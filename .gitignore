@@ -105,6 +105,7 @@ tags
 
 # Executables
 *.exe
+!FlashESP8266.exe
 *.out
 *.app
 *.i*86
