@@ -35,14 +35,17 @@ extern char gcode_macros[GCODE_MACROS_SLOTS][GCODE_MACROS_SLOT_SIZE + 1];
  */
 void GcodeSuite::M820() {
   SERIAL_ECHOLNPGM(STR_STORED_MACROS);
+  bool some = false;
   for (uint8_t i = 0; i < GCODE_MACROS_SLOTS; ++i) {
-    char * const cmd = gcode_macros[i];
+    const char *cmd = gcode_macros[i];
     if (*cmd) {
       SERIAL_ECHO(F("M81"), i, C(' '));
       while ((c = *cmd++)) SERIAL_CHAR(c == '\n' ? '|' : c);
       SERIAL_EOL();
+      some = true;
     }
   }
+  if (!some) SERIAL_ECHOLNPGM("None");
 }
 
 #endif // GCODE_MACROS
