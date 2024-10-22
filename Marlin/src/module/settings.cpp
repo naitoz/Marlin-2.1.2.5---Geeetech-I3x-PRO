@@ -887,20 +887,15 @@ void MarlinSettings::postprocess() {
     //
     // Write the size of the data structure for use in validation
     //
-    {
-      _FIELD_TEST(data_size);
-      const uint16_t data_size = datasize();
-      EEPROM_WRITE(data_size);
-    }
+    const uint16_t data_size = datasize();
+    EEPROM_WRITE(data_size);
 
     //
     // DISTINCT_E_FACTORS
     //
-    {
-      _FIELD_TEST(e_factors);
-      const uint8_t e_factors = DISTINCT_AXES - (NUM_AXES);
-      EEPROM_WRITE(e_factors);
-    }
+    _FIELD_TEST(e_factors);
+    const uint8_t e_factors = DISTINCT_AXES - (NUM_AXES);
+    EEPROM_WRITE(e_factors);
 
     //
     // Planner Motion
@@ -1234,12 +1229,11 @@ void MarlinSettings::postprocess() {
         #endif
         EEPROM_WRITE(pidcf);
       }
-    }
+
 
     //
     // PID_EXTRUSION_SCALING
     //
-    {
       _FIELD_TEST(lpq_len);
       const int16_t lpq_len = TERN(PID_EXTRUSION_SCALING, thermalManager.lpq_len, 20);
       EEPROM_WRITE(lpq_len);
@@ -2040,7 +2034,7 @@ void MarlinSettings::postprocess() {
         int8_t runout_sensor_enabled;
         EEPROM_READ(runout_sensor_enabled);
         #if HAS_FILAMENT_SENSOR
-        if (!validating) runout.enabled = runout_sensor_enabled < 0 ? FIL_RUNOUT_ENABLED_DEFAULT : runout_sensor_enabled;
+          if (!validating) runout.enabled = runout_sensor_enabled < 0 ? FIL_RUNOUT_ENABLED_DEFAULT : runout_sensor_enabled;
         #endif
 
         TERN_(HAS_FILAMENT_SENSOR, if (runout.enabled) runout.reset());
@@ -3427,7 +3421,6 @@ void MarlinSettings::reset() {
   // JyersUI User Data
   //
   TERN_(DWIN_CREALITY_LCD_JYERSUI, jyersDWIN.resetSettings());
-
 
   //
   // Case Light Brightness
