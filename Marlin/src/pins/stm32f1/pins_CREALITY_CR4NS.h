@@ -52,7 +52,7 @@
 //
 // Limit Switches
 //
-#define Z_STOP_PIN                        -1
+#define Z_STOP_PIN                        PC14
 
 //
 // Filament Runout Sensor
