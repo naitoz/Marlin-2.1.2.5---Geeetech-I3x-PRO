@@ -40,30 +40,30 @@
 //
 // EEPROM
 //
-#define IIC_EEPROM_SDA                    PA7
-#define IIC_EEPROM_SCL                    PA8
+#define IIC_EEPROM_SDA                      PA7
+#define IIC_EEPROM_SCL                      PA8
 
 //
 // Servos
 //
-#define SERVO0_PIN                        PC13
-#define Z_MIN_PROBE_PIN                   PC14
+#define SERVO0_PIN                          PC13
+#define Z_MIN_PROBE_PIN                     PC14
 
 //
 // Limit Switches
 //
-#define Z_STOP_PIN                        PC14
+#define Z_STOP_PIN                          PC14
 
 //
 // Filament Runout Sensor
 //
-#define FIL_RUNOUT_PIN                    PC15  // "Pulled-high"
+#define FIL_RUNOUT_PIN                      PC15  // "Pulled-high"
 
 //
 // Heaters / Fans
 //
-#define HEATER_BED_PIN                    PB2   // HOT BED
-#define FAN1_PIN                          PC1   // extruder fan
+#define HEATER_BED_PIN                      PB2   // HOT BED
+#define FAN1_PIN                            PC1   // extruder fan
 
 //
 // Steppers
@@ -90,7 +90,7 @@
 // SD Card
 //
 #define ONBOARD_SPI_DEVICE               1
-#define ONBOARD_SD_CS_PIN                PA4   // SDSS
+#define ONBOARD_SD_CS_PIN                   PA4   // SDSS
 
 #if ANY(RET6_12864_LCD, HAS_DWIN_E3V2, IS_DWIN_MARLINUI)
 
