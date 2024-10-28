@@ -562,13 +562,13 @@ void menu_backlash();
       #define SHAPING_MENU_FOR_AXIS(A)                                                                                                                                        \
         editable.decimal = stepper.get_shaping_frequency(_AXIS(A));                                                                                                           \
         if (editable.decimal) {                                                                                                                                               \
-          ACTION_ITEM_N(_AXIS(A), MSG_SHAPING_DISABLE, []{ stepper.set_shaping_frequency(_AXIS(A), 0.0f); ui.refresh(); });                                                   \
-          EDIT_ITEM_FAST_N(float41, _AXIS(A), MSG_SHAPING_FREQ, &editable.decimal, min_frequency, 200.0f, []{ stepper.set_shaping_frequency(_AXIS(A), editable.decimal); });  \
+          ACTION_ITEM_N(_AXIS(A), MSG_SHAPING_DISABLE_N, []{ stepper.set_shaping_frequency(_AXIS(A), 0.0f); ui.refresh(); });                                                   \
+          EDIT_ITEM_FAST_N(float41, _AXIS(A), MSG_SHAPING_FREQ_N, &editable.decimal, min_frequency, 200.0f, []{ stepper.set_shaping_frequency(_AXIS(A), editable.decimal); });  \
           editable.decimal = stepper.get_shaping_damping_ratio(_AXIS(A));                                                                                                     \
-          EDIT_ITEM_FAST_N(float42_52, _AXIS(A), MSG_SHAPING_ZETA, &editable.decimal, 0.0f, 1.0f, []{ stepper.set_shaping_damping_ratio(_AXIS(A), editable.decimal); });      \
+          EDIT_ITEM_FAST_N(float42_52, _AXIS(A), MSG_SHAPING_ZETA_N, &editable.decimal, 0.0f, 1.0f, []{ stepper.set_shaping_damping_ratio(_AXIS(A), editable.decimal); });      \
         }                                                                                                                                                                     \
         else                                                                                                                                                                  \
-          ACTION_ITEM_N(_AXIS(A), MSG_SHAPING_ENABLE, []{ stepper.set_shaping_frequency(_AXIS(A), (SHAPING_FREQ_##A) ?: (SHAPING_MIN_FREQ)); ui.refresh(); });
+          ACTION_ITEM_N(_AXIS(A), MSG_SHAPING_ENABLE_N, []{ stepper.set_shaping_frequency(_AXIS(A), (SHAPING_FREQ_##A) ?: (SHAPING_MIN_FREQ)); ui.refresh(); });
 
       TERN_(INPUT_SHAPING_X, SHAPING_MENU_FOR_AXIS(X))
       TERN_(INPUT_SHAPING_Y, SHAPING_MENU_FOR_AXIS(Y))
