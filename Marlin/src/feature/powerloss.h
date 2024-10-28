@@ -30,6 +30,10 @@
 
 #include "../inc/MarlinConfig.h"
 
+#if ENABLED(CANCEL_OBJECTS)
+  #include "cancel_object.h"
+#endif
+
 #if ENABLED(GCODE_REPEAT_MARKERS)
   #include "repeat.h"
 #endif
@@ -63,6 +67,11 @@ typedef struct {
   uint16_t flow_percentage[EXTRUDERS];
 
   float zraise;
+
+  // Canceled objects
+  #if ENABLED(CANCEL_OBJECTS)
+    cancel_state_t cancel_state;
+  #endif
 
   // Repeat information
   #if ENABLED(GCODE_REPEAT_MARKERS)
