@@ -33,9 +33,13 @@
   #error "CR4NS200320C13 only supports one hotend / E-stepper."
 #endif
 
-#define BOARD_INFO_NAME      "CR4NS200320C13"
-#define DEFAULT_MACHINE_NAME "Ender-3 V3 SE"
-#define BOARD_WEBSITE_URL    "www.creality.com"
+#ifndef BOARD_INFO_NAME
+  #define BOARD_INFO_NAME      "CR4NS200320C13"
+#endif
+#ifndef DEFAULT_MACHINE_NAME
+  #define DEFAULT_MACHINE_NAME "Ender-3 V3 SE"
+#endif
+#define BOARD_WEBSITE_URL      "www.creality.com"
 
 //
 // EEPROM
@@ -46,18 +50,26 @@
 //
 // Servos
 //
-#define SERVO0_PIN                          PC13
-#define Z_MIN_PROBE_PIN                     PC14
+#ifndef SERVO0_PIN
+  #define SERVO0_PIN                        PC13
+#endif
+#ifndef Z_MIN_PROBE_PIN
+  #define Z_MIN_PROBE_PIN                   PC14
+#endif
 
 //
 // Limit Switches
 //
-#define Z_STOP_PIN                          PC14
+#ifndef Z_STOP_PIN
+  #define Z_STOP_PIN                        PC14
+#endif
 
 //
 // Filament Runout Sensor
 //
-#define FIL_RUNOUT_PIN                      PC15  // "Pulled-high"
+#ifndef FIL_RUNOUT_PIN
+  #define FIL_RUNOUT_PIN                    PC15  // "Pulled-high"
+#endif
 
 //
 // Heaters / Fans
@@ -89,7 +101,7 @@
 //
 // SD Card
 //
-#define ONBOARD_SPI_DEVICE               1
+#define ONBOARD_SPI_DEVICE                     1  // SPI1
 #define ONBOARD_SD_CS_PIN                   PA4   // SDSS
 
 #if ANY(RET6_12864_LCD, HAS_DWIN_E3V2, IS_DWIN_MARLINUI)
