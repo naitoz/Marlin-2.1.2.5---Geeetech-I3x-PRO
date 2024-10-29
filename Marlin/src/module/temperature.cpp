@@ -903,7 +903,7 @@ volatile bool Temperature::raw_temps_ready = false;
             }
           }
         #endif
-      } // every 2 seconds
+      } // Every 2 seconds
 
       // Timeout after PID_AUTOTUNE_MAX_CYCLE_MINS minutes since the last undershoot/overshoot cycle
       #ifndef PID_AUTOTUNE_MAX_CYCLE_MINS
@@ -4425,14 +4425,14 @@ void Temperature::isr() {
   /**
    * Print a single heater state in the form:
    *     Extruder: " T0:nnn.nn /nnn.nn"
+   *     With ADC: " T0:nnn.nn /nnn.nn (nnn.nn)"
    *          Bed: " B:nnn.nn /nnn.nn"
    *      Chamber: " C:nnn.nn /nnn.nn"
-   *       Cooler: " L:nnn.nn /nnn.nn"
    *        Probe: " P:nnn.nn"
+   *       Cooler: " L:nnn.nn /nnn.nn"
    *        Board: " M:nnn.nn"
    *          SoC: " S:nnn.nn"
    *    Redundant: " R:nnn.nn /nnn.nn"
-   *     With ADC: " T0:nnn.nn /nnn.nn (nnn.nn)"
    */
   static void print_heater_state(const heater_id_t e, const_celsius_float_t c, const_celsius_float_t t
     OPTARG(SHOW_TEMP_ADC_VALUES, const float r)
@@ -4450,11 +4450,11 @@ void Temperature::isr() {
       #if HAS_TEMP_CHAMBER
         case H_CHAMBER: k = 'C'; break;
       #endif
-      #if HAS_TEMP_COOLER
-        case H_COOLER: k = 'L'; break;
-      #endif
       #if HAS_TEMP_PROBE
         case H_PROBE: k = 'P'; show_t = false; break;
+      #endif
+      #if HAS_TEMP_COOLER
+        case H_COOLER: k = 'L'; break;
       #endif
       #if HAS_TEMP_BOARD
         case H_BOARD: k = 'M'; show_t = false; break;
@@ -4487,11 +4487,11 @@ void Temperature::isr() {
    * See print_heater_state for heater output strings.
    * Power output strings are in the format:
    *     Extruder: " @:nnn"
+   *      Hotends: " @0:nnn @1:nnn ..."
    *          Bed: " B@:nnn"
    *      Peltier: " P@:H/C"
    *      Chamber: " C@:nnn"
    *       Cooler: " L@:nnn"
-   *      Hotends: " @0:nnn @1:nnn ..."
    */
   void Temperature::print_heater_states(const int8_t target_extruder
     OPTARG(HAS_TEMP_REDUNDANT, const bool include_r/*=false*/)
@@ -4499,17 +4499,20 @@ void Temperature::isr() {
     #if HAS_TEMP_HOTEND
       print_heater_state(H_NONE, degHotend(target_extruder), degTargetHotend(target_extruder) OPTARG(SHOW_TEMP_ADC_VALUES, rawHotendTemp(target_extruder)));
     #endif
+    #if HAS_MULTI_HOTEND
+      HOTEND_LOOP() print_heater_state((heater_id_t)e, degHotend(e), degTargetHotend(e) OPTARG(SHOW_TEMP_ADC_VALUES, rawHotendTemp(e)));
+    #endif
     #if HAS_HEATED_BED
       print_heater_state(H_BED, degBed(), degTargetBed() OPTARG(SHOW_TEMP_ADC_VALUES, rawBedTemp()));
     #endif
     #if HAS_TEMP_CHAMBER
       print_heater_state(H_CHAMBER, degChamber(), TERN0(HAS_HEATED_CHAMBER, degTargetChamber()) OPTARG(SHOW_TEMP_ADC_VALUES, rawChamberTemp()));
     #endif
-    #if HAS_TEMP_COOLER
-      print_heater_state(H_COOLER, degCooler(), TERN0(HAS_COOLER, degTargetCooler()) OPTARG(SHOW_TEMP_ADC_VALUES, rawCoolerTemp()));
-    #endif
     #if HAS_TEMP_PROBE
       print_heater_state(H_PROBE, degProbe(), 0 OPTARG(SHOW_TEMP_ADC_VALUES, rawProbeTemp()));
+    #endif
+    #if HAS_TEMP_COOLER
+      print_heater_state(H_COOLER, degCooler(), TERN0(HAS_COOLER, degTargetCooler()) OPTARG(SHOW_TEMP_ADC_VALUES, rawCoolerTemp()));
     #endif
     #if HAS_TEMP_BOARD
       print_heater_state(H_BOARD, degBoard(), 0 OPTARG(SHOW_TEMP_ADC_VALUES, rawBoardTemp()));
@@ -4520,17 +4523,15 @@ void Temperature::isr() {
     #if HAS_TEMP_REDUNDANT
       if (include_r) print_heater_state(H_REDUNDANT, degRedundant(), degRedundantTarget() OPTARG(SHOW_TEMP_ADC_VALUES, rawRedundantTemp()));
     #endif
-    #if HAS_MULTI_HOTEND
-      HOTEND_LOOP() print_heater_state((heater_id_t)e, degHotend(e), degTargetHotend(e) OPTARG(SHOW_TEMP_ADC_VALUES, rawHotendTemp(e)));
-    #endif
+
     SString<100> s(F(" @:"), getHeaterPower((heater_id_t)target_extruder));
+    #if HAS_MULTI_HOTEND
+      HOTEND_LOOP() s.append(F(" @"), e, ':', getHeaterPower((heater_id_t)e));
+    #endif
     TERN_(HAS_HEATED_BED,     s.append(F(" B@:"), getHeaterPower(H_BED)));
     TERN_(PELTIER_BED,        s.append(F(" P@:"), temp_bed.peltier_dir_heating ? 'H' : 'C'));
     TERN_(HAS_HEATED_CHAMBER, s.append(F(" C@:"), getHeaterPower(H_CHAMBER)));
     TERN_(HAS_COOLER,         s.append(F(" L@:"), getHeaterPower(H_COOLER)));
-    #if HAS_MULTI_HOTEND
-      HOTEND_LOOP() s.append(F(" @"), e, ':', getHeaterPower((heater_id_t)e));
-    #endif
     s.echo();
   }
 
