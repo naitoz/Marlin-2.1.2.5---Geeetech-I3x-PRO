@@ -2196,7 +2196,7 @@ bool Planner::_populate_block(
   else
     NOLESS(fr_mm_s, settings.min_travel_feedrate_mm_s);
 
-  const float inverse_millimeters = 1.0f / block->millimeters; // Inverse millimeters to remove multiple divides
+  const float inverse_millimeters = 1.0f / block->millimeters;  // Inverse millimeters to remove multiple divides
 
   /**
    * Calculate inverse time for this move. No divide by zero due to previous checks.
@@ -2775,8 +2775,6 @@ bool Planner::_populate_block(
  * @details Supports LASER_SYNCHRONOUS_M106_M107 and LASER_POWER_SYNC power sync block buffer queueing.
  *
  * @param sync_flag  The sync flag to set, determining the type of sync the block will do
- *                   Sets a condition bit to process additional items such as sync fan pwm
- *                   or sync M3/M4 laser power into a queued block
  */
 void Planner::buffer_sync_block(const BlockFlagBit sync_flag/*=BLOCK_BIT_SYNC_POSITION*/) {
 
@@ -2830,7 +2828,7 @@ void Planner::buffer_sync_block(const BlockFlagBit sync_flag/*=BLOCK_BIT_SYNC_PO
  * @param extruder      Optional target extruder (otherwise active_extruder)
  * @param hints         Optional parameters to aid planner calculations
  *
- * @return  false if no segment was queued due to cleaning, cold extrusion, full queue, etc...
+ * @return  false if no segment was queued due to cleaning, cold extrusion, full queue, etc.
  */
 bool Planner::buffer_segment(const abce_pos_t &abce
   OPTARG(HAS_DIST_MM_ARG, const xyze_float_t &cart_dist_mm)

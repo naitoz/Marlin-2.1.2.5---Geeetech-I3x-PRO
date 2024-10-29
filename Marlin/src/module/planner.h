@@ -493,7 +493,7 @@ class Planner {
         static float max_e_jerk[DISTINCT_E];          // Calculated from junction_deviation_mm
       #endif
     #else // CLASSIC_JERK
-      // (mm/s^2) M205 XYZE - The largest speed change requiring no acceleration.
+      // (mm/s^2) M205 XYZ(E) - The largest speed change requiring no acceleration.
       static TERN(HAS_LINEAR_E_JERK, xyz_pos_t, xyze_pos_t) max_jerk;
     #endif
 
@@ -819,6 +819,7 @@ class Planner {
      * @return  The first head block
      */
     FORCE_INLINE static block_t* get_next_free_block(uint8_t &next_buffer_head, const uint8_t count=1) {
+
       // Wait until there are enough slots free
       while (moves_free() < count) { idle(); }
 
