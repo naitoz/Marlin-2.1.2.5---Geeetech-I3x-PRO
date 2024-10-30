@@ -2956,6 +2956,8 @@ bool Planner::buffer_segment(const abce_pos_t &abce
  * @param fr_mm_s   (Target) speed of the move (mm/s)
  * @param extruder  Optional target extruder (otherwise active_extruder)
  * @param hints     Optional parameters to aid planner calculations
+ *
+ * @return  false if no segment was queued due to cleaning, cold extrusion, full queue, etc.
  */
 bool Planner::buffer_line(const xyze_pos_t &cart, const_feedRate_t fr_mm_s
   , const uint8_t extruder/*=active_extruder*/
