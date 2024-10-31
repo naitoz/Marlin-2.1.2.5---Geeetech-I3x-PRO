@@ -76,19 +76,20 @@ enum processID : uint8_t {
 
   enum tempcontrol_t : uint8_t {
     #if HAS_PID_HEATING
-      PIDTEMP_START = 1,
-      PIDTEMPBED_START,
-      PIDTEMPCHAMBER_START,
+      PID_DONE = 0,
+      PID_STARTED,
+      PID_BED_STARTED,
+      PID_CHAMBER_STARTED,
       PID_BAD_HEATER_ID,
       PID_TEMP_TOO_HIGH,
       PID_TUNING_TIMEOUT,
     #endif
     #if ENABLED(MPC_AUTOTUNE)
+      MPC_DONE = 0,
       MPC_STARTED,
       MPC_TEMP_ERROR,
       MPC_INTERRUPTED,
     #endif
-    AUTOTUNE_DONE = 0
   };
 
 #endif
@@ -178,7 +179,7 @@ typedef struct {
 typedef struct {
   rgb_t color;                        // Color
   #if ANY(HAS_PID_HEATING, MPCTEMP)
-    tempcontrol_t tempControl = AUTOTUNE_DONE;
+    tempcontrol_t tempControl = PID_DONE;
   #endif
   uint8_t select = 0;                 // Auxiliary selector variable
   AxisEnum axis = X_AXIS;             // Axis Select
@@ -291,7 +292,7 @@ void dwinPrintResume();
 void dwinPrintFinished();
 void dwinPrintAborted();
 #if HAS_FILAMENT_SENSOR
-  void dwinFilamentRunout(const uint8_t extruder);
+  void dwinFilamentRunout();
 #endif
 void dwinPrintHeader(const char * const cstr=nullptr);
 void dwinSetColorDefaults();

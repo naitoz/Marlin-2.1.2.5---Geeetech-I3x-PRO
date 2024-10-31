@@ -90,7 +90,8 @@ namespace ExtUI {
 
   #if HAS_FILAMENT_SENSOR
     void onFilamentRunout(const extruder_t extruder) {
-      dwinFilamentRunout(extruder);
+      UNUSED(extruder);
+      dwinFilamentRunout();
     }
   #endif
 
@@ -142,10 +143,10 @@ namespace ExtUI {
   void onFactoryReset() { dwinSetDataDefaults(); }
 
   // Copy settings to EEPROM buffer for write
-  void onStoreSettings(char *buff) { dwinCopySettingsTo(buff); }
+  void onStoreSettings(char *buff) { dwinCopySettingsTo(static_cast<char * const>(buff)); }
 
   // Get settings from loaded EEPROM data
-  void onLoadSettings(const char *buff) { dwinCopySettingsFrom(buff); }
+  void onLoadSettings(const char *buff) { dwinCopySettingsFrom(static_cast<const char * const>(buff)); }
 
   void onPostprocessSettings() {
     // Called after loading or resetting stored settings
@@ -204,22 +205,7 @@ namespace ExtUI {
   #if HAS_PID_HEATING
     void onPIDTuning(const pidresult_t rst) {
       // Called for temperature PID tuning result
-      switch (rst) {
-        default: break;
-        #if ENABLED(PIDTEMP)
-          case PID_STARTED:       dwinPIDTuning(PIDTEMP_START);                     break;
-        #endif
-        #if ENABLED(PIDTEMPBED)
-          case PID_BED_STARTED:   dwinPIDTuning(PIDTEMPBED_START);                  break;
-        #endif
-        #if ENABLED(PIDTEMPCHAMBER)
-          case PID_CHAMBER_STARTED: dwinPIDTuning(PIDTEMPCHAMBER_START);            break;
-        #endif
-        case PID_BAD_HEATER_ID:   dwinPIDTuning(tempcontrol_t(PID_BAD_HEATER_ID));  break;
-        case PID_TEMP_TOO_HIGH:   dwinPIDTuning(tempcontrol_t(PID_TEMP_TOO_HIGH));  break;
-        case PID_TUNING_TIMEOUT:  dwinPIDTuning(tempcontrol_t(PID_TUNING_TIMEOUT)); break;
-        case PID_DONE:            dwinPIDTuning(AUTOTUNE_DONE);                     break;
-      }
+      dwinPIDTuning(tempcontrol_t(rst));
     }
     void onStartM303(const int count, const heater_id_t hid, const celsius_t temp) {
       dwinStartM303(count, hid, temp);
@@ -229,12 +215,7 @@ namespace ExtUI {
   #if ENABLED(MPC_AUTOTUNE)
     void onMPCTuning(const mpcresult_t rst) {
       // Called for temperature MPC tuning result
-      switch (rst) {
-        case MPC_STARTED:     dwinMPCTuning(tempcontrol_t(MPC_STARTED));     break;
-        case MPC_TEMP_ERROR:  dwinMPCTuning(tempcontrol_t(MPC_TEMP_ERROR));  break;
-        case MPC_INTERRUPTED: dwinMPCTuning(tempcontrol_t(MPC_INTERRUPTED)); break;
-        case MPC_DONE:        dwinMPCTuning(AUTOTUNE_DONE);   break;
-      }
+      dwinMPCTuning(tempcontrol_t(rst));
     }
   #endif
 
@@ -244,7 +225,20 @@ namespace ExtUI {
 
   void onSteppersDisabled() {}
   void onSteppersEnabled() {}
-  void onAxisDisabled(const axis_t axis) {
+  void onAxisDisabled(const axis_t a) {
+    AxisEnum axis;
+    switch (a) {
+      TERN_(HAS_X_AXIS, case X:)
+      default: axis = X_AXIS;
+      OPTCODE(HAS_Y_AXIS, case Y: axis = Y_AXIS)
+      OPTCODE(HAS_Z_AXIS, case Z: axis = Z_AXIS)
+      OPTCODE(HAS_I_AXIS, case I: axis = I_AXIS)
+      OPTCODE(HAS_J_AXIS, case J: axis = J_AXIS)
+      OPTCODE(HAS_K_AXIS, case K: axis = K_AXIS)
+      OPTCODE(HAS_U_AXIS, case U: axis = U_AXIS)
+      OPTCODE(HAS_V_AXIS, case V: axis = V_AXIS)
+      OPTCODE(HAS_W_AXIS, case W: axis = W_AXIS)
+    }
     set_axis_never_homed(AxisEnum(axis)); // MRISCOC workaround: https://github.com/MarlinFirmware/Marlin/issues/23095
   }
   void onAxisEnabled(const axis_t) {}

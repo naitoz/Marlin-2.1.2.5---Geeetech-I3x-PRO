@@ -440,7 +440,7 @@ void popupPauseOrStop() {
 }
 
 #if HAS_HOTEND || HAS_HEATED_BED || HAS_HEATED_CHAMBER
-  void dwinPopupTemperature(const int_fast8_t heater_id, const uint8_t state) {
+  void dwinPopupTemperature(const heater_id_t heater_id, const uint8_t state) {
     hmiSaveProcessID(ID_WaitResponse);
     if (hmiIsChinese()) {
       DWINUI::clearMainArea();
@@ -1233,15 +1233,15 @@ void drawMainArea() {
       case ID_PlotProcess:
         switch (hmiValue.tempControl) {
           #if ENABLED(PIDTEMP)
-            case PIDTEMP_START: drawHotendPlot(); break;
+            case PID_STARTED: drawHotendPlot(); break;
           #elif ENABLED(MPCTEMP)
             case MPC_STARTED: drawHotendPlot(); break;
           #endif
           #if ENABLED(PIDTEMPBED)
-            case PIDTEMPBED_START: drawBedPlot(); break;
+            case PID_BED_STARTED: drawBedPlot(); break;
           #endif
           #if ENABLED(PIDTEMPCHAMBER)
-            case PIDTEMPCHAMBER_START: drawChamberPlot(); break;
+            case PID_CHAMBER_STARTED: drawChamberPlot(); break;
           #endif
           default: break;
         } break;
@@ -1311,16 +1311,16 @@ void eachMomentUpdate() {
     #endif
     #if PROUI_TUNING_GRAPH
       if (checkkey == ID_PIDProcess) {
-        TERN_(PIDTEMP, if (hmiValue.tempControl == PIDTEMP_START) plot.update(thermalManager.wholeDegHotend(0)));
-        TERN_(PIDTEMPBED, if (hmiValue.tempControl == PIDTEMPBED_START) plot.update(thermalManager.wholeDegBed()));
-        TERN_(PIDTEMPCHAMBER, if (hmiValue.tempControl == PIDTEMPCHAMBER_START) plot.update(thermalManager.wholeDegChamber()));
+        TERN_(PIDTEMP, if (hmiValue.tempControl == PID_STARTED) plot.update(thermalManager.wholeDegHotend(0)));
+        TERN_(PIDTEMPBED, if (hmiValue.tempControl == PID_BED_STARTED) plot.update(thermalManager.wholeDegBed()));
+        TERN_(PIDTEMPCHAMBER, if (hmiValue.tempControl == PID_CHAMBER_STARTED) plot.update(thermalManager.wholeDegChamber()));
       }
       TERN_(MPCTEMP, if (checkkey == ID_MPCProcess) plot.update(thermalManager.wholeDegHotend(0)));
       #if ENABLED(PROUI_ITEM_PLOT)
         if (checkkey == ID_PlotProcess) {
-          TERN_(PIDTEMP, if (hmiValue.tempControl == PIDTEMP_START) { plot.update(thermalManager.wholeDegHotend(0)); })
-          TERN_(PIDTEMPBED, if (hmiValue.tempControl == PIDTEMPBED_START) { plot.update(thermalManager.wholeDegBed()); })
-          TERN_(PIDTEMPCHAMBER, if (hmiValue.tempControl == PIDTEMPCHAMBER_START) { plot.update(thermalManager.wholeDegChamber()); })
+          TERN_(PIDTEMP, if (hmiValue.tempControl == PID_STARTED) { plot.update(thermalManager.wholeDegHotend(0)); })
+          TERN_(PIDTEMPBED, if (hmiValue.tempControl == PID_BED_STARTED) { plot.update(thermalManager.wholeDegBed()); })
+          TERN_(PIDTEMPCHAMBER, if (hmiValue.tempControl == PID_CHAMBER_STARTED) { plot.update(thermalManager.wholeDegChamber()); })
           TERN_(MPCTEMP, if (hmiValue.tempControl == MPC_STARTED) { plot.update(thermalManager.wholeDegHotend(0)); })
           if (hmiFlag.abort_flag || hmiFlag.pause_flag || print_job_timer.isPaused()) {
             hmiReturnScreen();
@@ -1590,7 +1590,7 @@ void dwinLevelingDone() {
           break;
       #endif
       #if ENABLED(PIDTEMP)
-        case PIDTEMP_START:
+        case PID_STARTED:
           DWINUI::drawCenteredString(hmiData.colorPopupTxt, 70, GET_TEXT_F(MSG_PID_AUTOTUNE));
           DWINUI::drawString(hmiData.colorPopupTxt, gfrm.x, gfrm.y - DWINUI::fontHeight() - 4, GET_TEXT_F(MSG_PID_TARGET));
           DWINUI::drawCenteredString(hmiData.colorPopupTxt, 92, GET_TEXT_F(MSG_PID_FOR_NOZZLE));
@@ -1599,7 +1599,7 @@ void dwinLevelingDone() {
           break;
       #endif
       #if ENABLED(PIDTEMPBED)
-        case PIDTEMPBED_START:
+        case PID_BED_STARTED:
           DWINUI::drawCenteredString(hmiData.colorPopupTxt, 70, GET_TEXT_F(MSG_PID_AUTOTUNE));
           DWINUI::drawString(hmiData.colorPopupTxt, gfrm.x, gfrm.y - DWINUI::fontHeight() - 4, GET_TEXT_F(MSG_PID_TARGET));
           DWINUI::drawCenteredString(hmiData.colorPopupTxt, 92, GET_TEXT_F(MSG_PID_FOR_BED));
@@ -1608,7 +1608,7 @@ void dwinLevelingDone() {
           break;
       #endif
       #if ENABLED(PIDTEMPCHAMBER)
-        case PIDTEMPCHAMBER_START:
+        case PID_CHAMBER_STARTED:
           DWINUI::drawCenteredString(hmiData.colorPopupTxt, 70, GET_TEXT_F(MSG_PID_AUTOTUNE));
           DWINUI::drawString(hmiData.colorPopupTxt, gfrm.x, gfrm.y - DWINUI::fontHeight() - 4, GET_TEXT_F(MSG_PID_TARGET));
           DWINUI::drawCenteredString(hmiData.colorPopupTxt, 92, GET_TEXT_F(MSG_PID_FOR_CHAMBER));
@@ -1636,7 +1636,7 @@ void dwinLevelingDone() {
         #if ENABLED(MPCTEMP)
           case MPC_STARTED:
         #elif ENABLED(PIDTEMP)
-          case PIDTEMP_START:
+          case PID_STARTED:
         #endif
             title.showCaption(GET_TEXT_F(MSG_HOTEND_TEMP_GRAPH));
             DWINUI::drawCenteredString(3, hmiData.colorPopupTxt, 75, GET_TEXT_F(MSG_TEMP_NOZZLE));
@@ -1644,7 +1644,7 @@ void dwinLevelingDone() {
             _target = thermalManager.degTargetHotend(0);
             break;
         #if ENABLED(PIDTEMPBED)
-          case PIDTEMPBED_START:
+          case PID_BED_STARTED:
             title.showCaption(GET_TEXT_F(MSG_BED_TEMP_GRAPH));
             DWINUI::drawCenteredString(3, hmiData.colorPopupTxt, 75, GET_TEXT_F(MSG_TEMP_BED));
             _maxtemp = BED_MAX_TARGET;
@@ -1652,7 +1652,7 @@ void dwinLevelingDone() {
             break;
         #endif
         #if ENABLED(PIDTEMPCHAMBER)
-          case PIDTEMPCHAMBER_START:
+          case PID_CHAMBER_STARTED:
             title.showCaption(GET_TEXT_F(MSG_CHAMBER_TEMP_GRAPH));
             DWINUI::drawCenteredString(3, hmiData.colorPopupTxt, 75, GET_TEXT_F(MSG_TEMP_CHAMBER));
             _maxtemp = CHAMBER_MAX_TARGET;
@@ -1669,14 +1669,14 @@ void dwinLevelingDone() {
     }
 
     void drawHotendPlot() {
-      TERN_(PIDTEMP, dwinDrawPlot(PIDTEMP_START));
+      TERN_(PIDTEMP, dwinDrawPlot(PID_STARTED));
       TERN_(MPCTEMP, dwinDrawPlot(MPC_STARTED));
     }
     void drawBedPlot() {
-      TERN_(PIDTEMPBED, dwinDrawPlot(PIDTEMPBED_START));
+      TERN_(PIDTEMPBED, dwinDrawPlot(PID_BED_STARTED));
     }
     void drawChamberPlot() {
-      TERN_(PIDTEMPCHAMBER, dwinDrawPlot(PIDTEMPCHAMBER_START));
+      TERN_(PIDTEMPCHAMBER, dwinDrawPlot(PID_CHAMBER_STARTED));
     }
 
   #endif // PROUI_ITEM_PLOT
@@ -1705,7 +1705,7 @@ void dwinLevelingDone() {
     hmiValue.tempControl = result;
     switch (result) {
       #if ENABLED(PIDTEMP)
-        case PIDTEMP_START:
+        case PID_STARTED:
           hmiSaveProcessID(ID_PIDProcess);
           #if PROUI_TUNING_GRAPH
             dwinDrawPIDMPCPopup();
@@ -1715,7 +1715,7 @@ void dwinLevelingDone() {
           break;
       #endif
       #if ENABLED(PIDTEMPBED)
-        case PIDTEMPBED_START:
+        case PID_BED_STARTED:
           hmiSaveProcessID(ID_PIDProcess);
           #if PROUI_TUNING_GRAPH
             dwinDrawPIDMPCPopup();
@@ -1725,7 +1725,7 @@ void dwinLevelingDone() {
           break;
       #endif
       #if ENABLED(PIDTEMPCHAMBER)
-        case PIDTEMPCHAMBER_START:
+        case PID_CHAMBER_STARTED:
           hmiSaveProcessID(ID_PIDProcess);
           #if PROUI_TUNING_GRAPH
             dwinDrawPIDMPCPopup();
@@ -1746,7 +1746,7 @@ void dwinLevelingDone() {
         checkkey = last_checkkey;
         dwinPopupContinue(ICON_TempTooHigh, GET_TEXT_F(MSG_PID_AUTOTUNE_FAILED), GET_TEXT_F(MSG_TEMP_TOO_HIGH));
         break;
-      case AUTOTUNE_DONE:
+      case PID_DONE:
         checkkey = last_checkkey;
         dwinPopupConfirm(ICON_TempTooLow, GET_TEXT_F(MSG_PID_AUTOTUNE), GET_TEXT_F(MSG_BUTTON_DONE));
         break;
@@ -1782,7 +1782,7 @@ void dwinLevelingDone() {
         dwinPopupContinue(ICON_TempTooHigh, GET_TEXT_F(MSG_ERROR), F(STR_MPC_AUTOTUNE_INTERRUPTED));
         ui.reset_alert_level();
         break;
-      case AUTOTUNE_DONE:
+      case MPC_DONE:
         checkkey = last_checkkey;
         dwinPopupConfirm(ICON_TempTooLow, GET_TEXT_F(MSG_MPC_AUTOTUNE), GET_TEXT_F(MSG_BUTTON_DONE));
         ui.reset_alert_level();
@@ -1849,7 +1849,7 @@ void dwinPrintAborted() {
 
 #if HAS_FILAMENT_SENSOR
   // Filament Runout process
-  void dwinFilamentRunout(const uint8_t extruder) { LCD_MESSAGE(MSG_RUNOUT_SENSOR); }
+  void dwinFilamentRunout() { LCD_MESSAGE(MSG_RUNOUT_SENSOR); }
 #endif
 
 void dwinSetColorDefaults() {
