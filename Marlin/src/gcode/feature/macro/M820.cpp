@@ -40,6 +40,7 @@ void GcodeSuite::M820() {
     const char *cmd = gcode_macros[i];
     if (*cmd) {
       SERIAL_ECHO(F("M81"), i, C(' '));
+      char c;
       while ((c = *cmd++)) SERIAL_CHAR(c == '\n' ? '|' : c);
       SERIAL_EOL();
       some = true;
