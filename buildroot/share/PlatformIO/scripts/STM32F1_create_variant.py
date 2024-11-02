@@ -17,7 +17,8 @@ if pioutil.is_pio_build():
     assert source_dir.is_dir()
 
     if True:
-
+        # Copying to the platform folder is still needed by STM32F1 (Maple).
+        # The alternative code below comes close. See if you can solve it!
         platform = env.PioPlatform()
         FRAMEWORK_DIR = Path(platform.get_package_dir("framework-arduinoststm32-maple"))
         assert FRAMEWORK_DIR.is_dir()
