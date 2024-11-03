@@ -27,10 +27,11 @@
   #define BOARD_INFO_NAME "Fly RRF E3 V1"
 #endif
 
-#define USES_DIAG_JUMPERS //you need Mellow/Fly's specific TMC2209's because they have a dip switch to turn off DIAG to disable auto home
+#define USES_DIAG_JUMPERS // Requires Mellow/Fly TMC2209 with DIAG disable dip switch
 
-// Onboard I2C EEPROM
-//#define I2C_EEPROM - this board doesn't have a real eeprom
+#if NO_EEPROM_SELECTED
+  #define FLASH_EEPROM_EMULATION
+#endif
 #define MARLIN_EEPROM_SIZE 0x1000                 // 4K
 
 //
@@ -137,45 +138,41 @@
 
     #if ENABLED(LCD_FOR_MELZI)
 
-      #ifndef NO_CONTROLLER_CUSTOM_WIRING_WARNING
-        #error "CAUTION! LCD_FOR_MELZI requires wiring modifications. See 'pins_Fly_RRF_E3_V1.h' for details. (Define NO_CONTROLLER_CUSTOM_WIRING_WARNING to suppress this warning.)"
-      #endif
+      CONTROLLER_WARNING("FLY_RRF_E3_V1", "LCD_FOR_MELZI")
 
-     /** LCD_FOR_MELZI display pinout
-      *
-      *              Fly RRF E3 V1                                 Display Ribbon
-      *                 ------                                         ------
-      * (BEEPER)  PE12 | 1  2 | PE11  (BTN_ENC)                   GND |10  9 | 5V
-      * (BTN_EN1) PE10 | 3  4 | RESET                          BEEPER | 8  7 | ESTOP    (RESET)
-      * (BTN_EN2) PE9    5  6 | PE8 (LCD_D4)        (BTN_ENC) ENC_BTN | 6  5 | LCD_SCLK (LCD_D4)
-      * (LCD_RS)  PE7  | 7  8 | PB1 (LCD_EN)        (BTN_EN2) ENC_A   | 4  3 | LCD_DATA (LCD_EN)
-      *           GND  | 9 10 | 5V                  (BTN_EN1) ENC_B   | 2  1 | LCD_CS   (LCD_RS)
-      *                 ------                                         ------
-      *                  EXP1                                           LCD
-      *
-      * Needs custom cable:
-      *
-      *    Board   Adapter   Display Ribbon (coming from display)
-      *  ----------------------------------
-      *  EXP1-10 ---------- LCD-9   5V
-      *  EXP1-9 ----------- LCD-10  GND
-      *  EXP1-8 ----------- LCD-3   LCD_EN
-      *  EXP1-7 ----------- LCD-1   LCD_RS
-      *  EXP1-6 ----------- LCD-5   LCD_D4
-      *  EXP1-5 ----------- LCD-4   EN2
-      *  EXP1-4 ----------- LCD-7   RESET
-      *  EXP1-3 ----------- LCD-2   EN1
-      *  EXP1-2 ----------- LCD-6   BTN
-      *  EXP1-1 ----------- LCD-8   BEEPER
-      */
+      /** LCD_FOR_MELZI display pinout
+       *
+       *              Fly RRF E3 V1                                 Display Ribbon
+       *                 ------                                         ------
+       * (BEEPER)  PE12 | 1  2 | PE11  (BTN_ENC)                   GND |10  9 | 5V
+       * (BTN_EN1) PE10 | 3  4 | RESET                          BEEPER | 8  7 | ESTOP    (RESET)
+       * (BTN_EN2) PE9    5  6 | PE8 (LCD_D4)        (BTN_ENC) ENC_BTN | 6  5 | LCD_SCLK (LCD_D4)
+       * (LCD_RS)  PE7  | 7  8 | PB1 (LCD_EN)        (BTN_EN2) ENC_A   | 4  3 | LCD_DATA (LCD_EN)
+       *           GND  | 9 10 | 5V                  (BTN_EN1) ENC_B   | 2  1 | LCD_CS   (LCD_RS)
+       *                 ------                                         ------
+       *                  EXP1                                           LCD
+       *
+       * Needs custom cable:
+       *
+       *    Board   Adapter   Display Ribbon (coming from display)
+       *  ----------------------------------
+       *  EXP1-10 ---------- LCD-9   5V
+       *  EXP1-9 ----------- LCD-10  GND
+       *  EXP1-8 ----------- LCD-3   LCD_EN
+       *  EXP1-7 ----------- LCD-1   LCD_RS
+       *  EXP1-6 ----------- LCD-5   LCD_D4
+       *  EXP1-5 ----------- LCD-4   EN2
+       *  EXP1-4 ----------- LCD-7   RESET
+       *  EXP1-3 ----------- LCD-2   EN1
+       *  EXP1-2 ----------- LCD-6   BTN
+       *  EXP1-1 ----------- LCD-8   BEEPER
+       */
 
     #endif
 
   #elif ENABLED(ZONESTAR_LCD)                     // ANET A8 LCD Controller - Must convert to 3.3V - CONNECTING TO 5V WILL DAMAGE THE BOARD!
 
-    #ifndef NO_CONTROLLER_CUSTOM_WIRING_WARNING
-      #error "CAUTION! ZONESTAR_LCD requires wiring modifications. See 'pins_Fly_RRF_E3_V1.h' for details. (Define NO_CONTROLLER_CUSTOM_WIRING_WARNING to suppress this warning.)"
-    #endif
+    CONTROLLER_WARNING("FLY_RRF_E3_V1", "ZONESTAR_LCD")
 
     #define LCD_PINS_RS              EXP1_06_PIN
     #define LCD_PINS_EN              EXP1_02_PIN
@@ -203,9 +200,7 @@
 
     #if ENABLED(TFTGLCD_PANEL_SPI)
 
-      #ifndef NO_CONTROLLER_CUSTOM_WIRING_WARNING
-        #error "CAUTION! TFTGLCD_PANEL_SPI requires wiring modifications. See 'pins_Fly_RRF_E3_V1.h' for details. (Define NO_CONTROLLER_CUSTOM_WIRING_WARNING to suppress this warning.)"
-      #endif
+      CONTROLLER_WARNING("FLY_RRF_E3_V1", "TFTGLCD_PANEL_SPI")
 
       /**
        * TFTGLCD_PANEL_SPI display pinout
@@ -241,7 +236,7 @@
     #endif
 
   #else
-    #error "Only CR10_STOCKDISPLAY, ZONESTAR_LCD, ENDER2_STOCKDISPLAY, MKS_MINI_12864, LCD_FOR_MELZI, and TFTGLCD_PANEL_(SPI|I2C) are currently supported on the Mellow_RRF_E3_V1."
+    #error "Only CR10_STOCKDISPLAY, ZONESTAR_LCD, ENDER2_STOCKDISPLAY, MKS_MINI_12864, LCD_FOR_MELZI, and TFTGLCD_PANEL_(SPI|I2C) are currently supported on the FLY_RRF_E3_V1."
   #endif
 
   // Alter timing for graphical display
@@ -259,9 +254,7 @@
 
 #if ALL(TOUCH_UI_FTDI_EVE, LCD_FYSETC_TFT81050)
 
-  #ifndef NO_CONTROLLER_CUSTOM_WIRING_WARNING
-    #error "CAUTION! LCD_FYSETC_TFT81050 requires wiring modifications. See 'pins_Fly_RRF_E3_V1.h' for details. (Define NO_CONTROLLER_CUSTOM_WIRING_WARNING to suppress this warning.)"
-  #endif
+  CONTROLLER_WARNING("FLY_RRF_E3_V1", "LCD_FYSETC_TFT81050")
 
   /** FYSETC TFT TFT81050 display pinout
    *
@@ -274,7 +267,6 @@
    *             GND  | 9 10 | 5V             (SCK)   | 2  1 | (MISO)
    *                   ------                          ------
    *                   EXP1                            EXP1
-   *
    *
    * Needs custom cable:
    *
