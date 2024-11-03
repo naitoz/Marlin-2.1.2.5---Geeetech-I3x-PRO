@@ -190,14 +190,14 @@
 #endif
 
 // Hybrid Threshold ranges
-#define _TMC2100_THRS     65535
-#define _TMC2130_THRS     65535
-#define _TMC2160_THRS       255
-#define _TMC2208_THRS       255
-#define _TMC2209_THRS       255
-#define _TMC2660_THRS     65535
-#define _TMC5130_THRS     65535
-#define _TMC5160_THRS     65535
+#define THRS_TMC2100     65535
+#define THRS_TMC2130     65535
+#define THRS_TMC2160       255
+#define THRS_TMC2208       255
+#define THRS_TMC2209       255
+#define THRS_TMC2660     65535
+#define THRS_TMC5130     65535
+#define THRS_TMC5160     65535
 
-#define _DRIVER_THRS(V) _CAT(_, V, _THRS)
+#define _DRIVER_THRS(V) CAT(THRS_, V)
 #define STEPPER_MAX_THRS(S) _DRIVER_THRS(S##_DRIVER_TYPE)
