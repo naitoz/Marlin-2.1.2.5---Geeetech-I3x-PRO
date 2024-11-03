@@ -336,6 +336,8 @@
   #include "mega/pins_GT2560_V4.h"                  // ATmega2560                           env:mega2560
 #elif MB(GT2560_V4_A20)
   #include "mega/pins_GT2560_V4_A20.h"              // ATmega2560                           env:mega2560
+#elif MB(GT2560_V41B)
+  #include "mega/pins_GT2560_V41b.h"                // ATmega2560                           env:mega2560ext
 #elif MB(EINSTART_S)
   #include "mega/pins_EINSTART-S.h"                 // ATmega2560, ATmega1280               env:mega2560ext env:mega1280
 #elif MB(WANHAO_ONEPLUS)
@@ -360,8 +362,6 @@
   #include "mega/pins_PROTONEER_CNC_SHIELD_V3.h"    // ATmega2560                           env:mega2560
 #elif MB(WEEDO_62A)
   #include "mega/pins_WEEDO_62A.h"                  // ATmega2560                           env:mega2560
-#elif MB(GT2560_V41B)
-  #include "mega/pins_GT2560_V41b.h"                // ATmega2560                           env:mega2560ext
 
 //
 // ATmega1281, ATmega2561
