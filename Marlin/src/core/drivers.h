@@ -198,3 +198,6 @@
 #define _TMC2660_THRS     65535
 #define _TMC5130_THRS     65535
 #define _TMC5160_THRS     65535
+
+#define _DRIVER_THRS(V) _CAT(_, V, _THRS)
+#define STEPPER_MAX_THRS(S) _DRIVER_THRS(S##_DRIVER_TYPE)
