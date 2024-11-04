@@ -1667,18 +1667,6 @@ void MarlinSettings::postprocess() {
     #endif
 
     //
-    // DWIN UI User Data
-    //
-    #if ENABLED(DWIN_LCD_PROUI)
-    {
-      _FIELD_TEST(dwin_data);
-      char dwin_data[EXTUI_EEPROM_DATA_SIZE] = { 0 };
-      dwinCopySettingsTo(dwin_data);
-      EEPROM_WRITE(dwin_data);
-    }
-    #endif
-
-    //
     // JyersUI DWIN User Data
     //
     #if ENABLED(DWIN_CREALITY_LCD_JYERSUI)
@@ -2798,18 +2786,6 @@ void MarlinSettings::postprocess() {
         _FIELD_TEST(extui_data);
         EEPROM_READ(extui_data);
         if (!validating) ExtUI::onLoadSettings(extui_data);
-      }
-      #endif
-
-      //
-      // DWIN ProUI User Data
-      //
-      #if ENABLED(DWIN_LCD_PROUI)
-      {
-        const char dwin_data[EXTUI_EEPROM_DATA_SIZE] = { 0 };
-        _FIELD_TEST(dwin_data);
-        EEPROM_READ(dwin_data);
-        if (!validating) dwinCopySettingsFrom(dwin_data);
       }
       #endif
 
