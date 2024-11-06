@@ -531,15 +531,19 @@
   /**
    *                      -------
    *            GND | 9  |       | 8 | 3.3V
-   *  (ESP-CS) PB12 | 10 |       | 7 | PB15 (ESP-MOSI)
-   *           3.3V | 11 |       | 6 | PB14 (ESP-MISO)
+   *  (ESP-CS) PB12 | 10 |       | 7 | PC3  (ESP-MOSI)
+   *             -- | 11 |       | 6 | PC2  (ESP-MISO)
    * (ESP-IO0)  PD7 | 12 |       | 5 | PB13 (ESP-CLK)
    * (ESP-IO4) PD10 | 13 |       | 4 | --
-   *             -- | 14 |       | 3 | PE15 (ESP-EN)
-   *  (ESP-RX)  PD8 | 15 |       | 2 | --
-   *  (ESP-TX)  PD9 | 16 |       | 1 | PE14 (ESP-RST)
+   *             -- | 14 |       | 3 | PG8  (ESP-EN)
+   *  (ESP-RX)  **1 | 15 |       | 2 | --
+   *  (ESP-TX)  **2 | 16 |       | 1 | PG7  (ESP-RST)
    *                      -------
    *                       WIFI
+   *
+   * **1 PD8 on BTT_OCTOPUS_V1_0 and on BTT_OCTOPUS_PRO_V1_0, PD5 on BTT_OCTOPUS_V1_1
+   * **2 PD9 on BTT_OCTOPUS_V1_0 and on BTT_OCTOPUS_PRO_V1_0, PD6 on BTT_OCTOPUS_V1_1
+   *
    */
   #define ESP_WIFI_MODULE_COM                  3  // Must also set either SERIAL_PORT or SERIAL_PORT_2 to this
   #define ESP_WIFI_MODULE_BAUDRATE      BAUDRATE  // Must use same BAUDRATE as SERIAL_PORT & SERIAL_PORT_2
