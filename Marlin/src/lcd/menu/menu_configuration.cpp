@@ -419,7 +419,7 @@ void menu_advanced_settings();
         }); \
       }while(0);
     #else
-      #define _EDIT_HOMING_FR(A)  \
+      #define _EDIT_HOMING_FR(A) \
         EDIT_ITEM_FAST_N(float5, _AXIS(A), MSG_HOMING_FEEDRATE_N, &homing_feedrate_mm_m.A, MMS_TO_MMM(planner.settings.min_feedrate_mm_s), MMS_TO_MMM(planner.settings.max_feedrate_mm_s[_AXIS(A)]));
     #endif
 
