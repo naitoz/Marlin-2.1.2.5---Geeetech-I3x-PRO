@@ -66,9 +66,9 @@ void GcodeSuite::M0_M1() {
   #elif ENABLED(DWIN_LCD_PROUI) // ProUI with icon, string, button title
 
     if (parser.string_arg)
-      dwinPopupContinue(ICON_Continue_1, parser.string_arg, GET_TEXT_F(MSG_USERWAIT));
+      ExtUI::onUserConfirmRequired(ICON_Continue_1, parser.string_arg, GET_TEXT_F(MSG_USERWAIT));
     else
-      dwinPopupContinue(ICON_Stop_1, GET_TEXT_F(MSG_STOPPED), GET_TEXT_F(MSG_USERWAIT));
+      ExtUI::onUserConfirmRequired(ICON_Stop_1, GET_TEXT_F(MSG_STOPPED), GET_TEXT_F(MSG_USERWAIT));
 
   #elif ENABLED(EXTENSIBLE_UI) // ExtUI with icon, string, button title
 

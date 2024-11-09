@@ -143,25 +143,23 @@ namespace ExtUI {
   void onFactoryReset() { dwinSetDataDefaults(); }
 
   // Copy settings to EEPROM buffer for write
-  void onStoreSettings(char *buff) { dwinCopySettingsTo(static_cast<char * const>(buff)); }
+  void onStoreSettings(char *buff) { dwinCopySettingsTo(buff); }
 
   // Get settings from loaded EEPROM data
-  void onLoadSettings(const char *buff) { dwinCopySettingsFrom(static_cast<const char * const>(buff)); }
+  void onLoadSettings(const char *buff) { dwinCopySettingsFrom(buff); }
 
   void onPostprocessSettings() {
     // Called after loading or resetting stored settings
   }
 
-  void onSettingsStored(const bool success) {
+  void onSettingsStored(const bool) {
     // Called after the entire EEPROM has been written,
     // whether successful or not.
-    DONE_BUZZ(success);
   }
 
-  void onSettingsLoaded(const bool success) {
+  void onSettingsLoaded(const bool) {
     // Called after the entire EEPROM has been read,
     // whether successful or not.
-    DONE_BUZZ(success);
   }
 
   #if HAS_LEVELING
