@@ -178,8 +178,10 @@ typedef struct {
 
 typedef struct {
   rgb_t color;                        // Color
-  #if ANY(HAS_PID_HEATING, MPCTEMP)
+  #if HAS_PID_HEATING
     tempcontrol_t tempControl = PID_DONE;
+  #elif ENABLED(MPC_AUTOTUNE)
+    tempcontrol_t tempControl = MPC_DONE;
   #endif
   uint8_t select = 0;                 // Auxiliary selector variable
   AxisEnum axis = X_AXIS;             // Axis Select

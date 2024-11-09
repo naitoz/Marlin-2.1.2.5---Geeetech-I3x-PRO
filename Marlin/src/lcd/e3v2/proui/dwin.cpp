@@ -2683,7 +2683,7 @@ void applyMaxAccel() { planner.set_max_acceleration(hmiValue.axis, menuData.valu
       default: break;
     }
   }
-  void applyHomingFR() { updateHomingFR(HMI_value.axis, MenuData.Value); }
+  void applyHomingFR() { updateHomingFR(hmiValue.axis, menuData.value); }
   #if HAS_X_AXIS
     void setHomingX() { hmiValue.axis = X_AXIS; setIntOnClick(min_homing_edit_values.x, max_homing_edit_values.x, homing_feedrate_mm_m.x, applyHomingFR); }
   #endif
@@ -3143,7 +3143,7 @@ void drawPrepareMenu() {
         MENU_ITEM(ICON_PIDNozzle, MSG_HOTEND_TEMP_GRAPH, onDrawMenuItem, drawHotendPlot);
       #endif
       TERN_(PIDTEMPBED, MENU_ITEM(ICON_PIDBed, MSG_BED_TEMP_GRAPH, onDrawMenuItem, drawBedPlot));
-      TERN_(PIDTEMPCHAMBER, MENU_ITEM(ICON_PIDBed, MSG_BED_TEMP_GRAPH, onDrawMenuItem, drawChamberPlot));
+      TERN_(PIDTEMPCHAMBER, MENU_ITEM(ICON_PIDChamber, MSG_CHAMBER_TEMP_GRAPH, onDrawMenuItem, drawChamberPlot));
     #endif
     MENU_ITEM(ICON_Language, MSG_UI_LANGUAGE, onDrawLanguage, setLanguage);
   }
@@ -3477,7 +3477,7 @@ void drawTuneMenu() {
         MENU_ITEM(ICON_PIDNozzle, MSG_HOTEND_TEMP_GRAPH, onDrawMenuItem, drawHotendPlot);
       #endif
       TERN_(PIDTEMPBED, MENU_ITEM(ICON_PIDBed, MSG_BED_TEMP_GRAPH, onDrawMenuItem, drawBedPlot));
-      TERN_(PIDTEMPCHAMBER, MENU_ITEM(ICON_PIDBed, MSG_BED_TEMP_GRAPH, onDrawMenuItem, drawChamberPlot));
+      TERN_(PIDTEMPCHAMBER, MENU_ITEM(ICON_PIDChamber, MSG_CHAMBER_TEMP_GRAPH, onDrawMenuItem, drawChamberPlot));
     #endif
     #if ENABLED(CASE_LIGHT_MENU)
       EDIT_ITEM(ICON_CaseLight, MSG_CASE_LIGHT, onDrawChkbMenu, setCaseLight, &caselight.on);
@@ -3816,15 +3816,15 @@ void drawMaxAccelMenu() {
     if (SET_MENU(homingFRMenu, MSG_HOMING_FEEDRATE, 4)) {
       BACK_ITEM(drawMotionMenu);
       #if HAS_X_AXIS
-        static uint16_t xhome = static_cast<uint16_t>(homing_feedrate_mm_m.x);
+        uint16_t xhome = static_cast<uint16_t>(homing_feedrate_mm_m.x);
         EDIT_ITEM(ICON_MaxSpeedJerkX, MSG_HOMING_FEEDRATE_X, onDrawPIntMenu, setHomingX, &xhome);
       #endif
       #if HAS_Y_AXIS
-        static uint16_t yhome = static_cast<uint16_t>(homing_feedrate_mm_m.y);
+        uint16_t yhome = static_cast<uint16_t>(homing_feedrate_mm_m.y);
         EDIT_ITEM(ICON_MaxSpeedJerkY, MSG_HOMING_FEEDRATE_Y, onDrawPIntMenu, setHomingY, &yhome);
       #endif
       #if HAS_Z_AXIS
-        static uint16_t zhome = static_cast<uint16_t>(homing_feedrate_mm_m.z);
+        uint16_t zhome = static_cast<uint16_t>(homing_feedrate_mm_m.z);
         EDIT_ITEM(ICON_MaxSpeedJerkZ, MSG_HOMING_FEEDRATE_Z, onDrawPIntMenu, setHomingZ, &zhome);
       #endif
     }
@@ -4219,10 +4219,20 @@ void drawMaxAccelMenu() {
 #endif // AUTO_BED_LEVELING_UBL
 
 #if HAS_MESH
-
+  #if ENABLED(AUTO_BED_LEVELING_3POINT)
+    #define TITLE_MSG MSG_3POINT_LEVELING
+  #elif ENABLED(AUTO_BED_LEVELING_LINEAR)
+    #define TITLE_MSG MSG_LINEAR_LEVELING
+  #elif ENABLED(AUTO_BED_LEVELING_BILINEAR)
+    #define TITLE_MSG MSG_BILINEAR_LEVELING
+  #elif ENABLED(AUTO_BED_LEVELING_UBL)
+    #define TITLE_MSG MSG_UBL_LEVELING
+  #else
+    #define TITLE_MSG MSG_MESH_LEVELING
+  #endif
   void drawMeshSetMenu() {
     checkkey = ID_Menu;
-    if (SET_MENU(meshMenu, MSG_MESH_LEVELING, 14)) {
+    if (SET_MENU(meshMenu, TITLE_MSG, 14)) {
       BACK_ITEM(drawAdvancedSettingsMenu);
       #if ENABLED(PREHEAT_BEFORE_LEVELING)
         EDIT_ITEM(ICON_Temperature, MSG_UBL_SET_TEMP_BED, onDrawPIntMenu, setBedLevT, &hmiData.bedLevT);
