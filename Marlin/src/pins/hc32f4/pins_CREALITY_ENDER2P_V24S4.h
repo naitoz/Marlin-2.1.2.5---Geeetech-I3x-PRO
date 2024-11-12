@@ -75,7 +75,7 @@
 // Servos
 //
 #ifndef SERVO0_PIN
-  #define SERVO0_PIN                        PB1   // BLTouch IN *
+  #define SERVO0_PIN                        PB1
 #endif
 
 //
@@ -86,7 +86,7 @@
 #define Z_STOP_PIN                          PB0
 
 #ifndef Z_MIN_PROBE_PIN
-  #define Z_MIN_PROBE_PIN                   PB2   // BLTouch OUT *
+  #define Z_MIN_PROBE_PIN                   PB2
 #endif
 
 //
