@@ -212,13 +212,21 @@ void GcodeSuite::G34() {
           // Probe a Z height for each stepper.
           // Probing sanity check is disabled, as it would trigger even in normal cases because
           // current_position.z has been manually altered in the "dirty trick" above.
-          
-          if (DEBUGGING(LEVELING)) DEBUG_ECHOLNPGM_P("Z_PROBE_LOW_POINT: ", p_float_t(Z_PROBE_LOW_POINT, 2));
-          if (DEBUGGING(LEVELING)) DEBUG_ECHOLNPGM_P("z_probe: ", p_float_t(z_probe, 2));
-          if (DEBUGGING(LEVELING)) DEBUG_ECHOLNPGM_P("Probe Tgt: ", p_float_t((Z_PROBE_LOW_POINT) - z_probe * 0.5f, 2));
+
+          if (DEBUGGING(LEVELING))
+            DEBUG_ECHOLNPGM(
+              "Z_PROBE_LOW_POINT: ", p_float_t(Z_PROBE_LOW_POINT, 2),
+              "z_probe: ", p_float_t(z_probe, 2),
+              "Probe Tgt: ", p_float_t((Z_PROBE_LOW_POINT) - z_probe * 0.5f, 2)
+            );
+
           const float z_probed_height = probe.probe_at_point(DIFF_TERN(HAS_HOME_OFFSET, ppos, xy_pos_t(home_offset)), raise_after, 3, true, false, (Z_PROBE_LOW_POINT) - (z_probe * 0.5f), Z_TWEEN_SAFE_CLEARANCE);
-          if (DEBUGGING(LEVELING)) DEBUG_ECHOLNPGM_P(PSTR("Probing X"), ppos.x, SP_Y_STR, ppos.y);
-          if (DEBUGGING(LEVELING)) DEBUG_ECHOLNPGM_P("Height = ", z_probed_height);
+
+          if (DEBUGGING(LEVELING)) {
+            DEBUG_ECHOLNPGM_P(PSTR("Probing X"), ppos.x, SP_Y_STR, ppos.y);
+            DEBUG_ECHOLNPGM("Height = ", z_probed_height);
+          }
+
           if (isnan(z_probed_height)) {
             SERIAL_ECHOLNPGM(STR_ERR_PROBING_FAILED);
             LCD_MESSAGE(MSG_LCD_PROBING_FAILED);
@@ -242,11 +250,12 @@ void GcodeSuite::G34() {
         // Adapt the next probe clearance height based on the new measurements.
         // Safe_height = lowest distance to bed (= highest measurement) plus highest measured misalignment.
         z_maxdiff = z_measured_max - z_measured_min;
-        // While the intent of the below line seems to be to clamp the probe depth on successive iterations of G34, in reality if the amplification
-        // factor is not completely accurate, this was causing probing to fail as the probe stopped fractions of a mm from the trigger point 
+
+        // The intent of the line below seems to be to clamp the probe depth on successive iterations of G34, but in reality if the amplification
+        // factor is not completely accurate, this was causing probing to fail as the probe stopped fractions of a mm from the trigger point
         // on the second iteration very reliably. This may be restored with an uncertainty factor at some point, however its usefulness after
-        // all probe points have seen a successfull probe is questionable.
-        //z_probe = (Z_TWEEN_SAFE_CLEARANCE + zoffs) + z_measured_max + z_maxdiff; //Not sure we need z_maxdiff, but leaving it in for safety.
+        // all probe points have seen a successful probe is questionable.
+        //z_probe = (Z_TWEEN_SAFE_CLEARANCE + zoffs) + z_measured_max + z_maxdiff; // Not sure we need z_maxdiff, but leaving it in for safety.
 
         #if HAS_Z_STEPPER_ALIGN_STEPPER_XY
           // Replace the initial values in z_measured with calculated heights at
@@ -411,11 +420,15 @@ void GcodeSuite::G34() {
         // Use the probed height from the last iteration to determine the Z height.
         // z_measured_min is used, because all steppers are aligned to z_measured_min.
         // Ideally, this would be equal to the 'z_probe * 0.5f' which was added earlier.
-        if (DEBUGGING(LEVELING)) DEBUG_ECHOLNPGM_P("z_measured_min: ", p_float_t(z_measured_min, 2));
-        if (DEBUGGING(LEVELING)) DEBUG_ECHOLNPGM_P("Z_TWEEN_SAFE_CLEARANCE: ", p_float_t(Z_TWEEN_SAFE_CLEARANCE, 2));
-        if (DEBUGGING(LEVELING)) DEBUG_ECHOLNPGM_P("zoffs: ", p_float_t(zoffs, 2));
-        if(!err_break)
-          current_position.z -= z_measured_min - (Z_TWEEN_SAFE_CLEARANCE + zoffs); //we shouldn't want to subtract the clearance from here right? (Depends if we added it further up)
+        if (DEBUGGING(LEVELING))
+          DEBUG_ECHOLNPGM(
+            "z_measured_min: ", p_float_t(z_measured_min, 2),
+            "Z_TWEEN_SAFE_CLEARANCE: ", p_float_t(Z_TWEEN_SAFE_CLEARANCE, 2),
+            "zoffs: ", p_float_t(zoffs, 2)
+          );
+
+        if (!err_break)
+          current_position.z -= z_measured_min - (Z_TWEEN_SAFE_CLEARANCE + zoffs); // We shouldn't want to subtract the clearance from here right? (Depends if we added it further up)
         sync_plan_position();
       #endif
 
