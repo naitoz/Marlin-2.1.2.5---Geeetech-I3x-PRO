@@ -220,7 +220,14 @@ void GcodeSuite::G34() {
               "Probe Tgt: ", p_float_t((Z_PROBE_LOW_POINT) - z_probe * 0.5f, 2)
             );
 
-          const float z_probed_height = probe.probe_at_point(DIFF_TERN(HAS_HOME_OFFSET, ppos, xy_pos_t(home_offset)), raise_after, 3, true, false, (Z_PROBE_LOW_POINT) - (z_probe * 0.5f), Z_TWEEN_SAFE_CLEARANCE);
+          const float z_probed_height = probe.probe_at_point(
+            DIFF_TERN(HAS_HOME_OFFSET, ppos, xy_pos_t(home_offset)),   // xy
+            raise_after,                                               // raise_after
+            (DEBUGGING(LEVELING) || DEBUGGING(INFO)) ? 3 : 0,          // verbose_level
+            true, false,                                               // probe_relative, sanity_check
+            (Z_PROBE_LOW_POINT) - (z_probe * 0.5f),                    // z_min_point
+            Z_TWEEN_SAFE_CLEARANCE                                     // z_clearance
+          );
 
           if (DEBUGGING(LEVELING)) {
             DEBUG_ECHOLNPGM_P(PSTR("Probing X"), ppos.x, SP_Y_STR, ppos.y);
