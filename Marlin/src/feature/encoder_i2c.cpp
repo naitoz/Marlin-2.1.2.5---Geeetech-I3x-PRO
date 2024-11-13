@@ -39,7 +39,7 @@
 #include "../module/stepper.h"
 #include "../gcode/parser.h"
 
-#include "../feature/babystep.h"
+#include "babystep.h"
 
 #include <Wire.h>
 
