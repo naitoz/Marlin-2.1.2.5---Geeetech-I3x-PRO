@@ -459,8 +459,6 @@ namespace LanguageNarrow_fr_na {
   LSTR MSG_DELTA_HEIGHT                   = _UxGT("Hauteur");
   LSTR MSG_DELTA_RADIUS                   = _UxGT("Rayon");
 
-  LSTR MSG_INFO_MENU                      = _UxGT("Infos imprimante");
-  LSTR MSG_INFO_PRINTER_MENU              = _UxGT("Infos imprimante");
   LSTR MSG_3POINT_LEVELING                = _UxGT("Niveau a 3 points");
   LSTR MSG_LINEAR_LEVELING                = _UxGT("Niveau lineaire");
   LSTR MSG_BILINEAR_LEVELING              = _UxGT("Niveau bilineaire");
@@ -468,6 +466,9 @@ namespace LanguageNarrow_fr_na {
   LSTR MSG_MESH_LEVELING                  = _UxGT("Niveau par grille");
   LSTR MSG_MESH_DONE                      = _UxGT("Niveau termine");
   LSTR MSG_MESH_SETTINGS                  = _UxGT("Reglages de maillage");
+
+  LSTR MSG_INFO_MENU                      = _UxGT("Propos de imprimante");
+  LSTR MSG_INFO_PRINTER_MENU              = _UxGT("Infos imprimante");
   LSTR MSG_INFO_STATS_MENU                = _UxGT("Stats. imprimante");
   LSTR MSG_INFO_BOARD_MENU                = _UxGT("Infos carte");
   LSTR MSG_INFO_THERMISTOR_MENU           = _UxGT("Thermistances");
@@ -476,21 +477,15 @@ namespace LanguageNarrow_fr_na {
   LSTR MSG_INFO_PROTOCOL                  = _UxGT("Protocole");
   LSTR MSG_INFO_RUNAWAY_OFF               = _UxGT("Protection inactive");
   LSTR MSG_INFO_RUNAWAY_ON                = _UxGT("Protection active");
-  LSTR MSG_HOTEND_IDLE_TIMEOUT            = _UxGT("Hotend Idle Timeout");
-
-  LSTR MSG_CASE_LIGHT                     = _UxGT("Lumiere caisson");
-  LSTR MSG_CASE_LIGHT_BRIGHTNESS          = _UxGT("Luminosite");
-  LSTR MSG_KILL_EXPECTED_PRINTER          = _UxGT("Imprimante incorrecte");
-
   LSTR MSG_INFO_PRINT_COUNT               = _UxGT("Impressions");
   LSTR MSG_INFO_COMPLETED_PRINTS          = _UxGT("Terminees");
   LSTR MSG_INFO_PRINT_TIME                = _UxGT("Total");
   LSTR MSG_INFO_PRINT_LONGEST             = _UxGT("+ long");
   LSTR MSG_INFO_PRINT_FILAMENT            = _UxGT("Filament");
-
   LSTR MSG_INFO_MIN_TEMP                  = _UxGT("Temp Min");
   LSTR MSG_INFO_MAX_TEMP                  = _UxGT("Temp Max");
   LSTR MSG_INFO_PSU                       = _UxGT("Alim.");
+
   LSTR MSG_DRIVE_STRENGTH                 = _UxGT("Puiss. moteur ");
   LSTR MSG_DAC_PERCENT_N                  = _UxGT("Driver @ %");
   LSTR MSG_DAC_EEPROM_WRITE               = _UxGT("DAC EEPROM sauv.");
@@ -507,6 +502,11 @@ namespace LanguageNarrow_fr_na {
   LSTR MSG_RUNOUT_SENSOR                  = _UxGT("Capteur fil.");
   LSTR MSG_KILL_HOMING_FAILED             = _UxGT("Echec origine");
   LSTR MSG_LCD_PROBING_FAILED             = _UxGT("Echec sonde");
+  LSTR MSG_HOTEND_IDLE_TIMEOUT            = _UxGT("Hotend Idle Timeout");
+  LSTR MSG_KILL_EXPECTED_PRINTER          = _UxGT("Imprimante incorrecte");
+
+  LSTR MSG_CASE_LIGHT                     = _UxGT("Lumiere caisson");
+  LSTR MSG_CASE_LIGHT_BRIGHTNESS          = _UxGT("Luminosite");
 
   LSTR MSG_KILL_MMU2_FIRMWARE             = _UxGT("MAJ firmware MMU!!");
   LSTR MSG_MMU2_CHOOSE_FILAMENT_HEADER    = _UxGT("CHOISIR FILAMENT");

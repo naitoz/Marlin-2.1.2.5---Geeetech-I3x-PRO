@@ -352,38 +352,35 @@ namespace LanguageNarrow_vi {
   LSTR MSG_DELTA_DIAG_ROD                 = _UxGT("Gậy Chéo");                            // Diag Rod
   LSTR MSG_DELTA_HEIGHT                   = _UxGT("Chiều Cao");                           // Height
   LSTR MSG_DELTA_RADIUS                   = _UxGT("Bán Kính");                            // Radius
-  LSTR MSG_INFO_MENU                      = _UxGT("Về Máy In");
-  LSTR MSG_INFO_PRINTER_MENU              = _UxGT("Thông Tin Máy In");                    // Printer Info
   LSTR MSG_3POINT_LEVELING                = _UxGT("San lấp 3-Điểm");                      // 3-Point Leveling
   LSTR MSG_LINEAR_LEVELING                = _UxGT("San Lấp Tuyến Tính");                  // Linear Leveling
   LSTR MSG_BILINEAR_LEVELING              = _UxGT("San Lấp Song Tuyến");                  // Bilinear Leveling
   LSTR MSG_UBL_LEVELING                   = _UxGT("San Lấp Bàn Thống Nhất");              // Unified Bed Leveling
   LSTR MSG_MESH_LEVELING                  = _UxGT("Lưới San Lấp");                        // Mesh Leveling
   LSTR MSG_MESH_SETTINGS                  = _UxGT("Lưới Cài Đặt");                        // Mesh Settings
+  LSTR MSG_INFO_MENU                      = _UxGT("Về Máy In");
+  LSTR MSG_INFO_PRINTER_MENU              = _UxGT("Thông Tin Máy In");                    // Printer Info
   LSTR MSG_INFO_STATS_MENU                = _UxGT("Thống Kê Máy In");                     // Printer Stats
   LSTR MSG_INFO_BOARD_MENU                = _UxGT("Thông Tin Bo Mạch");                   // Board Info
   LSTR MSG_INFO_THERMISTOR_MENU           = _UxGT("Điện Trở Nhiệt");                      // Thermistors
   LSTR MSG_INFO_EXTRUDERS                 = _UxGT("Máy đùn");                             // Extruders
   LSTR MSG_INFO_BAUDRATE                  = _UxGT("Baud");                                // Baud
   LSTR MSG_INFO_PROTOCOL                  = _UxGT("Giao Thức");                           // Protocol
-  LSTR MSG_CASE_LIGHT                     = _UxGT("Đèn Khuông");                          // Case light
-  LSTR MSG_CASE_LIGHT_BRIGHTNESS          = _UxGT("Độ Sáng");                             // Light Brightness
+  LSTR MSG_INFO_PRINT_COUNT               = _UxGT("Số In");                               // Prints
+  LSTR MSG_INFO_COMPLETED_PRINTS          = _UxGT("Đã hoàn thành");                       // Completed
   #if LCD_WIDTH >= 20 || HAS_DWIN_E3V2
-    LSTR MSG_INFO_PRINT_COUNT             = _UxGT("Số In");                               // Print Count
-    LSTR MSG_INFO_COMPLETED_PRINTS        = _UxGT("Đã hoàn thành");
-    LSTR MSG_INFO_PRINT_TIME              = _UxGT("Tổng số thời gian in");               // Total print time
+    LSTR MSG_INFO_PRINT_TIME              = _UxGT("Tổng số thời gian in");                // Total print time
     LSTR MSG_INFO_PRINT_LONGEST           = _UxGT("Thời gian việc lâu nhất");             // Longest job time
     LSTR MSG_INFO_PRINT_FILAMENT          = _UxGT("Tổng số đùn");                         // Extruded total
   #else
-    LSTR MSG_INFO_PRINT_COUNT             = _UxGT("In");                                  // Prints
-    LSTR MSG_INFO_COMPLETED_PRINTS        = _UxGT("Đã hoàn thành");                       // Completed
-    LSTR MSG_INFO_PRINT_TIME              = _UxGT("Tổng số");                            // Total
+    LSTR MSG_INFO_PRINT_TIME              = _UxGT("Tổng số");                             // Total
     LSTR MSG_INFO_PRINT_LONGEST           = _UxGT("Dài nhất");                            // Longest
     LSTR MSG_INFO_PRINT_FILAMENT          = _UxGT("Đã ép đùn");
   #endif
   LSTR MSG_INFO_MIN_TEMP                  = _UxGT("Nhiệt độ tối thiểu");                  // Min Temp
   LSTR MSG_INFO_MAX_TEMP                  = _UxGT("Nhiệt độ tối đa");                     // Max temp
   LSTR MSG_INFO_PSU                       = _UxGT("Bộ nguồn");                            // PSU
+
   LSTR MSG_DRIVE_STRENGTH                 = _UxGT("Sức mạnh ổ đĩa");                      // Drive Strength
   LSTR MSG_DAC_PERCENT_N                  = _UxGT("@ % trình điều khiển");
   LSTR MSG_DAC_EEPROM_WRITE               = _UxGT("Ghi DAC EEPROM");                      // DAC EEPROM Write
@@ -397,6 +394,9 @@ namespace LanguageNarrow_vi {
   LSTR MSG_RUNOUT_SENSOR_ENABLE           = _UxGT("Cảm Biến Hết");                        // Runout Sensor
   LSTR MSG_KILL_HOMING_FAILED             = _UxGT("Sự nhà không thành công");             // Homing failed
   LSTR MSG_LCD_PROBING_FAILED             = _UxGT(" không thành công");                   // Probing failed
+
+  LSTR MSG_CASE_LIGHT                     = _UxGT("Đèn Khuông");                          // Case light
+  LSTR MSG_CASE_LIGHT_BRIGHTNESS          = _UxGT("Độ Sáng");                             // Light Brightness
 
   //
   // Filament Change screens show up to 3 lines on a 4-line display

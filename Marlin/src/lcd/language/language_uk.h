@@ -511,9 +511,6 @@ namespace LanguageNarrow_uk {
   LSTR MSG_DELTA_HEIGHT                     = _UxGT("Висота");
   LSTR MSG_DELTA_RADIUS                     = _UxGT("Радіус");
 
-  LSTR MSG_INFO_MENU                        = _UxGT("Про принтер");
-  LSTR MSG_INFO_PRINTER_MENU                = _UxGT("Дані принтера");
-
   LSTR MSG_3POINT_LEVELING                  = _UxGT("3-точкове вирівн.");
   LSTR MSG_LINEAR_LEVELING                  = _UxGT("Лінійне вирівн.");
   LSTR MSG_BILINEAR_LEVELING                = _UxGT("Білінійне вирівн.");
@@ -522,6 +519,8 @@ namespace LanguageNarrow_uk {
   LSTR MSG_MESH_DONE                        = _UxGT("Зондування виконано");
   LSTR MSG_MESH_SETTINGS                    = _UxGT("Сітка Параметри");
 
+  LSTR MSG_INFO_MENU                        = _UxGT("Про принтер");
+  LSTR MSG_INFO_PRINTER_MENU                = _UxGT("Дані принтера");
   LSTR MSG_INFO_STATS_MENU                  = _UxGT("Статистика принтера");
   LSTR MSG_INFO_BOARD_MENU                  = _UxGT("Про плату");
   LSTR MSG_INFO_THERMISTOR_MENU             = _UxGT("Термістори");
@@ -530,28 +529,6 @@ namespace LanguageNarrow_uk {
   LSTR MSG_INFO_PROTOCOL                    = _UxGT("Протокол");
   LSTR MSG_INFO_RUNAWAY_OFF                 = _UxGT("Контр.витіку ") LCD_STR_THERMOMETER _UxGT(" Вимк");
   LSTR MSG_INFO_RUNAWAY_ON                  = _UxGT("Контр.витіку ") LCD_STR_THERMOMETER _UxGT(" Увімк");
-  LSTR MSG_HOTEND_IDLE_TIMEOUT              = _UxGT("Час прост. хот-у");
-
-  LSTR MSG_CASE_LIGHT                       = _UxGT("Підсвітка");
-  LSTR MSG_CASE_LIGHT_BRIGHTNESS            = _UxGT("Яскравість світла");
-  LSTR MSG_KILL_EXPECTED_PRINTER            = _UxGT("НЕ ТОЙ ПРИНТЕР");
-
-  LSTR MSG_COLORS_GET                       = _UxGT("Отримати колір");  // ProUI
-  LSTR MSG_COLORS_SELECT                    = _UxGT("Кольори");         // ProUI
-  LSTR MSG_COLORS_APPLIED                   = _UxGT("Кольори застос."); // ProUI
-  LSTR MSG_COLORS_RED                       = _UxGT("Червоний");        // ProUI / JyersUI
-  LSTR MSG_COLORS_GREEN                     = _UxGT("Зелений");         // ProUI / JyersUI
-  LSTR MSG_COLORS_BLUE                      = _UxGT("Синій");           // ProUI / JyersUI
-  LSTR MSG_COLORS_WHITE                     = _UxGT("Білий");           // ProUI
-  LSTR MSG_UI_LANGUAGE                      = _UxGT("Мова");            // ProUI
-  LSTR MSG_SOUND_ENABLE                     = _UxGT("Дозволити звук");  // ProUI
-  LSTR MSG_LOCKSCREEN                       = _UxGT("Блокувати екран"); // ProUI
-  //MSG_LOCKSCREEN_LOCKED
-  //MSG_LOCKSCREEN_UNLOCK
-  LSTR MSG_PLEASE_WAIT_REBOOT               = _UxGT("Перезавантаж..."); // ProUI
-  LSTR MSG_MEDIA_NOT_INSERTED               = _UxGT("Немає носія");     // ProUI
-  LSTR MSG_PLEASE_PREHEAT                   = _UxGT("Нагрійте хотенд"); // ProUI
-
   LSTR MSG_INFO_PRINT_COUNT                 = _UxGT("Друків");
   LSTR MSG_INFO_PRINT_TIME                  = _UxGT("Загалом");
   LSTR MSG_INFO_PRINT_LONGEST               = _UxGT("Найдовше");
@@ -577,7 +554,30 @@ namespace LanguageNarrow_uk {
   LSTR MSG_RUNOUT_DISTANCE_MM               = _UxGT("До закінч.,мм");
   LSTR MSG_KILL_HOMING_FAILED               = _UxGT("Помилка паркування");
   LSTR MSG_LCD_PROBING_FAILED               = _UxGT("Помилка зондування");
+  LSTR MSG_HOTEND_IDLE_TIMEOUT              = _UxGT("Час прост. хот-у");
+  LSTR MSG_KILL_EXPECTED_PRINTER            = _UxGT("НЕ ТОЙ ПРИНТЕР");
 
+  LSTR MSG_CASE_LIGHT                       = _UxGT("Підсвітка");
+  LSTR MSG_CASE_LIGHT_BRIGHTNESS            = _UxGT("Яскравість світла");
+
+  // Ender-3 V2 DWIN - ProUI / JyersUI
+  LSTR MSG_COLORS_GET                       = _UxGT("Отримати колір");  // ProUI
+  LSTR MSG_COLORS_SELECT                    = _UxGT("Кольори");         // ProUI
+  LSTR MSG_COLORS_APPLIED                   = _UxGT("Кольори застос."); // ProUI
+  LSTR MSG_COLORS_RED                       = _UxGT("Червоний");        // ProUI / JyersUI
+  LSTR MSG_COLORS_GREEN                     = _UxGT("Зелений");         // ProUI / JyersUI
+  LSTR MSG_COLORS_BLUE                      = _UxGT("Синій");           // ProUI / JyersUI
+  LSTR MSG_COLORS_WHITE                     = _UxGT("Білий");           // ProUI
+  LSTR MSG_UI_LANGUAGE                      = _UxGT("Мова");            // ProUI
+  LSTR MSG_SOUND_ENABLE                     = _UxGT("Дозволити звук");  // ProUI
+  LSTR MSG_LOCKSCREEN                       = _UxGT("Блокувати екран"); // ProUI
+  //MSG_LOCKSCREEN_LOCKED
+  //MSG_LOCKSCREEN_UNLOCK
+  LSTR MSG_PLEASE_WAIT_REBOOT               = _UxGT("Перезавантаж..."); // ProUI
+  LSTR MSG_MEDIA_NOT_INSERTED               = _UxGT("Немає носія");     // ProUI
+  LSTR MSG_PLEASE_PREHEAT                   = _UxGT("Нагрійте хотенд"); // ProUI
+
+  // Prusa MMU 2
   LSTR MSG_MMU2_CHOOSE_FILAMENT_HEADER      = _UxGT("ОБЕРІТЬ ПРУТОК");
   LSTR MSG_MMU2_MENU                        = _UxGT("MMU");
   LSTR MSG_KILL_MMU2_FIRMWARE               = _UxGT("Онови прошивку MMU!");

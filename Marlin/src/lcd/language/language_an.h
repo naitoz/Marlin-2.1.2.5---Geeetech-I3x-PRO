@@ -184,22 +184,19 @@ namespace LanguageNarrow_an {
   LSTR MSG_DELTA_CALIBRATE_Z              = _UxGT("Calibrar Z");
   LSTR MSG_DELTA_CALIBRATE_CENTER         = _UxGT("Calibrar Centro");
 
-  LSTR MSG_INFO_MENU                      = _UxGT("Inf. Impresora");
-  LSTR MSG_INFO_PRINTER_MENU              = _UxGT("Inf. Impresora");
+  LSTR MSG_INFO_MENU                      = _UxGT("Sobre Impresora");
+  LSTR MSG_INFO_PRINTER_MENU              = _UxGT("Info. Impresora");
   LSTR MSG_INFO_STATS_MENU                = _UxGT("Estadisticas Imp.");
-  LSTR MSG_INFO_BOARD_MENU                = _UxGT("Inf. Controlador");
+  LSTR MSG_INFO_BOARD_MENU                = _UxGT("Info. Controlador");
   LSTR MSG_INFO_THERMISTOR_MENU           = _UxGT("Termistors");
   LSTR MSG_INFO_EXTRUDERS                 = _UxGT("Extrusors");
   LSTR MSG_INFO_BAUDRATE                  = _UxGT("Baudios");
   LSTR MSG_INFO_PROTOCOL                  = _UxGT("Protocolo");
-  LSTR MSG_CASE_LIGHT                     = _UxGT("Luz");
-
   LSTR MSG_INFO_PRINT_COUNT               = _UxGT("Impresions");
   LSTR MSG_INFO_COMPLETED_PRINTS          = _UxGT("Completadas");
   LSTR MSG_INFO_PRINT_TIME                = _UxGT("Total");
   LSTR MSG_INFO_PRINT_LONGEST             = _UxGT("Mas larga");
   LSTR MSG_INFO_PRINT_FILAMENT            = _UxGT("Extrusion");
-
   LSTR MSG_INFO_MIN_TEMP                  = _UxGT("Temperatura menima");
   LSTR MSG_INFO_MAX_TEMP                  = _UxGT("Temperatura maxima");
   LSTR MSG_INFO_PSU                       = _UxGT("Fuente de aliment");
@@ -207,6 +204,8 @@ namespace LanguageNarrow_an {
   LSTR MSG_DRIVE_STRENGTH                 = _UxGT("Fuerza d'o driver");
   LSTR MSG_DAC_EEPROM_WRITE               = _UxGT("Escri. DAC EEPROM");
   LSTR MSG_FILAMENT_CHANGE_OPTION_RESUME  = _UxGT("Resumir imp.");
+
+  LSTR MSG_CASE_LIGHT                     = _UxGT("Luz");
 
   // Up to 2 lines allowed
   LSTR MSG_FILAMENT_CHANGE_INIT           = _UxGT(MSG_2_LINE("Aguardand iniciar", "d'o fil. cambear"));

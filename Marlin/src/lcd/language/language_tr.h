@@ -629,8 +629,6 @@ namespace LanguageNarrow_tr {
   LSTR MSG_DELTA_DIAG_ROD                 = _UxGT("Çapral Mil");
   LSTR MSG_DELTA_HEIGHT                   = _UxGT("Yükseklik");
   LSTR MSG_DELTA_RADIUS                   = _UxGT("Yarıçap");
-  LSTR MSG_INFO_MENU                      = _UxGT("Yazıcı Hakkında");
-  LSTR MSG_INFO_PRINTER_MENU              = _UxGT("Yazıcı Bilgisi");
   LSTR MSG_3POINT_LEVELING                = _UxGT("3-Nokta Seviyeleme");
   LSTR MSG_LINEAR_LEVELING                = _UxGT("Doğrusal Seviyeleme");
   LSTR MSG_BILINEAR_LEVELING              = _UxGT("İki Yönlü Doğ. Hiza.");
@@ -638,7 +636,10 @@ namespace LanguageNarrow_tr {
   LSTR MSG_MESH_LEVELING                  = _UxGT("Mesh Seviyeleme");
   LSTR MSG_MESH_DONE                      = _UxGT("Mesh sondalama tamam");
   LSTR MSG_MESH_SETTINGS                  = _UxGT("Mesh Ayarları");
+
   LSTR MSG_RESET_STATS                    = _UxGT("Yazdırma istatistik Sıfırla?");
+  LSTR MSG_INFO_MENU                      = _UxGT("Yazıcı Hakkında");
+  LSTR MSG_INFO_PRINTER_MENU              = _UxGT("Yazıcı Bilgisi");
   LSTR MSG_INFO_STATS_MENU                = _UxGT("İstatistikler");
   LSTR MSG_INFO_BOARD_MENU                = _UxGT("Kontrolcü Bilgisi");
   LSTR MSG_INFO_THERMISTOR_MENU           = _UxGT("Termistörler");
@@ -647,15 +648,6 @@ namespace LanguageNarrow_tr {
   LSTR MSG_INFO_PROTOCOL                  = _UxGT("Protokol");
   LSTR MSG_INFO_RUNAWAY_OFF               = _UxGT("Kaçak İzleme: KAPALI");
   LSTR MSG_INFO_RUNAWAY_ON                = _UxGT("Kaçak İzleme: AÇIK");
-  LSTR MSG_HOTEND_IDLE_TIMEOUT            = _UxGT("Hotend Boşta Zamn Aş");
-  LSTR MSG_HOTEND_IDLE_DISABLE            = _UxGT("Zaman Aşımı Pasif");
-  LSTR MSG_HOTEND_IDLE_NOZZLE_TARGET      = _UxGT("Meme Boşta Isısı");
-  LSTR MSG_HOTEND_IDLE_BED_TARGET         = _UxGT("Tabla Boşta Isısı");
-  LSTR MSG_FAN_SPEED_FAULT                = _UxGT("Fan hızı hatası");
-
-  LSTR MSG_CASE_LIGHT                     = _UxGT("Aydınlatma");
-  LSTR MSG_CASE_LIGHT_BRIGHTNESS          = _UxGT("Işık Parlaklğı");
-  LSTR MSG_KILL_EXPECTED_PRINTER          = _UxGT("HATALI YAZICI");
 
   LSTR MSG_COLORS_GET                     = _UxGT("Renk Al");               // ProUI
   LSTR MSG_COLORS_SELECT                  = _UxGT("Renkleri Seç");          // ProUI
@@ -701,6 +693,15 @@ namespace LanguageNarrow_tr {
   LSTR MSG_FANCHECK                       = _UxGT("Fan Takosu Kontrolü");
   LSTR MSG_KILL_HOMING_FAILED             = _UxGT("Sıfırlama Başarısız");
   LSTR MSG_LCD_PROBING_FAILED             = _UxGT("Probing Başarısız");
+  LSTR MSG_HOTEND_IDLE_TIMEOUT            = _UxGT("Hotend Boşta Zamn Aş");
+  LSTR MSG_HOTEND_IDLE_DISABLE            = _UxGT("Zaman Aşımı Pasif");
+  LSTR MSG_HOTEND_IDLE_NOZZLE_TARGET      = _UxGT("Meme Boşta Isısı");
+  LSTR MSG_HOTEND_IDLE_BED_TARGET         = _UxGT("Tabla Boşta Isısı");
+  LSTR MSG_FAN_SPEED_FAULT                = _UxGT("Fan hızı hatası");
+  LSTR MSG_KILL_EXPECTED_PRINTER          = _UxGT("HATALI YAZICI");
+
+  LSTR MSG_CASE_LIGHT                     = _UxGT("Aydınlatma");
+  LSTR MSG_CASE_LIGHT_BRIGHTNESS          = _UxGT("Işık Parlaklğı");
 
   LSTR MSG_MMU2_CHOOSE_FILAMENT_HEADER    = _UxGT("FILAMAN SEÇ");
   LSTR MSG_MMU2_MENU                      = _UxGT("MMU");

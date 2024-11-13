@@ -368,34 +368,30 @@ namespace LanguageNarrow_pt_br {
   LSTR MSG_DELTA_DIAG_ROD                 = _UxGT("Haste Diagonal");
   LSTR MSG_DELTA_HEIGHT                   = _UxGT("Altura");
   LSTR MSG_DELTA_RADIUS                   = _UxGT("Raio");
-  LSTR MSG_INFO_MENU                      = _UxGT("Sobre");
-  LSTR MSG_INFO_PRINTER_MENU              = _UxGT("Impressora");
   LSTR MSG_3POINT_LEVELING                = _UxGT("Nivelamento 3 pontos");
   LSTR MSG_LINEAR_LEVELING                = _UxGT("Nivelamento Linear");
   LSTR MSG_BILINEAR_LEVELING              = _UxGT("Nivelamento Bilinear");
   LSTR MSG_UBL_LEVELING                   = _UxGT("Nivelamento UBL");
   LSTR MSG_MESH_LEVELING                  = _UxGT("Nivelamento da Malha");
   LSTR MSG_MESH_SETTINGS                  = _UxGT("Malha Configuração");
+
+  LSTR MSG_INFO_MENU                      = _UxGT("Sobre");
+  LSTR MSG_INFO_PRINTER_MENU              = _UxGT("Impressora");
   LSTR MSG_INFO_STATS_MENU                = _UxGT("Estatísticas");
   LSTR MSG_INFO_BOARD_MENU                = _UxGT("Info. da Placa");
   LSTR MSG_INFO_THERMISTOR_MENU           = _UxGT("Termistores");
   LSTR MSG_INFO_EXTRUDERS                 = _UxGT("Extrusoras");
   LSTR MSG_INFO_BAUDRATE                  = _UxGT("Taxa de Transmissão");
   LSTR MSG_INFO_PROTOCOL                  = _UxGT("Protocolo");
-
-  LSTR MSG_CASE_LIGHT                     = _UxGT("Luz da Impressora");
-  LSTR MSG_CASE_LIGHT_BRIGHTNESS          = _UxGT("Intensidade Brilho");
-  LSTR MSG_KILL_EXPECTED_PRINTER          = _UxGT("Impressora Incorreta");
-
   LSTR MSG_INFO_PRINT_COUNT               = _UxGT("Qtd de Impressões");
   LSTR MSG_INFO_COMPLETED_PRINTS          = _UxGT("Realizadas");
   LSTR MSG_INFO_PRINT_TIME                = _UxGT("Tempo de Impressão");
   LSTR MSG_INFO_PRINT_LONGEST             = _UxGT("Maior trabalho");
   LSTR MSG_INFO_PRINT_FILAMENT            = _UxGT("T. Extrusão");
-
   LSTR MSG_INFO_MIN_TEMP                  = _UxGT("Temp Mín");
   LSTR MSG_INFO_MAX_TEMP                  = _UxGT("Temp Máx");
   LSTR MSG_INFO_PSU                       = _UxGT("PSU");
+
   LSTR MSG_DRIVE_STRENGTH                 = _UxGT("Força do Motor");
   LSTR MSG_DAC_EEPROM_WRITE               = _UxGT("Escrever EEPROM DAC");
   LSTR MSG_FILAMENT_CHANGE_HEADER         = _UxGT("TROCA DE FILAMENTO");
@@ -409,6 +405,10 @@ namespace LanguageNarrow_pt_br {
   LSTR MSG_RUNOUT_SENSOR                  = _UxGT("Sensor filamento");
   LSTR MSG_KILL_HOMING_FAILED             = _UxGT("Falha ao ir à origem");
   LSTR MSG_LCD_PROBING_FAILED             = _UxGT("Falha ao sondar");
+  LSTR MSG_KILL_EXPECTED_PRINTER          = _UxGT("Impressora Incorreta");
+
+  LSTR MSG_CASE_LIGHT                     = _UxGT("Luz da Impressora");
+  LSTR MSG_CASE_LIGHT_BRIGHTNESS          = _UxGT("Intensidade Brilho");
 
   LSTR MSG_MMU2_CHOOSE_FILAMENT_HEADER    = _UxGT("ESCOLHER FILAMENTO");
   LSTR MSG_MMU2_MENU                      = _UxGT("MMU");

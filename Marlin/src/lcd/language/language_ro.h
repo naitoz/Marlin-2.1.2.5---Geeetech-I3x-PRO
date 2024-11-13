@@ -448,14 +448,15 @@ namespace LanguageNarrow_ro {
   LSTR MSG_DELTA_DIAG_ROD                 = _UxGT("Diag Rod");
   LSTR MSG_DELTA_HEIGHT                   = _UxGT("Inaltime");
   LSTR MSG_DELTA_RADIUS                   = _UxGT("Radius");
-  LSTR MSG_INFO_MENU                      = _UxGT("Despre Imprimanta");
-  LSTR MSG_INFO_PRINTER_MENU              = _UxGT("Info Imprimanta");
   LSTR MSG_3POINT_LEVELING                = _UxGT("Nivelare in 3 puncte");
   LSTR MSG_LINEAR_LEVELING                = _UxGT("Nivelare Lineara");
   LSTR MSG_BILINEAR_LEVELING              = _UxGT("Nivelare Bilineara");
   LSTR MSG_UBL_LEVELING                   = _UxGT("Nivelarea Patului Unificata");
   LSTR MSG_MESH_LEVELING                  = _UxGT("Nivelare Mesh");
   LSTR MSG_MESH_SETTINGS                  = _UxGT("Mesh Setari");
+
+  LSTR MSG_INFO_MENU                      = _UxGT("Despre Imprimanta");
+  LSTR MSG_INFO_PRINTER_MENU              = _UxGT("Info Imprimanta");
   LSTR MSG_INFO_STATS_MENU                = _UxGT("Status Imprimanta");
   LSTR MSG_INFO_BOARD_MENU                = _UxGT("Informatii Placa");
   LSTR MSG_INFO_THERMISTOR_MENU           = _UxGT("Termistoare");
@@ -464,21 +465,15 @@ namespace LanguageNarrow_ro {
   LSTR MSG_INFO_PROTOCOL                  = _UxGT("Protocol");
   LSTR MSG_INFO_RUNAWAY_OFF               = _UxGT("Runaway Watch: OFF");
   LSTR MSG_INFO_RUNAWAY_ON                = _UxGT("Runaway Watch: ON");
-  LSTR MSG_HOTEND_IDLE_TIMEOUT            = _UxGT("Hotend Idle Timeout");
-
-  LSTR MSG_CASE_LIGHT                     = _UxGT("Case Light");
-  LSTR MSG_CASE_LIGHT_BRIGHTNESS          = _UxGT("Light Brightness");
-  LSTR MSG_KILL_EXPECTED_PRINTER          = _UxGT("INCORRECT PRINTER");
-
   LSTR MSG_INFO_PRINT_COUNT               = _UxGT("Prints");
   LSTR MSG_INFO_COMPLETED_PRINTS          = _UxGT("Completed");
   LSTR MSG_INFO_PRINT_TIME                = _UxGT("Total");
   LSTR MSG_INFO_PRINT_LONGEST             = _UxGT("Longest");
   LSTR MSG_INFO_PRINT_FILAMENT            = _UxGT("Extruded");
-
   LSTR MSG_INFO_MIN_TEMP                  = _UxGT("Temperatura Minima");
   LSTR MSG_INFO_MAX_TEMP                  = _UxGT("Temperatura Maxima");
   LSTR MSG_INFO_PSU                       = _UxGT("PSU");
+
   LSTR MSG_DRIVE_STRENGTH                 = _UxGT("Drive Strength");
   LSTR MSG_DAC_PERCENT_N                  = _UxGT("@ Driver %");
   LSTR MSG_ERROR_TMC                      = _UxGT("TMC CONNECTION ERROR");
@@ -495,6 +490,11 @@ namespace LanguageNarrow_ro {
   LSTR MSG_RUNOUT_DISTANCE_MM             = _UxGT("Runout Dist mm");
   LSTR MSG_KILL_HOMING_FAILED             = _UxGT("Homing Failed");
   LSTR MSG_LCD_PROBING_FAILED             = _UxGT("Probing Failed");
+  LSTR MSG_HOTEND_IDLE_TIMEOUT            = _UxGT("Hotend Idle Timeout");
+  LSTR MSG_KILL_EXPECTED_PRINTER          = _UxGT("INCORRECT PRINTER");
+
+  LSTR MSG_CASE_LIGHT                     = _UxGT("Case Light");
+  LSTR MSG_CASE_LIGHT_BRIGHTNESS          = _UxGT("Light Brightness");
 
   LSTR MSG_MMU2_CHOOSE_FILAMENT_HEADER    = _UxGT("CHOOSE FILAMENT");
   LSTR MSG_MMU2_MENU                      = _UxGT("MMU");

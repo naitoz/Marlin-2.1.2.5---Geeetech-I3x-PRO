@@ -441,14 +441,15 @@ namespace LanguageNarrow_gl {
   LSTR MSG_DELTA_DIAG_ROD                 = _UxGT("Barra Diagonal");
   LSTR MSG_DELTA_HEIGHT                   = _UxGT("Altura");
   LSTR MSG_DELTA_RADIUS                   = _UxGT("Radio");
-  LSTR MSG_INFO_MENU                      = _UxGT("Acerca de...");
-  LSTR MSG_INFO_PRINTER_MENU              = _UxGT("Información");
   LSTR MSG_3POINT_LEVELING                = _UxGT("Nivelación 3puntos");
   LSTR MSG_LINEAR_LEVELING                = _UxGT("Nivelación Lineal");
   LSTR MSG_BILINEAR_LEVELING              = _UxGT("Nivelación Bilineal");
   LSTR MSG_UBL_LEVELING                   = _UxGT("Nivelación UBL");
   LSTR MSG_MESH_LEVELING                  = _UxGT("Nivelación en Malla");
   LSTR MSG_MESH_SETTINGS                  = _UxGT("Configuración Malla");
+
+  LSTR MSG_INFO_MENU                      = _UxGT("Acerca de...");
+  LSTR MSG_INFO_PRINTER_MENU              = _UxGT("Información");
   LSTR MSG_INFO_STATS_MENU                = _UxGT("Estatísticas");
   LSTR MSG_INFO_BOARD_MENU                = _UxGT("Placa nai");
   LSTR MSG_INFO_THERMISTOR_MENU           = _UxGT("Termistores");
@@ -457,20 +458,15 @@ namespace LanguageNarrow_gl {
   LSTR MSG_INFO_PROTOCOL                  = _UxGT("Protocolo");
   LSTR MSG_INFO_RUNAWAY_OFF               = _UxGT("Reloxo Traballo: OFF");
   LSTR MSG_INFO_RUNAWAY_ON                = _UxGT("Reloxo Traballo: ON");
-
-  LSTR MSG_CASE_LIGHT                     = _UxGT("Luz da Caixa");
-  LSTR MSG_CASE_LIGHT_BRIGHTNESS          = _UxGT("Brillo Luces");
-  LSTR MSG_KILL_EXPECTED_PRINTER          = _UxGT("IMPRESORA INCORRECTA");
-
   LSTR MSG_INFO_PRINT_COUNT               = _UxGT("Impresións");
   LSTR MSG_INFO_COMPLETED_PRINTS          = _UxGT("Completadas");
   LSTR MSG_INFO_PRINT_TIME                = _UxGT("Total");
   LSTR MSG_INFO_PRINT_LONGEST             = _UxGT("Máis Longa");
   LSTR MSG_INFO_PRINT_FILAMENT            = _UxGT("Extruido");
-
   LSTR MSG_INFO_MIN_TEMP                  = _UxGT("Temp Mín");
   LSTR MSG_INFO_MAX_TEMP                  = _UxGT("Temp Máx");
   LSTR MSG_INFO_PSU                       = _UxGT("Fonte Alimentación");
+
   LSTR MSG_DRIVE_STRENGTH                 = _UxGT("Forza do Motor");
   LSTR MSG_DAC_PERCENT_N                  = _UxGT("@ Driver %");
   LSTR MSG_ERROR_TMC                      = _UxGT("ERRO CONEX. TMC");
@@ -487,6 +483,10 @@ namespace LanguageNarrow_gl {
   LSTR MSG_RUNOUT_DISTANCE_MM             = _UxGT("Dist mm Sensor Fil");
   LSTR MSG_KILL_HOMING_FAILED             = _UxGT("Fallo ao ir á Orixe");
   LSTR MSG_LCD_PROBING_FAILED             = _UxGT("Fallo ao Sondar");
+  LSTR MSG_KILL_EXPECTED_PRINTER          = _UxGT("IMPRESORA INCORRECTA");
+
+  LSTR MSG_CASE_LIGHT                     = _UxGT("Luz da Caixa");
+  LSTR MSG_CASE_LIGHT_BRIGHTNESS          = _UxGT("Brillo Luces");
 
   LSTR MSG_MMU2_CHOOSE_FILAMENT_HEADER    = _UxGT("ESCOLLE FILAMENTO");
   LSTR MSG_MMU2_MENU                      = _UxGT("MMU");

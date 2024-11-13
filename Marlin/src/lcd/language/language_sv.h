@@ -481,14 +481,16 @@ namespace LanguageNarrow_sv {
   LSTR MSG_DELTA_DIAG_ROD                 = _UxGT("Diag Rod");
   LSTR MSG_DELTA_HEIGHT                   = _UxGT("Höjd");
   LSTR MSG_DELTA_RADIUS                   = _UxGT("Radius");
-  LSTR MSG_INFO_MENU                      = _UxGT("Om Skrivaren");
-  LSTR MSG_INFO_PRINTER_MENU              = _UxGT("Skrivare Info");
+
   LSTR MSG_3POINT_LEVELING                = _UxGT("3-Punkt Nivellering");
   LSTR MSG_LINEAR_LEVELING                = _UxGT("Linjär Nivellering");
   LSTR MSG_BILINEAR_LEVELING              = _UxGT("Bilinjär Nivellering");
   LSTR MSG_UBL_LEVELING                   = _UxGT("Enhetlig Bädd Nivellering (UBL)");
   LSTR MSG_MESH_LEVELING                  = _UxGT("Nät Nivellering");
   LSTR MSG_MESH_SETTINGS                  = _UxGT("Nät Inställningar");
+
+  LSTR MSG_INFO_MENU                      = _UxGT("Om Skrivaren");
+  LSTR MSG_INFO_PRINTER_MENU              = _UxGT("Skrivare Info");
   LSTR MSG_INFO_STATS_MENU                = _UxGT("Skrivar Stats");
   LSTR MSG_INFO_BOARD_MENU                = _UxGT("Kort Info");
   LSTR MSG_INFO_THERMISTOR_MENU           = _UxGT("Termistor");
@@ -497,21 +499,15 @@ namespace LanguageNarrow_sv {
   LSTR MSG_INFO_PROTOCOL                  = _UxGT("Protokoll");
   LSTR MSG_INFO_RUNAWAY_OFF               = _UxGT("Överdrift Övervakning: AV");
   LSTR MSG_INFO_RUNAWAY_ON                = _UxGT("Överdrift Övervakning: PÅ");
-  LSTR MSG_HOTEND_IDLE_TIMEOUT            = _UxGT("Hetände Overksam Tidsgräns");
-
-  LSTR MSG_CASE_LIGHT                     = _UxGT("Lådljus");
-  LSTR MSG_CASE_LIGHT_BRIGHTNESS          = _UxGT("Ljus ljusstyrka");
-  LSTR MSG_KILL_EXPECTED_PRINTER          = _UxGT("INKORREKT SKRIVARE");
-
   LSTR MSG_INFO_PRINT_COUNT               = _UxGT("Utskrift");
   LSTR MSG_INFO_COMPLETED_PRINTS          = _UxGT("Färdig");
   LSTR MSG_INFO_PRINT_TIME                = _UxGT("Total");
   LSTR MSG_INFO_PRINT_LONGEST             = _UxGT("Längsta");
   LSTR MSG_INFO_PRINT_FILAMENT            = _UxGT("Extruderad");
-
   LSTR MSG_INFO_MIN_TEMP                  = _UxGT("Min Temp");
   LSTR MSG_INFO_MAX_TEMP                  = _UxGT("Max Temp");
   LSTR MSG_INFO_PSU                       = _UxGT("PSU");
+
   LSTR MSG_DRIVE_STRENGTH                 = _UxGT("Driv Styrka");
   LSTR MSG_DAC_PERCENT_N                  = _UxGT("@ Driver %");
   LSTR MSG_ERROR_TMC                      = _UxGT("TMC KOPPLNINGSFEL");
@@ -528,6 +524,11 @@ namespace LanguageNarrow_sv {
   LSTR MSG_RUNOUT_DISTANCE_MM             = _UxGT("Utskjut Dist mm");
   LSTR MSG_KILL_HOMING_FAILED             = _UxGT("Hemning Misslyckad");
   LSTR MSG_LCD_PROBING_FAILED             = _UxGT("Sondering Misslyckad");
+  LSTR MSG_HOTEND_IDLE_TIMEOUT            = _UxGT("Hetände Overksam Tidsgräns");
+  LSTR MSG_KILL_EXPECTED_PRINTER          = _UxGT("INKORREKT SKRIVARE");
+
+  LSTR MSG_CASE_LIGHT                     = _UxGT("Lådljus");
+  LSTR MSG_CASE_LIGHT_BRIGHTNESS          = _UxGT("Ljus ljusstyrka");
 
   LSTR MSG_MMU2_CHOOSE_FILAMENT_HEADER    = _UxGT("VÄLJ TRÅD");
   LSTR MSG_MMU2_MENU                      = _UxGT("MMU");

@@ -183,14 +183,11 @@ namespace LanguageNarrow_ca {
   LSTR MSG_INFO_EXTRUDERS                 = _UxGT("Extrusors");
   LSTR MSG_INFO_BAUDRATE                  = _UxGT("Baud");
   LSTR MSG_INFO_PROTOCOL                  = _UxGT("Protocol");
-  LSTR MSG_CASE_LIGHT                     = _UxGT("Llum");
-
   LSTR MSG_INFO_PRINT_COUNT               = _UxGT("Impressions");
   LSTR MSG_INFO_COMPLETED_PRINTS          = _UxGT("Acabades");
   LSTR MSG_INFO_PRINT_TIME                = _UxGT("Total");
   LSTR MSG_INFO_PRINT_LONGEST             = _UxGT("Mes llarg");
   LSTR MSG_INFO_PRINT_FILAMENT            = _UxGT("Extrudit");
-
   LSTR MSG_INFO_MIN_TEMP                  = _UxGT("Temp. mínima");
   LSTR MSG_INFO_MAX_TEMP                  = _UxGT("Temp. màxima");
   LSTR MSG_INFO_PSU                       = _UxGT("Font alimentacio");
@@ -200,6 +197,8 @@ namespace LanguageNarrow_ca {
   LSTR MSG_FILAMENT_CHANGE_OPTION_RESUME  = _UxGT("Repren impressió");
 
   LSTR MSG_KILL_EXPECTED_PRINTER          = _UxGT("Impressora incorrecta");
+
+  LSTR MSG_CASE_LIGHT                     = _UxGT("Llum");
 
   //
   // Filament Change screens show up to 2 lines on a 3-line display

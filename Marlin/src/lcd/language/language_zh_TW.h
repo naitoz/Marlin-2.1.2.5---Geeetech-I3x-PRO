@@ -396,14 +396,16 @@ namespace LanguageNarrow_zh_TW {
   LSTR MSG_DELTA_DIAG_ROD                 = _UxGT("⊿斜柱"); // "Diag Rod"
   LSTR MSG_DELTA_HEIGHT                   = _UxGT("⊿高度"); // "Height"
   LSTR MSG_DELTA_RADIUS                   = _UxGT("⊿半徑"); // "Radius"
-  LSTR MSG_INFO_MENU                      = _UxGT("關於印表機"); // "About Printer"
-  LSTR MSG_INFO_PRINTER_MENU              = _UxGT("印表機訊息"); // "Printer Info"
+
   LSTR MSG_3POINT_LEVELING                = _UxGT("三點調平"); // "3-Point Leveling"
   LSTR MSG_LINEAR_LEVELING                = _UxGT("線性調平"); // "Linear Leveling"
   LSTR MSG_BILINEAR_LEVELING              = _UxGT("      雙線性調平"); // "Bilinear Leveling"
   LSTR MSG_UBL_LEVELING                   = _UxGT("統一熱床調平(UBL)"); // "Unified Bed Leveling"
   LSTR MSG_MESH_LEVELING                  = _UxGT("網格調平"); // "Mesh Leveling"
   LSTR MSG_MESH_SETTINGS                  = _UxGT("網格設置"); // "Mesh Settings"
+
+  LSTR MSG_INFO_MENU                      = _UxGT("關於印表機"); // "About Printer"
+  LSTR MSG_INFO_PRINTER_MENU              = _UxGT("印表機訊息"); // "Printer Info"
   LSTR MSG_INFO_STATS_MENU                = _UxGT("印表機統計"); // "Printer Stats"
   LSTR MSG_INFO_BOARD_MENU                = _UxGT("主板訊息"); // "Board Info"
   LSTR MSG_INFO_THERMISTOR_MENU           = _UxGT("溫度計"); // "Thermistors"
@@ -412,20 +414,15 @@ namespace LanguageNarrow_zh_TW {
   LSTR MSG_INFO_PROTOCOL                  = _UxGT("協議"); // "Protocol"
   LSTR MSG_INFO_RUNAWAY_OFF               = _UxGT("監測溫度失控:關"); // "Runaway Watch: OFF"
   LSTR MSG_INFO_RUNAWAY_ON                = _UxGT("監測溫度失控:開"); // "Runaway Watch: ON"
-
-  LSTR MSG_CASE_LIGHT                     = _UxGT("外殼燈"); // "Case light"
-  LSTR MSG_CASE_LIGHT_BRIGHTNESS          = _UxGT("燈亮度"); // "Light BRIGHTNESS"
-  LSTR MSG_KILL_EXPECTED_PRINTER          = _UxGT("打印機不正確"); // "The printer is incorrect"
-
   LSTR MSG_INFO_PRINT_COUNT               = _UxGT("列印數"); // "Prints"
   LSTR MSG_INFO_COMPLETED_PRINTS          = _UxGT("完成"); // "Completed"
   LSTR MSG_INFO_PRINT_TIME                = _UxGT("總共"); // "Total"
   LSTR MSG_INFO_PRINT_LONGEST             = _UxGT("最長"); // "Longest"
   LSTR MSG_INFO_PRINT_FILAMENT            = _UxGT("已擠出"); // "Extruded"
-
   LSTR MSG_INFO_MIN_TEMP                  = _UxGT("最低溫度"); // "Min Temp"
   LSTR MSG_INFO_MAX_TEMP                  = _UxGT("最高溫度"); // "Max Temp"
   LSTR MSG_INFO_PSU                       = _UxGT("電源供應"); // "Power Supply"
+
   LSTR MSG_DRIVE_STRENGTH                 = _UxGT("驅動力度"); // "Drive Strength"
   LSTR MSG_DAC_PERCENT_N                  = _UxGT("@ 驅動 %"); //E Driver %
   LSTR MSG_ERROR_TMC                      = _UxGT("TMC連接錯誤"); // "TMC CONNECTION ERROR"
@@ -442,6 +439,10 @@ namespace LanguageNarrow_zh_TW {
   LSTR MSG_RUNOUT_DISTANCE_MM             = _UxGT("絲距離mm"); // "Runout Dist mm"
   LSTR MSG_KILL_HOMING_FAILED             = _UxGT("歸原位失敗"); // "Homing failed"
   LSTR MSG_LCD_PROBING_FAILED             = _UxGT("探針探測失敗"); // "Probing failed"
+  LSTR MSG_KILL_EXPECTED_PRINTER          = _UxGT("打印機不正確"); // "The printer is incorrect"
+
+  LSTR MSG_CASE_LIGHT                     = _UxGT("外殼燈"); // "Case light"
+  LSTR MSG_CASE_LIGHT_BRIGHTNESS          = _UxGT("燈亮度"); // "Light BRIGHTNESS"
 
   //
   // Filament Change screens show up to 2 lines on a 3-line display

@@ -501,8 +501,7 @@ namespace LanguageNarrow_ru {
   LSTR MSG_DELTA_DIAG_ROD                   = _UxGT("Стержень диаг.");
   LSTR MSG_DELTA_HEIGHT                     = _UxGT("Высота");
   LSTR MSG_DELTA_RADIUS                     = _UxGT("Радиус");
-  LSTR MSG_INFO_MENU                        = _UxGT("О принтере");
-  LSTR MSG_INFO_PRINTER_MENU                = _UxGT("Данные принтера");
+
   LSTR MSG_3POINT_LEVELING                  = _UxGT("3-точ. выравнив.");
   LSTR MSG_LINEAR_LEVELING                  = _UxGT("Линейное выравн.");
   LSTR MSG_BILINEAR_LEVELING                = _UxGT("Билин. выравнив.");
@@ -510,7 +509,10 @@ namespace LanguageNarrow_ru {
   LSTR MSG_MESH_LEVELING                    = _UxGT("Выравнивание сеткой");
   LSTR MSG_MESH_DONE                        = _UxGT("Зондиров. выполнено");
   LSTR MSG_MESH_SETTINGS                    = _UxGT("Сетка Настройки");
+
   LSTR MSG_RESET_STATS                      = _UxGT("Сбросить статистику печати?");
+  LSTR MSG_INFO_MENU                        = _UxGT("О принтере");
+  LSTR MSG_INFO_PRINTER_MENU                = _UxGT("Данные принтера");
   LSTR MSG_INFO_STATS_MENU                  = _UxGT("Статистика принтера");
   LSTR MSG_INFO_BOARD_MENU                  = _UxGT("Данные платы");
   LSTR MSG_INFO_THERMISTOR_MENU             = _UxGT("Термисторы");
@@ -519,20 +521,15 @@ namespace LanguageNarrow_ru {
   LSTR MSG_INFO_PROTOCOL                    = _UxGT("Протокол");
   LSTR MSG_INFO_RUNAWAY_OFF                 = _UxGT("Контр.утечки Т:Выкл");
   LSTR MSG_INFO_RUNAWAY_ON                  = _UxGT("Контр.утечки Т:Вкл");
-  LSTR MSG_HOTEND_IDLE_TIMEOUT              = _UxGT("Время прост.хот-а");
-  LSTR MSG_CASE_LIGHT                       = _UxGT("Подсветка корпуса");
-  LSTR MSG_CASE_LIGHT_BRIGHTNESS            = _UxGT("Яркость подсветки");
-  LSTR MSG_KILL_EXPECTED_PRINTER            = _UxGT("НЕВЕРНЫЙ ПРИНТЕР");
-
   LSTR MSG_INFO_PRINT_COUNT                 = _UxGT("Напечатано");
   LSTR MSG_INFO_PRINT_TIME                  = _UxGT("Общее время");
   LSTR MSG_INFO_PRINT_LONGEST               = _UxGT("Наидольшее");
   LSTR MSG_INFO_PRINT_FILAMENT              = _UxGT("Выдавлено");
   LSTR MSG_INFO_COMPLETED_PRINTS            = _UxGT("Завершено");
-
   LSTR MSG_INFO_MIN_TEMP                    = _UxGT("Мин.  ") LCD_STR_THERMOMETER;
   LSTR MSG_INFO_MAX_TEMP                    = _UxGT("Макс. ") LCD_STR_THERMOMETER;
   LSTR MSG_INFO_PSU                         = _UxGT("БП");
+
   LSTR MSG_DRIVE_STRENGTH                   = _UxGT("Сила привода");
   LSTR MSG_DAC_PERCENT_N                    = _UxGT("@ Привод, %");
   LSTR MSG_ERROR_TMC                        = _UxGT("СБОЙ СВЯЗИ С TMC");
@@ -549,6 +546,11 @@ namespace LanguageNarrow_ru {
   LSTR MSG_RUNOUT_DISTANCE_MM               = _UxGT("До конца, мм");
   LSTR MSG_KILL_HOMING_FAILED               = _UxGT("Ошибка парковки");
   LSTR MSG_LCD_PROBING_FAILED               = _UxGT("Ошибка зондирования");
+  LSTR MSG_HOTEND_IDLE_TIMEOUT              = _UxGT("Время прост.хот-а");
+  LSTR MSG_KILL_EXPECTED_PRINTER            = _UxGT("НЕВЕРНЫЙ ПРИНТЕР");
+
+  LSTR MSG_CASE_LIGHT                       = _UxGT("Подсветка корпуса");
+  LSTR MSG_CASE_LIGHT_BRIGHTNESS            = _UxGT("Яркость подсветки");
 
   LSTR MSG_MMU2_CHOOSE_FILAMENT_HEADER      = _UxGT("ВЫБИРЕТЕ ФИЛАМЕНТ");
   LSTR MSG_MMU2_MENU                        = _UxGT("Настройки MMU");
