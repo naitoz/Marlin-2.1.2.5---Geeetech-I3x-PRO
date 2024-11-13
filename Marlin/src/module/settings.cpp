@@ -3953,12 +3953,12 @@ void MarlinSettings::reset() {
     IF_DISABLED(NO_VOLUMETRICS, gcode.M200_report(forReplay));
 
     //
-    // M92 Steps per Unit
+    // M92 Steps per unit
     //
     TERN_(EDITABLE_STEPS_PER_UNIT, gcode.M92_report(forReplay));
 
     //
-    // M203 Maximum feedrates (units/s)
+    // M203 Maximum Feedrates (units/s)
     //
     gcode.M203_report(forReplay);
 
@@ -4120,9 +4120,14 @@ void MarlinSettings::reset() {
     #endif
 
     //
-    // Editable Homing Feedrate
+    // M210 Homing Feedrate
     //
     TERN_(EDITABLE_HOMING_FEEDRATE, gcode.M210_report(forReplay));
+
+    //
+    // M211 Soft endstops
+    //
+    TERN_(HAS_SOFTWARE_ENDSTOPS, gcode.M211_report(forReplay));
 
     //
     // M851 Probe Offset
