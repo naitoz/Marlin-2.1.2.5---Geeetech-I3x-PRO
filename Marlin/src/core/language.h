@@ -161,6 +161,7 @@
 #define STR_DUPLICATION_MODE                "Duplication mode: "
 #define STR_SOFT_MIN                        "  Min: "
 #define STR_SOFT_MAX                        "  Max: "
+#define STR_STORED_MACROS                   "Stored macros"
 
 #define STR_SAVED_POSITION                  "Saved position #"
 #define STR_RESTORING_POSITION              "Restoring position #"
