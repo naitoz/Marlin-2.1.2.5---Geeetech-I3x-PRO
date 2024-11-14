@@ -1365,7 +1365,7 @@ void RTS::handleData() {
     #if HAS_FILAMENT_SENSOR
       case FilamentChange: // Automatic material
         switch (recdat.data[0]) {
-          case 1: if (runout.filament_ran_out) break;
+          case 1: if (READ(FIL_RUNOUT_PIN) == FIL_RUNOUT_STATE) break;
           case 2:
             updateTempE0();
             wait_for_heatup = wait_for_user = false;
