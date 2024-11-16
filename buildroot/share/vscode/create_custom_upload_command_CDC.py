@@ -10,8 +10,7 @@
 #  Will continue on if a COM port isn't found so that the compilation can be done.
 #
 
-from __future__ import print_function
-from __future__ import division
+from __future__ import print_function, division
 
 import subprocess, os, platform
 from SCons.Script import DefaultEnvironment

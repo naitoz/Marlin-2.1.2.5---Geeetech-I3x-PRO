@@ -69,8 +69,7 @@
 #
 #######################################
 
-from __future__ import print_function
-from __future__ import division
+from __future__ import print_function, division
 
 import sys, os, re
 
@@ -962,7 +961,7 @@ def run_PIO(dummy):
 
 ########################################################################
 
-import threading
+import threading, sys
 if python_ver == 2:
   import Tkinter as tk
   import Queue as queue
@@ -974,7 +973,7 @@ else:
   import tkinter as tk
   import queue as queue
   from tkinter import ttk, Tk, Frame, Text, Menu
-import sys
+
 que = queue.Queue()
 #IO_queue = queue.Queue()
 
