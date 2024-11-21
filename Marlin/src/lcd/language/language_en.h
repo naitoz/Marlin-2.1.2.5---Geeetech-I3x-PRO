@@ -1098,6 +1098,7 @@ namespace LanguageWide_en {
     LSTR MSG_MEDIA_NOT_INSERTED           = _UxGT("No media inserted.");          // ProUI
     LSTR MSG_PLEASE_PREHEAT               = _UxGT("Please preheat the hot end."); // ProUI
     LSTR MSG_INFO_PRINT_COUNT_RESET       = _UxGT("Reset Print Count");           // ProUI
+    LSTR MSG_ZERO_MESH                    = _UxGT("Zero Current Point");          // ProUI
     LSTR MSG_INFO_PRINT_COUNT             = _UxGT("Print Count");
     LSTR MSG_INFO_PRINT_TIME              = _UxGT("Print Time");
     LSTR MSG_INFO_PRINT_LONGEST           = _UxGT("Longest Job Time");
