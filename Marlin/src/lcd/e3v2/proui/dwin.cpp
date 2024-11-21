@@ -2672,7 +2672,7 @@ void applyMaxAccel() { planner.set_max_acceleration(hmiValue.axis, menuData.valu
       default: break;
     }
   }
-  void applyHomingFR() { updateHomingFR(HMI_value.axis, MenuData.Value); }
+  void applyHomingFR() { updateHomingFR(hmiValue.axis, menuData.value); }
   #if HAS_X_AXIS
     void setHomingX() { hmiValue.axis = X_AXIS; setIntOnClick(min_homing_edit_values.x, max_homing_edit_values.x, homing_feedrate_mm_m.x, applyHomingFR); }
   #endif
