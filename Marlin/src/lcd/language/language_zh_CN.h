@@ -162,7 +162,6 @@ namespace LanguageNarrow_zh_CN {
   LSTR MSG_G26_CANCELED                   = _UxGT("G26已取消");
   LSTR MSG_G26_LEAVING                    = _UxGT("离开G26");
   LSTR MSG_UBL_CONTINUE_MESH              = _UxGT("继续热床网格"); // "Continue Bed Mesh"
-  LSTR MSG_UBL_MESH_LEVELING              = _UxGT("网格调平"); // "Mesh Leveling"
   LSTR MSG_UBL_3POINT_MESH_LEVELING       = _UxGT("三点调平"); // "3-Point Leveling"
   LSTR MSG_UBL_GRID_MESH_LEVELING         = _UxGT("格子网格调平"); // "Grid Mesh Leveling"
   LSTR MSG_UBL_MESH_LEVEL                 = _UxGT("调平网格"); // "Level Mesh"
@@ -458,13 +457,16 @@ namespace LanguageNarrow_zh_CN {
   LSTR MSG_DELTA_DIAG_ROD                 = _UxGT("⊿斜柱"); // "Diag Rod"
   LSTR MSG_DELTA_HEIGHT                   = _UxGT("⊿高度"); // "Height"
   LSTR MSG_DELTA_RADIUS                   = _UxGT("⊿半径"); // "Radius"
-  LSTR MSG_INFO_MENU                      = _UxGT("关于打印机"); // "About Printer"
-  LSTR MSG_INFO_PRINTER_MENU              = _UxGT("打印机信息"); // "Printer Info"
+
   LSTR MSG_3POINT_LEVELING                = _UxGT("三点调平"); // "3-Point Leveling"
   LSTR MSG_LINEAR_LEVELING                = _UxGT("线性调平"); // "Linear Leveling"
   LSTR MSG_BILINEAR_LEVELING              = _UxGT("双线性调平"); // "Bilinear Leveling"
   LSTR MSG_UBL_LEVELING                   = _UxGT("统一热床调平(UBL)"); // "Unified Bed Leveling"
   LSTR MSG_MESH_LEVELING                  = _UxGT("网格调平"); // "Mesh Leveling"
+  LSTR MSG_MESH_SETTINGS                  = _UxGT("网格设置"); // "Mesh Settings"
+
+  LSTR MSG_INFO_MENU                      = _UxGT("关于打印机"); // "About Printer"
+  LSTR MSG_INFO_PRINTER_MENU              = _UxGT("打印机信息"); // "Printer Info"
   LSTR MSG_INFO_STATS_MENU                = _UxGT("打印机统计"); // "Printer Stats"
   LSTR MSG_INFO_BOARD_MENU                = _UxGT("主板信息"); // "Board Info"
   LSTR MSG_INFO_THERMISTOR_MENU           = _UxGT("温度计"); // "Thermistors"
@@ -473,22 +475,15 @@ namespace LanguageNarrow_zh_CN {
   LSTR MSG_INFO_PROTOCOL                  = _UxGT("协议"); // "Protocol"
   LSTR MSG_INFO_RUNAWAY_OFF               = _UxGT("监控温度失控:关");
   LSTR MSG_INFO_RUNAWAY_ON                = _UxGT("监控温度失控:开");
-  LSTR MSG_HOTEND_IDLE_TIMEOUT            = _UxGT("热端空闲超时");
-
-  LSTR MSG_CASE_LIGHT                     = _UxGT("外壳灯"); // "Case light"
-  LSTR MSG_CASE_LIGHT_BRIGHTNESS          = _UxGT("灯亮度"); // "Light BRIGHTNESS"
-
-  LSTR MSG_KILL_EXPECTED_PRINTER          = _UxGT("打印机不正确"); // "The printer is incorrect"
-
   LSTR MSG_INFO_PRINT_COUNT               = _UxGT("打印数"); // "Prints"
   LSTR MSG_INFO_COMPLETED_PRINTS          = _UxGT("完成"); // "Completed"
   LSTR MSG_INFO_PRINT_TIME                = _UxGT("总共"); // "Total"
   LSTR MSG_INFO_PRINT_LONGEST             = _UxGT("最长"); // "Longest"
   LSTR MSG_INFO_PRINT_FILAMENT            = _UxGT("已挤出"); // "Extruded"
-
   LSTR MSG_INFO_MIN_TEMP                  = _UxGT("最低温度"); // "Min Temp"
   LSTR MSG_INFO_MAX_TEMP                  = _UxGT("最高温度"); // "Max Temp"
   LSTR MSG_INFO_PSU                       = _UxGT("电源供应"); // "Power Supply"
+
   LSTR MSG_DRIVE_STRENGTH                 = _UxGT("驱动力度"); // "Drive Strength"
   LSTR MSG_DAC_PERCENT_N                  = _UxGT("@ 驱动 %"); // "E Driver %"
   LSTR MSG_ERROR_TMC                      = _UxGT("TMC 连接错误");
@@ -505,6 +500,11 @@ namespace LanguageNarrow_zh_CN {
   LSTR MSG_RUNOUT_DISTANCE_MM             = _UxGT("断料距离mm");
   LSTR MSG_KILL_HOMING_FAILED             = _UxGT("归原位失败"); // "Homing failed"
   LSTR MSG_LCD_PROBING_FAILED             = _UxGT("探针探测失败"); // "Probing failed"
+  LSTR MSG_HOTEND_IDLE_TIMEOUT            = _UxGT("热端空闲超时");
+  LSTR MSG_KILL_EXPECTED_PRINTER          = _UxGT("打印机不正确"); // "The printer is incorrect"
+
+  LSTR MSG_CASE_LIGHT                     = _UxGT("外壳灯"); // "Case light"
+  LSTR MSG_CASE_LIGHT_BRIGHTNESS          = _UxGT("灯亮度"); // "Light BRIGHTNESS"
 
   LSTR MSG_MMU2_CHOOSE_FILAMENT_HEADER    = _UxGT("选择料");
   LSTR MSG_MMU2_MENU                      = _UxGT("MMU");

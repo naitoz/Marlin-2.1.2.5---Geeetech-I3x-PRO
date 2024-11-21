@@ -197,6 +197,7 @@ namespace LanguageNarrow_jp_kana {
   LSTR MSG_DELTA_CALIBRATE_Y              = _UxGT("Yジク コウセイ"); // "Calibrate Y"
   LSTR MSG_DELTA_CALIBRATE_Z              = _UxGT("Zジク コウセイ"); // "Calibrate Z"
   LSTR MSG_DELTA_CALIBRATE_CENTER         = _UxGT("チュウシン コウセイ"); // "Calibrate Center"
+
   LSTR MSG_INFO_MENU                      = _UxGT("コノプリンターニツイテ"); // "About Printer"
   LSTR MSG_INFO_PRINTER_MENU              = _UxGT("プリンタージョウホウ"); // "Printer Info"
   LSTR MSG_INFO_STATS_MENU                = _UxGT("プリントジョウキョウ"); // "Printer Stats"
@@ -205,7 +206,6 @@ namespace LanguageNarrow_jp_kana {
   LSTR MSG_INFO_EXTRUDERS                 = _UxGT("エクストルーダースウ"); // "Extruders"
   LSTR MSG_INFO_BAUDRATE                  = _UxGT("ボーレート"); // "Baud"
   LSTR MSG_INFO_PROTOCOL                  = _UxGT("プロトコル"); // "Protocol"
-  LSTR MSG_CASE_LIGHT                     = _UxGT("キョウタイナイショウメイ"); // "Case light"
   LSTR MSG_INFO_PRINT_COUNT               = _UxGT("プリントスウ "); // "Print Count"
   LSTR MSG_INFO_COMPLETED_PRINTS          = _UxGT("カンリョウスウ"); // "Completed"
   LSTR MSG_INFO_PRINT_TIME                = _UxGT("プリントジカンルイケイ"); // "Total print time"
@@ -214,6 +214,7 @@ namespace LanguageNarrow_jp_kana {
   LSTR MSG_INFO_MIN_TEMP                  = _UxGT("セッテイサイテイオン"); // "Min Temp"
   LSTR MSG_INFO_MAX_TEMP                  = _UxGT("セッテイサイコウオン"); // "Max Temp"
   LSTR MSG_INFO_PSU                       = _UxGT("デンゲンシュベツ"); // "Power Supply"
+
   LSTR MSG_DRIVE_STRENGTH                 = _UxGT("モータークドウリョク"); // "Drive Strength"
   LSTR MSG_DAC_PERCENT_N                  = _UxGT("@ DACシュツリョク %"); // "@ Driver %"
   LSTR MSG_DAC_EEPROM_WRITE               = _UxGT("EEPROMヘホゾン"); // "Store memory"
@@ -226,6 +227,8 @@ namespace LanguageNarrow_jp_kana {
   LSTR MSG_FILAMENT_CHANGE_RESUME         = _UxGT(MSG_2_LINE("プリントヲサイカイシマス", "シバラクオマチクダサイ")); // "Wait for print to resume"
 
   LSTR MSG_KILL_EXPECTED_PRINTER          = _UxGT("マチガッタプリンター"); // "Wrong printer"
+
+  LSTR MSG_CASE_LIGHT                     = _UxGT("キョウタイナイショウメイ"); // "Case light"
 
   LSTR MSG_CONFIGURATION                  = _UxGT("セッテイカンリ");
   LSTR MSG_ADVANCED_SETTINGS              = _UxGT("ショウサイセッテイ");

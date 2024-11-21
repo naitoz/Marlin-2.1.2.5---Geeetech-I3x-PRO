@@ -127,6 +127,7 @@ namespace LanguageNarrow_hr {
   LSTR MSG_DELTA_CALIBRATE_Y              = _UxGT("Kalibriraj Y");
   LSTR MSG_DELTA_CALIBRATE_Z              = _UxGT("Kalibriraj Z");
   LSTR MSG_DELTA_CALIBRATE_CENTER         = _UxGT("Kalibriraj Središte");
+
   LSTR MSG_INFO_MENU                      = _UxGT("O printeru");
   LSTR MSG_INFO_PRINTER_MENU              = _UxGT("Podaci o printeru");
   LSTR MSG_INFO_STATS_MENU                = _UxGT("Statistika printera");
@@ -135,16 +136,11 @@ namespace LanguageNarrow_hr {
   LSTR MSG_INFO_EXTRUDERS                 = _UxGT("Extruderi");
   LSTR MSG_INFO_BAUDRATE                  = _UxGT("Baud");
   LSTR MSG_INFO_PROTOCOL                  = _UxGT("Protokol");
-  LSTR MSG_CASE_LIGHT                     = _UxGT("Osvjetljenje");
-
-  LSTR MSG_KILL_EXPECTED_PRINTER          = _UxGT("Neispravan pisač");
-
   LSTR MSG_INFO_PRINT_COUNT               = _UxGT("Printovi");
   LSTR MSG_INFO_COMPLETED_PRINTS          = _UxGT("Završeni");
   LSTR MSG_INFO_PRINT_TIME                = _UxGT("Ukupno");
   LSTR MSG_INFO_PRINT_LONGEST             = _UxGT("Najduži");
   LSTR MSG_INFO_PRINT_FILAMENT            = _UxGT("Extrudirano");
-
   LSTR MSG_INFO_PSU                       = _UxGT("Napajanje");
 
   LSTR MSG_FILAMENT_CHANGE_OPTION_RESUME  = _UxGT("Nastavi print");
@@ -152,6 +148,10 @@ namespace LanguageNarrow_hr {
   LSTR MSG_FILAMENT_CHANGE_UNLOAD         = _UxGT(MSG_2_LINE("Čekaj", "filament unload"));
   LSTR MSG_FILAMENT_CHANGE_LOAD           = _UxGT(MSG_2_LINE("Pričekaj", "filament load"));
   LSTR MSG_FILAMENT_CHANGE_RESUME         = _UxGT(MSG_1_LINE("Nastavljam..."));
+
+  LSTR MSG_KILL_EXPECTED_PRINTER          = _UxGT("Neispravan pisač");
+
+  LSTR MSG_CASE_LIGHT                     = _UxGT("Osvjetljenje");
 
   // Up to 2 lines allowed
   LSTR MSG_FILAMENT_CHANGE_INIT           = _UxGT("Pričekaj...");

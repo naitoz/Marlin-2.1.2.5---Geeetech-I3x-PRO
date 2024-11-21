@@ -186,7 +186,6 @@ namespace LanguageNarrow_hu {
   LSTR MSG_G26_CANCELED                   = _UxGT("G26 Törölve");
   LSTR MSG_G26_LEAVING                    = _UxGT("Kilépö G26");
   LSTR MSG_UBL_CONTINUE_MESH              = _UxGT("Ágy háló folyt.");
-  LSTR MSG_UBL_MESH_LEVELING              = _UxGT("Háló szintezés");
   LSTR MSG_UBL_3POINT_MESH_LEVELING       = _UxGT("3-Pontos szintezés");
   LSTR MSG_UBL_GRID_MESH_LEVELING         = _UxGT("Rács szintezés");
   LSTR MSG_UBL_MESH_LEVEL                 = _UxGT("Háló szint");
@@ -497,14 +496,16 @@ namespace LanguageNarrow_hu {
   LSTR MSG_DELTA_DIAG_ROD                 = _UxGT("Diag rúd");
   LSTR MSG_DELTA_HEIGHT                   = _UxGT("Magasság");
   LSTR MSG_DELTA_RADIUS                   = _UxGT("Sugár");
-  LSTR MSG_INFO_MENU                      = _UxGT("A Nyomtatóról");
-  LSTR MSG_INFO_PRINTER_MENU              = _UxGT("Nyomtató infó");
   LSTR MSG_3POINT_LEVELING                = _UxGT("3-Pontos szintezés");
   LSTR MSG_LINEAR_LEVELING                = _UxGT("Lineáris szintezés");
   LSTR MSG_BILINEAR_LEVELING              = _UxGT("Bilineáris szintezés");
   LSTR MSG_UBL_LEVELING                   = _UxGT("Egységes ágy szintezés");
   LSTR MSG_MESH_LEVELING                  = _UxGT("Háló szintezés");
   LSTR MSG_MESH_DONE                      = _UxGT("Háló szintezés kész");
+  LSTR MSG_MESH_SETTINGS                  = _UxGT("Hálós beállítások");
+
+  LSTR MSG_INFO_MENU                      = _UxGT("A Nyomtatóról");
+  LSTR MSG_INFO_PRINTER_MENU              = _UxGT("Nyomtató infó");
   LSTR MSG_INFO_STATS_MENU                = _UxGT("Statisztikák");
   LSTR MSG_INFO_BOARD_MENU                = _UxGT("Alaplap infó");
   LSTR MSG_INFO_THERMISTOR_MENU           = _UxGT("Termisztorok");
@@ -513,21 +514,15 @@ namespace LanguageNarrow_hu {
   LSTR MSG_INFO_PROTOCOL                  = _UxGT("Protokol");
   LSTR MSG_INFO_RUNAWAY_OFF               = _UxGT("Futáselemzés: KI");
   LSTR MSG_INFO_RUNAWAY_ON                = _UxGT("Futáselemzés: BE");
-  LSTR MSG_HOTEND_IDLE_TIMEOUT            = _UxGT("Fej üresjárati idök.");
-
-  LSTR MSG_CASE_LIGHT                     = _UxGT("Munkalámpa");
-  LSTR MSG_CASE_LIGHT_BRIGHTNESS          = _UxGT("Fényerösség");
-  LSTR MSG_KILL_EXPECTED_PRINTER          = _UxGT("HELYTELEN NYOMTATÓ");
-
   LSTR MSG_INFO_PRINT_COUNT               = _UxGT("Nyomtatások");
   LSTR MSG_INFO_COMPLETED_PRINTS          = _UxGT("Befejezett");
   LSTR MSG_INFO_PRINT_TIME                = _UxGT("Összes");
   LSTR MSG_INFO_PRINT_LONGEST             = _UxGT("Leghosszabb");
   LSTR MSG_INFO_PRINT_FILAMENT            = _UxGT("Kiadott");
-
   LSTR MSG_INFO_MIN_TEMP                  = _UxGT("Min höfok");
   LSTR MSG_INFO_MAX_TEMP                  = _UxGT("Max höfok");
   LSTR MSG_INFO_PSU                       = _UxGT("PSU");
+
   LSTR MSG_DRIVE_STRENGTH                 = _UxGT("Meghajtási erö");
   LSTR MSG_DAC_PERCENT_N                  = _UxGT("@ meghajtó %");
   LSTR MSG_ERROR_TMC                      = _UxGT("TMC CSATLAKOZÁSI HIBA");
@@ -544,6 +539,11 @@ namespace LanguageNarrow_hu {
   LSTR MSG_RUNOUT_DISTANCE_MM             = _UxGT("Túlfutás táv. mm");
   LSTR MSG_KILL_HOMING_FAILED             = _UxGT("Tájolási hiba");
   LSTR MSG_LCD_PROBING_FAILED             = _UxGT("Szondázás hiba");
+  LSTR MSG_HOTEND_IDLE_TIMEOUT            = _UxGT("Fej üresjárati idök.");
+  LSTR MSG_KILL_EXPECTED_PRINTER          = _UxGT("HELYTELEN NYOMTATÓ");
+
+  LSTR MSG_CASE_LIGHT                     = _UxGT("Munkalámpa");
+  LSTR MSG_CASE_LIGHT_BRIGHTNESS          = _UxGT("Fényerösség");
 
   LSTR MSG_MMU2_CHOOSE_FILAMENT_HEADER    = _UxGT("SZÁLVÁLASZTÁS");
   LSTR MSG_MMU2_MENU                      = _UxGT("MMU");

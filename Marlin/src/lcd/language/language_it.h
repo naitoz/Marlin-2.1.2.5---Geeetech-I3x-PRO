@@ -242,9 +242,8 @@ namespace LanguageNarrow_it {
   LSTR MSG_G26_LEAVING                    = _UxGT("Uscita da G26");
   LSTR MSG_UBL_VALIDATE_CUSTOM_MESH       = _UxGT("Valida mesh pers.");
   LSTR MSG_UBL_CONTINUE_MESH              = _UxGT("Continua mesh");
-  LSTR MSG_UBL_MESH_LEVELING              = _UxGT("Livell. mesh");
-  LSTR MSG_UBL_3POINT_MESH_LEVELING       = _UxGT("Livell. 3 Punti");
-  LSTR MSG_UBL_GRID_MESH_LEVELING         = _UxGT("Livell. griglia mesh");
+  LSTR MSG_UBL_3POINT_MESH_LEVELING       = _UxGT("Livella 3 Punti");
+  LSTR MSG_UBL_GRID_MESH_LEVELING         = _UxGT("Livel. griglia mesh");
   LSTR MSG_UBL_MESH_LEVEL                 = _UxGT("Livella mesh");
   LSTR MSG_UBL_SIDE_POINTS                = _UxGT("Punti laterali");
   LSTR MSG_UBL_MAP_TYPE                   = _UxGT("Tipo di mappa");
@@ -652,27 +651,29 @@ namespace LanguageNarrow_it {
   LSTR MSG_CHAMBER_COOLING                = _UxGT("Raffr. camera...");
   LSTR MSG_LASER_COOLING                  = _UxGT("Raffr. laser...");
   LSTR MSG_DELTA_CALIBRATE                = _UxGT("Calibraz. Delta");
-  LSTR MSG_DELTA_CALIBRATION_IN_PROGRESS  = _UxGT("Calibrazione delta in corso");
   LSTR MSG_DELTA_CALIBRATE_X              = _UxGT("Calibra X");
   LSTR MSG_DELTA_CALIBRATE_Y              = _UxGT("Calibra Y");
   LSTR MSG_DELTA_CALIBRATE_Z              = _UxGT("Calibra Z");
   LSTR MSG_DELTA_CALIBRATE_CENTER         = _UxGT("Calibra centro");
+  LSTR MSG_DELTA_CALIBRATION_IN_PROGRESS  = _UxGT("Calibrazione delta in corso");
   LSTR MSG_DELTA_SETTINGS                 = _UxGT("Impostaz. delta");
   LSTR MSG_DELTA_AUTO_CALIBRATE           = _UxGT("Auto calibrazione");
   LSTR MSG_DELTA_DIAG_ROD                 = _UxGT("Barra diagonale");
   LSTR MSG_DELTA_HEIGHT                   = _UxGT("Altezza");
   LSTR MSG_DELTA_RADIUS                   = _UxGT("Raggio");
-  LSTR MSG_INFO_MENU                      = _UxGT("Info su stampante");
-  LSTR MSG_INFO_PRINTER_MENU              = _UxGT("Info. stampante");
+
   LSTR MSG_3POINT_LEVELING                = _UxGT("Livel. a 3 punti");
   LSTR MSG_LINEAR_LEVELING                = _UxGT("Livel. lineare");
   LSTR MSG_BILINEAR_LEVELING              = _UxGT("Livel. bilineare");
   LSTR MSG_UBL_LEVELING                   = _UxGT("Livel.piatto unific.");
   LSTR MSG_MESH_LEVELING                  = _UxGT("Livel. mesh");
   LSTR MSG_MESH_DONE                      = _UxGT("Sond.mesh eseguito");
-  LSTR MSG_INFO_PRINTER_STATS_MENU        = _UxGT("Statistiche stampante");
-  LSTR MSG_INFO_STATS_MENU                = _UxGT("Statistiche");
+  LSTR MSG_MESH_SETTINGS                  = _UxGT("Mesh Impostazioni");
+
   LSTR MSG_RESET_STATS                    = _UxGT("Reset stat.stampa?");
+  LSTR MSG_INFO_MENU                      = _UxGT("Sulla stampante");
+  LSTR MSG_INFO_PRINTER_MENU              = _UxGT("Info. stampante");
+  LSTR MSG_INFO_STATS_MENU                = _UxGT("Statistiche stampante");
   LSTR MSG_INFO_BOARD_MENU                = _UxGT("Info. scheda");
   LSTR MSG_INFO_THERMISTOR_MENU           = _UxGT("Termistori");
   LSTR MSG_INFO_EXTRUDERS                 = _UxGT("Estrusori");
@@ -680,17 +681,6 @@ namespace LanguageNarrow_it {
   LSTR MSG_INFO_PROTOCOL                  = _UxGT("Protocollo");
   LSTR MSG_INFO_RUNAWAY_OFF               = _UxGT("Controllo fuga: OFF");
   LSTR MSG_INFO_RUNAWAY_ON                = _UxGT("Controllo fuga: ON");
-  LSTR MSG_HOTEND_IDLE_TIMEOUT            = _UxGT("Timeout inatt.ugello");
-  LSTR MSG_BED_IDLE_TIMEOUT               = _UxGT("Timeout inatt.piatto");
-  LSTR MSG_HOTEND_IDLE_DISABLE            = _UxGT("Disabilita timeout");
-  LSTR MSG_HOTEND_IDLE_NOZZLE_TARGET      = _UxGT("Temp.inatt.ugello");
-  LSTR MSG_HOTEND_IDLE_BED_TARGET         = _UxGT("Temp.inatt.piatto");
-  LSTR MSG_FAN_SPEED_FAULT                = _UxGT("Err.vel.della ventola");
-
-  LSTR MSG_CASE_LIGHT                     = _UxGT("Luci case");
-  LSTR MSG_CASE_LIGHT_BRIGHTNESS          = _UxGT("Luminosità Luci");
-  LSTR MSG_KILL_EXPECTED_PRINTER          = _UxGT("STAMPANTE ERRATA");
-
   LSTR MSG_INFO_PRINT_COUNT               = _UxGT("Stampe");
   LSTR MSG_INFO_PRINT_TIME                = _UxGT("Durata");
   LSTR MSG_INFO_PRINT_LONGEST             = _UxGT("Più lungo");
@@ -720,6 +710,16 @@ namespace LanguageNarrow_it {
   LSTR MSG_FANCHECK                       = _UxGT("Verif.tacho vent."); // Max 17 characters
   LSTR MSG_KILL_HOMING_FAILED             = _UxGT("Home fallito");
   LSTR MSG_LCD_PROBING_FAILED             = _UxGT("Sondaggio fallito");
+  LSTR MSG_BED_IDLE_TIMEOUT               = _UxGT("Timeout inatt.piatto");
+  LSTR MSG_HOTEND_IDLE_TIMEOUT            = _UxGT("Timeout inatt.ugello");
+  LSTR MSG_HOTEND_IDLE_DISABLE            = _UxGT("Disabilita timeout");
+  LSTR MSG_HOTEND_IDLE_NOZZLE_TARGET      = _UxGT("Temp.inatt.ugello");
+  LSTR MSG_HOTEND_IDLE_BED_TARGET         = _UxGT("Temp.inatt.piatto");
+  LSTR MSG_FAN_SPEED_FAULT                = _UxGT("Err.vel.della ventola");
+  LSTR MSG_KILL_EXPECTED_PRINTER          = _UxGT("STAMPANTE ERRATA");
+
+  LSTR MSG_CASE_LIGHT                     = _UxGT("Luci case");
+  LSTR MSG_CASE_LIGHT_BRIGHTNESS          = _UxGT("Luminosità Luci");
 
   // Ender-3 V2 DWIN - ProUI / JyersUI
   LSTR MSG_COLORS_GET                     = _UxGT("Ottieni colori");             // ProUI

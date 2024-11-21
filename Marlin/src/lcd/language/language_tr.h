@@ -230,7 +230,6 @@ namespace LanguageNarrow_tr {
   LSTR MSG_G26_CANCELED                   = _UxGT("G26 İptal edildi");
   LSTR MSG_G26_LEAVING                    = _UxGT("Çıkış G26");
   LSTR MSG_UBL_CONTINUE_MESH              = _UxGT("Tabla Mesh Devam et");
-  LSTR MSG_UBL_MESH_LEVELING              = _UxGT("Mesh Seviyeleme");
   LSTR MSG_UBL_3POINT_MESH_LEVELING       = _UxGT("3-Nokta Seviyeleme");
   LSTR MSG_UBL_GRID_MESH_LEVELING         = _UxGT("Kafes Mesh Seviyeleme");
   LSTR MSG_UBL_MESH_LEVEL                 = _UxGT("Mesh Seviyesi");
@@ -620,26 +619,28 @@ namespace LanguageNarrow_tr {
   LSTR MSG_CHAMBER_COOLING                = _UxGT("Kabin Soğuyor...");
   LSTR MSG_LASER_COOLING                  = _UxGT("Lazer Soğuyor...");
   LSTR MSG_DELTA_CALIBRATE                = _UxGT("Delta Kalibrasyonu");
-  LSTR MSG_DELTA_CALIBRATION_IN_PROGRESS  = _UxGT("Delta Kalibrasyonu sürüyor");
   LSTR MSG_DELTA_CALIBRATE_X              = _UxGT("Ayarla X");
   LSTR MSG_DELTA_CALIBRATE_Y              = _UxGT("Ayarla Y");
   LSTR MSG_DELTA_CALIBRATE_Z              = _UxGT("Ayarla Z");
   LSTR MSG_DELTA_CALIBRATE_CENTER         = _UxGT("Ayarla Merkez");
+  LSTR MSG_DELTA_CALIBRATION_IN_PROGRESS  = _UxGT("Delta Kalibrasyonu sürüyor");
   LSTR MSG_DELTA_SETTINGS                 = _UxGT("Delta Ayarları");
   LSTR MSG_DELTA_AUTO_CALIBRATE           = _UxGT("Oto Kalibrasyon");
   LSTR MSG_DELTA_DIAG_ROD                 = _UxGT("Çapral Mil");
   LSTR MSG_DELTA_HEIGHT                   = _UxGT("Yükseklik");
   LSTR MSG_DELTA_RADIUS                   = _UxGT("Yarıçap");
-  LSTR MSG_INFO_MENU                      = _UxGT("Yazıcı Hakkında");
-  LSTR MSG_INFO_PRINTER_MENU              = _UxGT("Yazıcı Bilgisi");
   LSTR MSG_3POINT_LEVELING                = _UxGT("3-Nokta Seviyeleme");
   LSTR MSG_LINEAR_LEVELING                = _UxGT("Doğrusal Seviyeleme");
   LSTR MSG_BILINEAR_LEVELING              = _UxGT("İki Yönlü Doğ. Hiza.");
   LSTR MSG_UBL_LEVELING                   = _UxGT("Birleşik Tabla Hiza.");
   LSTR MSG_MESH_LEVELING                  = _UxGT("Mesh Seviyeleme");
   LSTR MSG_MESH_DONE                      = _UxGT("Mesh sondalama tamam");
-  LSTR MSG_INFO_STATS_MENU                = _UxGT("İstatistikler");
+  LSTR MSG_MESH_SETTINGS                  = _UxGT("Mesh Ayarları");
+
   LSTR MSG_RESET_STATS                    = _UxGT("Yazdırma istatistik Sıfırla?");
+  LSTR MSG_INFO_MENU                      = _UxGT("Yazıcı Hakkında");
+  LSTR MSG_INFO_PRINTER_MENU              = _UxGT("Yazıcı Bilgisi");
+  LSTR MSG_INFO_STATS_MENU                = _UxGT("İstatistikler");
   LSTR MSG_INFO_BOARD_MENU                = _UxGT("Kontrolcü Bilgisi");
   LSTR MSG_INFO_THERMISTOR_MENU           = _UxGT("Termistörler");
   LSTR MSG_INFO_EXTRUDERS                 = _UxGT("Ekstruderler");
@@ -647,15 +648,6 @@ namespace LanguageNarrow_tr {
   LSTR MSG_INFO_PROTOCOL                  = _UxGT("Protokol");
   LSTR MSG_INFO_RUNAWAY_OFF               = _UxGT("Kaçak İzleme: KAPALI");
   LSTR MSG_INFO_RUNAWAY_ON                = _UxGT("Kaçak İzleme: AÇIK");
-  LSTR MSG_HOTEND_IDLE_TIMEOUT            = _UxGT("Hotend Boşta Zamn Aş");
-  LSTR MSG_HOTEND_IDLE_DISABLE            = _UxGT("Zaman Aşımı Pasif");
-  LSTR MSG_HOTEND_IDLE_NOZZLE_TARGET      = _UxGT("Meme Boşta Isısı");
-  LSTR MSG_HOTEND_IDLE_BED_TARGET         = _UxGT("Tabla Boşta Isısı");
-  LSTR MSG_FAN_SPEED_FAULT                = _UxGT("Fan hızı hatası");
-
-  LSTR MSG_CASE_LIGHT                     = _UxGT("Aydınlatma");
-  LSTR MSG_CASE_LIGHT_BRIGHTNESS          = _UxGT("Işık Parlaklğı");
-  LSTR MSG_KILL_EXPECTED_PRINTER          = _UxGT("HATALI YAZICI");
 
   LSTR MSG_COLORS_GET                     = _UxGT("Renk Al");               // ProUI
   LSTR MSG_COLORS_SELECT                  = _UxGT("Renkleri Seç");          // ProUI
@@ -701,6 +693,15 @@ namespace LanguageNarrow_tr {
   LSTR MSG_FANCHECK                       = _UxGT("Fan Takosu Kontrolü");
   LSTR MSG_KILL_HOMING_FAILED             = _UxGT("Sıfırlama Başarısız");
   LSTR MSG_LCD_PROBING_FAILED             = _UxGT("Probing Başarısız");
+  LSTR MSG_HOTEND_IDLE_TIMEOUT            = _UxGT("Hotend Boşta Zamn Aş");
+  LSTR MSG_HOTEND_IDLE_DISABLE            = _UxGT("Zaman Aşımı Pasif");
+  LSTR MSG_HOTEND_IDLE_NOZZLE_TARGET      = _UxGT("Meme Boşta Isısı");
+  LSTR MSG_HOTEND_IDLE_BED_TARGET         = _UxGT("Tabla Boşta Isısı");
+  LSTR MSG_FAN_SPEED_FAULT                = _UxGT("Fan hızı hatası");
+  LSTR MSG_KILL_EXPECTED_PRINTER          = _UxGT("HATALI YAZICI");
+
+  LSTR MSG_CASE_LIGHT                     = _UxGT("Aydınlatma");
+  LSTR MSG_CASE_LIGHT_BRIGHTNESS          = _UxGT("Işık Parlaklğı");
 
   LSTR MSG_MMU2_CHOOSE_FILAMENT_HEADER    = _UxGT("FILAMAN SEÇ");
   LSTR MSG_MMU2_MENU                      = _UxGT("MMU");

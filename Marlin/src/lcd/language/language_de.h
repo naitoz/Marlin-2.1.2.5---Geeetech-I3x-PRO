@@ -211,7 +211,6 @@ namespace LanguageNarrow_de {
   LSTR MSG_G26_CANCELED                   = _UxGT("G26 abgebrochen");
   LSTR MSG_G26_LEAVING                    = _UxGT("G26 verlassen");
   LSTR MSG_UBL_CONTINUE_MESH              = _UxGT("Netzerst. forts.");
-  LSTR MSG_UBL_MESH_LEVELING              = _UxGT("Netz-Nivellierung");
   LSTR MSG_UBL_3POINT_MESH_LEVELING       = _UxGT("3-Punkt-Nivell.");
   LSTR MSG_UBL_GRID_MESH_LEVELING         = _UxGT("Gitternetz-Nivell.");
   LSTR MSG_UBL_MESH_LEVEL                 = _UxGT("Netz nivellieren");
@@ -567,14 +566,16 @@ namespace LanguageNarrow_de {
   LSTR MSG_DELTA_DIAG_ROD                 = _UxGT("Diag Rod");
   LSTR MSG_DELTA_HEIGHT                   = _UxGT("Höhe");
   LSTR MSG_DELTA_RADIUS                   = _UxGT("Radius");
-  LSTR MSG_INFO_MENU                      = _UxGT("Über den Drucker");
-  LSTR MSG_INFO_PRINTER_MENU              = _UxGT("Drucker-Info");
   LSTR MSG_3POINT_LEVELING                = _UxGT("3-Punkt-Nivellierung");
   LSTR MSG_LINEAR_LEVELING                = _UxGT("Lineare Nivellierung");
   LSTR MSG_BILINEAR_LEVELING              = _UxGT("Bilineare Nivell.");
   LSTR MSG_UBL_LEVELING                   = _UxGT("Einheit. Bettnivell.");
   LSTR MSG_MESH_LEVELING                  = _UxGT("Netz-Nivellierung");
   LSTR MSG_MESH_DONE                      = _UxGT("Nivellierung fertig");
+  LSTR MSG_MESH_SETTINGS                  = _UxGT("Netzeinstellungen");
+
+  LSTR MSG_INFO_MENU                      = _UxGT("Über den Drucker");
+  LSTR MSG_INFO_PRINTER_MENU              = _UxGT("Drucker-Info");
   LSTR MSG_INFO_STATS_MENU                = _UxGT("Drucker-Statistik");
   LSTR MSG_INFO_BOARD_MENU                = _UxGT("Board-Info");
   LSTR MSG_INFO_THERMISTOR_MENU           = _UxGT("Thermistoren");
@@ -583,28 +584,6 @@ namespace LanguageNarrow_de {
   LSTR MSG_INFO_PROTOCOL                  = _UxGT("Protokoll");
   LSTR MSG_INFO_RUNAWAY_OFF               = _UxGT("Runaway Watch: AUS");
   LSTR MSG_INFO_RUNAWAY_ON                = _UxGT("Runaway Watch: AN");
-  LSTR MSG_HOTEND_IDLE_TIMEOUT            = _UxGT("Hotend Idle Timeout");
-  LSTR MSG_FAN_SPEED_FAULT                = _UxGT("Fehler Lüftergeschw.");
-
-  LSTR MSG_CASE_LIGHT                     = _UxGT("Beleuchtung");
-  LSTR MSG_CASE_LIGHT_BRIGHTNESS          = _UxGT("Helligkeit");
-  LSTR MSG_KILL_EXPECTED_PRINTER          = _UxGT("Falscher Drucker");
-
-  LSTR MSG_COLORS_GET                     = _UxGT("Farbe");                 // ProUI
-  LSTR MSG_COLORS_SELECT                  = _UxGT("Farben auswählen");      // ProUI
-  LSTR MSG_COLORS_APPLIED                 = _UxGT("Farben verwenden");      // ProUI
-  LSTR MSG_COLORS_RED                     = _UxGT("Rot");                   // ProUI / JyersUI
-  LSTR MSG_COLORS_GREEN                   = _UxGT("Grün");                  // ProUI / JyersUI
-  LSTR MSG_COLORS_BLUE                    = _UxGT("Blau");                  // ProUI / JyersUI
-  LSTR MSG_COLORS_WHITE                   = _UxGT("Weiß");                  // ProUI
-  LSTR MSG_UI_LANGUAGE                    = _UxGT("UI Sprache");            // ProUI
-  LSTR MSG_SOUND_ENABLE                   = _UxGT("Ton aktivieren");        // ProUI
-  LSTR MSG_LOCKSCREEN                     = _UxGT("Bildschirm sperren");    // ProUI
-  LSTR MSG_LOCKSCREEN_LOCKED              = _UxGT("Drucker ist gesperrt,"); // ProUI
-  LSTR MSG_LOCKSCREEN_UNLOCK              = _UxGT("Scrollen zum Entsper."); // ProUI
-  LSTR MSG_PLEASE_WAIT_REBOOT             = _UxGT("Auf Neustart warten");   // ProUI
-  LSTR MSG_PLEASE_PREHEAT                 = _UxGT("Bitte vorheizen");       // ProUI
-
   LSTR MSG_INFO_PRINT_COUNT               = _UxGT("Drucke");
   LSTR MSG_INFO_COMPLETED_PRINTS          = _UxGT("Komplette");
   LSTR MSG_INFO_PRINT_TIME                = _UxGT("Gesamte");
@@ -633,7 +612,30 @@ namespace LanguageNarrow_de {
   LSTR MSG_FANCHECK                       = _UxGT("Lüftergeschw. prüfen");
   LSTR MSG_KILL_HOMING_FAILED             = _UxGT("Homing gescheitert");
   LSTR MSG_LCD_PROBING_FAILED             = _UxGT("Probing gescheitert");
+  LSTR MSG_HOTEND_IDLE_TIMEOUT            = _UxGT("Hotend Idle Timeout");
+  LSTR MSG_FAN_SPEED_FAULT                = _UxGT("Fehler Lüftergeschw.");
+  LSTR MSG_KILL_EXPECTED_PRINTER          = _UxGT("Falscher Drucker");
 
+  LSTR MSG_CASE_LIGHT                     = _UxGT("Beleuchtung");
+  LSTR MSG_CASE_LIGHT_BRIGHTNESS          = _UxGT("Helligkeit");
+
+  // Ender-3 V2 DWIN - ProUI / JyersUI
+  LSTR MSG_COLORS_GET                     = _UxGT("Farbe");                 // ProUI
+  LSTR MSG_COLORS_SELECT                  = _UxGT("Farben auswählen");      // ProUI
+  LSTR MSG_COLORS_APPLIED                 = _UxGT("Farben verwenden");      // ProUI
+  LSTR MSG_COLORS_RED                     = _UxGT("Rot");                   // ProUI / JyersUI
+  LSTR MSG_COLORS_GREEN                   = _UxGT("Grün");                  // ProUI / JyersUI
+  LSTR MSG_COLORS_BLUE                    = _UxGT("Blau");                  // ProUI / JyersUI
+  LSTR MSG_COLORS_WHITE                   = _UxGT("Weiß");                  // ProUI
+  LSTR MSG_UI_LANGUAGE                    = _UxGT("UI Sprache");            // ProUI
+  LSTR MSG_SOUND_ENABLE                   = _UxGT("Ton aktivieren");        // ProUI
+  LSTR MSG_LOCKSCREEN                     = _UxGT("Bildschirm sperren");    // ProUI
+  LSTR MSG_LOCKSCREEN_LOCKED              = _UxGT("Drucker ist gesperrt,"); // ProUI
+  LSTR MSG_LOCKSCREEN_UNLOCK              = _UxGT("Scrollen zum Entsper."); // ProUI
+  LSTR MSG_PLEASE_WAIT_REBOOT             = _UxGT("Auf Neustart warten");   // ProUI
+  LSTR MSG_PLEASE_PREHEAT                 = _UxGT("Bitte vorheizen");       // ProUI
+
+  // Prusa MMU 2
   LSTR MSG_MMU2_CHOOSE_FILAMENT_HEADER    = _UxGT("FILAMENT WÄHLEN");
   LSTR MSG_MMU2_MENU                      = _UxGT("MMU");
   LSTR MSG_KILL_MMU2_FIRMWARE             = _UxGT("Update MMU Firmware!");

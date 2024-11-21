@@ -168,7 +168,6 @@ namespace LanguageNarrow_pl {
   LSTR MSG_G26_CANCELED                   = _UxGT("G26 Przewane");
   LSTR MSG_G26_LEAVING                    = _UxGT("Opuszczanie G26");
   LSTR MSG_UBL_CONTINUE_MESH              = _UxGT("Kontynuuj tworzenie siatki");
-  LSTR MSG_UBL_MESH_LEVELING              = _UxGT("Poziomowanie siatką");
   LSTR MSG_UBL_3POINT_MESH_LEVELING       = _UxGT("Poziomowaie 3-punktowe");
   LSTR MSG_UBL_GRID_MESH_LEVELING         = _UxGT("Poziomowaie według siatki");
   LSTR MSG_UBL_MESH_LEVEL                 = _UxGT("Poziomuj siatkę");
@@ -399,12 +398,14 @@ namespace LanguageNarrow_pl {
   LSTR MSG_DELTA_DIAG_ROD                 = _UxGT("Ukośne ramię");
   LSTR MSG_DELTA_HEIGHT                   = _UxGT("Wysokość");
   LSTR MSG_DELTA_RADIUS                   = _UxGT("Promień");
-  LSTR MSG_INFO_MENU                      = _UxGT("O drukarce");
-  LSTR MSG_INFO_PRINTER_MENU              = _UxGT("Info drukarki");
   LSTR MSG_3POINT_LEVELING                = _UxGT("Poziomowanie 3-punktowe");
   LSTR MSG_LINEAR_LEVELING                = _UxGT("Poziomowanie liniowe");
   LSTR MSG_BILINEAR_LEVELING              = _UxGT("Poziomowanie biliniowe");
   LSTR MSG_MESH_LEVELING                  = _UxGT("Poziomowanie siatką");
+  LSTR MSG_MESH_SETTINGS                  = _UxGT("Siatki Ustawienia");
+
+  LSTR MSG_INFO_MENU                      = _UxGT("O drukarce");
+  LSTR MSG_INFO_PRINTER_MENU              = _UxGT("Info drukarki");
   LSTR MSG_INFO_STATS_MENU                = _UxGT("Statystyki");
   LSTR MSG_INFO_BOARD_MENU                = _UxGT("Info płyty");
   LSTR MSG_INFO_THERMISTOR_MENU           = _UxGT("Termistory");
@@ -413,18 +414,13 @@ namespace LanguageNarrow_pl {
   LSTR MSG_INFO_PROTOCOL                  = _UxGT("Protokół");
   LSTR MSG_INFO_RUNAWAY_OFF               = _UxGT("Zegar pracy: OFF");
   LSTR MSG_INFO_RUNAWAY_ON                = _UxGT("Zegar pracy: ON");
-
-  LSTR MSG_CASE_LIGHT                     = _UxGT("Oświetlenie obudowy");
-  LSTR MSG_CASE_LIGHT_BRIGHTNESS          = _UxGT("Jasność oświetlenia");
-  LSTR MSG_KILL_EXPECTED_PRINTER          = _UxGT("Niepoprawna drukarka");
-
   LSTR MSG_INFO_PRINT_COUNT               = _UxGT("Wydrukowano");
   LSTR MSG_INFO_COMPLETED_PRINTS          = _UxGT("Ukończono");
   LSTR MSG_INFO_PRINT_TIME                = _UxGT("Razem");
   LSTR MSG_INFO_PRINT_LONGEST             = _UxGT("Najdł. druk");
   LSTR MSG_INFO_PRINT_FILAMENT            = _UxGT("Użyty fil.");
-
   LSTR MSG_INFO_PSU                       = _UxGT("Zasilacz");
+
   LSTR MSG_DRIVE_STRENGTH                 = _UxGT("Siła silnika");
   LSTR MSG_DAC_PERCENT_N                  = _UxGT("@ Siła %");
   LSTR MSG_ERROR_TMC                      = _UxGT("TMC BŁĄD POŁĄCZENIA");
@@ -441,6 +437,10 @@ namespace LanguageNarrow_pl {
   LSTR MSG_RUNOUT_DISTANCE_MM             = _UxGT("Dystans do czujnika mm");
   LSTR MSG_KILL_HOMING_FAILED             = _UxGT("Zerowanie nieudane");
   LSTR MSG_LCD_PROBING_FAILED             = _UxGT("Sondowanie nieudane");
+  LSTR MSG_KILL_EXPECTED_PRINTER          = _UxGT("Niepoprawna drukarka");
+
+  LSTR MSG_CASE_LIGHT                     = _UxGT("Oświetlenie obudowy");
+  LSTR MSG_CASE_LIGHT_BRIGHTNESS          = _UxGT("Jasność oświetlenia");
 
   LSTR MSG_MMU2_CHOOSE_FILAMENT_HEADER    = _UxGT("WYBIERZ FILAMENT");
   LSTR MSG_KILL_MMU2_FIRMWARE             = _UxGT("Uaktualnij firmware MMU!");

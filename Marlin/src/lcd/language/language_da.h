@@ -156,13 +156,11 @@ namespace LanguageNarrow_da {
   LSTR MSG_INFO_MENU                      = _UxGT("Om Printer");
   LSTR MSG_INFO_BOARD_MENU                = _UxGT("Kort Info");
   LSTR MSG_INFO_THERMISTOR_MENU           = _UxGT("Thermistors");
-
   LSTR MSG_INFO_PRINT_COUNT               = _UxGT("Prints");
   LSTR MSG_INFO_COMPLETED_PRINTS          = _UxGT("Færdige");
   LSTR MSG_INFO_PRINT_TIME                = _UxGT("Total");
   LSTR MSG_INFO_PRINT_LONGEST             = _UxGT("Længste");
   LSTR MSG_INFO_PRINT_FILAMENT            = _UxGT("Extruderet");
-
   LSTR MSG_INFO_PSU                       = _UxGT("Strømfors.");
 
   LSTR MSG_DRIVE_STRENGTH                 = _UxGT("Driv Styrke");

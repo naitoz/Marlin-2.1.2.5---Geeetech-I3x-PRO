@@ -160,7 +160,6 @@ namespace LanguageNarrow_cz {
   LSTR MSG_G26_CANCELED                   = _UxGT("G26 Canceled");
   LSTR MSG_G26_LEAVING                    = _UxGT("Leaving G26");
   LSTR MSG_UBL_CONTINUE_MESH              = _UxGT("Pokračovat v síťi");
-  LSTR MSG_UBL_MESH_LEVELING              = _UxGT("Síťové rovnání");
   LSTR MSG_UBL_3POINT_MESH_LEVELING       = _UxGT("3-bodové rovnání");
   LSTR MSG_UBL_GRID_MESH_LEVELING         = _UxGT("Mřížkové rovnání");
   LSTR MSG_UBL_MESH_LEVEL                 = _UxGT("Srovnat podložku");
@@ -419,13 +418,15 @@ namespace LanguageNarrow_cz {
   LSTR MSG_DELTA_DIAG_ROD                 = _UxGT("Diag rameno");
   LSTR MSG_DELTA_HEIGHT                   = _UxGT("Výška");
   LSTR MSG_DELTA_RADIUS                   = _UxGT("Poloměr");
-  LSTR MSG_INFO_MENU                      = _UxGT("O tiskárně");
-  LSTR MSG_INFO_PRINTER_MENU              = _UxGT("Info o tiskárně");
   LSTR MSG_3POINT_LEVELING                = _UxGT("3-bodové rovnání");
   LSTR MSG_LINEAR_LEVELING                = _UxGT("Lineárni rovnání");
   LSTR MSG_BILINEAR_LEVELING              = _UxGT("Bilineární rovnání");
   LSTR MSG_UBL_LEVELING                   = _UxGT("Unified Bed Leveling");
   LSTR MSG_MESH_LEVELING                  = _UxGT("Mřížkové rovnání");
+  LSTR MSG_MESH_SETTINGS                  = _UxGT("Nastavení sítě");
+
+  LSTR MSG_INFO_MENU                      = _UxGT("O tiskárně");
+  LSTR MSG_INFO_PRINTER_MENU              = _UxGT("Info o tiskárně");
   LSTR MSG_INFO_STATS_MENU                = _UxGT("Statistika");
   LSTR MSG_INFO_BOARD_MENU                = _UxGT("Info o desce");
   LSTR MSG_INFO_THERMISTOR_MENU           = _UxGT("Termistory");
@@ -434,20 +435,15 @@ namespace LanguageNarrow_cz {
   LSTR MSG_INFO_PROTOCOL                  = _UxGT("Protokol");
   LSTR MSG_INFO_RUNAWAY_OFF               = _UxGT("Sledování úniku: VYP");
   LSTR MSG_INFO_RUNAWAY_ON                = _UxGT("Sledování úniku: ZAP");
-
-  LSTR MSG_CASE_LIGHT                     = _UxGT("Osvětlení");
-  LSTR MSG_CASE_LIGHT_BRIGHTNESS          = _UxGT("Jas světla");
-  LSTR MSG_KILL_EXPECTED_PRINTER          = _UxGT("NESPRÁVNÁ TISKÁRNA");
-
   LSTR MSG_INFO_PRINT_COUNT               = _UxGT("Tisky");
   LSTR MSG_INFO_COMPLETED_PRINTS          = _UxGT("Hotovo");
   LSTR MSG_INFO_PRINT_TIME                = _UxGT("Čas");
   LSTR MSG_INFO_PRINT_LONGEST             = _UxGT("Nejdelší");
   LSTR MSG_INFO_PRINT_FILAMENT            = _UxGT("Vytlačeno");
-
   LSTR MSG_INFO_MIN_TEMP                  = _UxGT("Teplota min");
   LSTR MSG_INFO_MAX_TEMP                  = _UxGT("Teplota max");
   LSTR MSG_INFO_PSU                       = _UxGT("Nap. zdroj");
+
   LSTR MSG_DRIVE_STRENGTH                 = _UxGT("Buzení motorů");
   LSTR MSG_DAC_PERCENT_N                  = _UxGT("@ Motor %");
   LSTR MSG_DAC_EEPROM_WRITE               = _UxGT("DAC uložit EEPROM");
@@ -464,6 +460,10 @@ namespace LanguageNarrow_cz {
   LSTR MSG_RUNOUT_DISTANCE_MM             = _UxGT("Délka mm senz.fil.");
   LSTR MSG_KILL_HOMING_FAILED             = _UxGT("Parkování selhalo");
   LSTR MSG_LCD_PROBING_FAILED             = _UxGT("Kalibrace selhala");
+  LSTR MSG_KILL_EXPECTED_PRINTER          = _UxGT("NESPRÁVNÁ TISKÁRNA");
+
+  LSTR MSG_CASE_LIGHT                     = _UxGT("Osvětlení");
+  LSTR MSG_CASE_LIGHT_BRIGHTNESS          = _UxGT("Jas světla");
 
   LSTR MSG_MMU2_CHOOSE_FILAMENT_HEADER    = _UxGT("VYBERTE FILAMENT");
   LSTR MSG_MMU2_MENU                      = _UxGT("MMU");

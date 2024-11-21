@@ -227,7 +227,6 @@ namespace LanguageNarrow_sk {
   LSTR MSG_G26_CANCELED                   = _UxGT("G26 zrušený");
   LSTR MSG_G26_LEAVING                    = _UxGT("Opúšťam G26");
   LSTR MSG_UBL_CONTINUE_MESH              = _UxGT("Pokračovať v sieti");
-  LSTR MSG_UBL_MESH_LEVELING              = _UxGT("Sieťové rovnanie");
   LSTR MSG_UBL_3POINT_MESH_LEVELING       = _UxGT("3-bodové rovnanie");
   LSTR MSG_UBL_GRID_MESH_LEVELING         = _UxGT("Mriežkové rovnanie");
   LSTR MSG_UBL_MESH_LEVEL                 = _UxGT("Vyrovnať podložku");
@@ -609,16 +608,18 @@ namespace LanguageNarrow_sk {
   LSTR MSG_DELTA_DIAG_ROD                 = _UxGT("Diag. rameno");
   LSTR MSG_DELTA_HEIGHT                   = _UxGT("Výška");
   LSTR MSG_DELTA_RADIUS                   = _UxGT("Polomer");
-  LSTR MSG_INFO_MENU                      = _UxGT("O tlačiarni");
-  LSTR MSG_INFO_PRINTER_MENU              = _UxGT("Info. o tlačiarni");
   LSTR MSG_3POINT_LEVELING                = _UxGT("3-bodové rovnanie");
   LSTR MSG_LINEAR_LEVELING                = _UxGT("Lineárne rovnanie");
   LSTR MSG_BILINEAR_LEVELING              = _UxGT("Bilineárne rovnanie");
   LSTR MSG_UBL_LEVELING                   = _UxGT("UBL rovnanie");
   LSTR MSG_MESH_LEVELING                  = _UxGT("Mriežkové rovnanie");
   LSTR MSG_MESH_DONE                      = _UxGT("Mriežka dokončená");
-  LSTR MSG_INFO_STATS_MENU                = _UxGT("Štatistika");
+  LSTR MSG_MESH_SETTINGS                  = _UxGT("Mriežka nastavenia");
+
   LSTR MSG_RESET_STATS                    = _UxGT("Vynulovať štatis.?");
+  LSTR MSG_INFO_MENU                      = _UxGT("O tlačiarni");
+  LSTR MSG_INFO_PRINTER_MENU              = _UxGT("Info. o tlačiarni");
+  LSTR MSG_INFO_STATS_MENU                = _UxGT("Štatistika");
   LSTR MSG_INFO_BOARD_MENU                = _UxGT("Info. o doske");
   LSTR MSG_INFO_THERMISTOR_MENU           = _UxGT("Termistory");
   LSTR MSG_INFO_EXTRUDERS                 = _UxGT("Extrudéry");
@@ -626,29 +627,6 @@ namespace LanguageNarrow_sk {
   LSTR MSG_INFO_PROTOCOL                  = _UxGT("Protokol");
   LSTR MSG_INFO_RUNAWAY_OFF               = _UxGT("Tepl. ochrana: VYP");
   LSTR MSG_INFO_RUNAWAY_ON                = _UxGT("Tepl. ochrana: ZAP");
-  LSTR MSG_HOTEND_IDLE_TIMEOUT            = _UxGT("Vypr.čas nečinnosti");
-  LSTR MSG_FAN_SPEED_FAULT                = _UxGT("Chyba rýchl. vent.");
-
-  LSTR MSG_CASE_LIGHT                     = _UxGT("Osvetlenie");
-  LSTR MSG_CASE_LIGHT_BRIGHTNESS          = _UxGT("Jas svetla");
-  LSTR MSG_KILL_EXPECTED_PRINTER          = _UxGT("Nesprávna tlačiareň");
-
-  LSTR MSG_COLORS_GET                     = _UxGT("Zvoliť farbu");                // ProUI
-  LSTR MSG_COLORS_SELECT                  = _UxGT("Zvoliť farby");                // ProUI
-  LSTR MSG_COLORS_APPLIED                 = _UxGT("Farby aplikované");            // ProUI
-  LSTR MSG_COLORS_RED                     = _UxGT("Červená");                     // ProUI / JyersUI
-  LSTR MSG_COLORS_GREEN                   = _UxGT("Zelená");                      // ProUI / JyersUI
-  LSTR MSG_COLORS_BLUE                    = _UxGT("Modrá");                       // ProUI / JyersUI
-  LSTR MSG_COLORS_WHITE                   = _UxGT("Biela");                       // ProUI
-  LSTR MSG_UI_LANGUAGE                    = _UxGT("Jazyk rozhrania");             // ProUI
-  LSTR MSG_SOUND_ENABLE                   = _UxGT("Povoliť zvuky");               // ProUI
-  LSTR MSG_LOCKSCREEN                     = _UxGT("Uzamknúť obrazovku");          // ProUI
-  LSTR MSG_LOCKSCREEN_LOCKED              = _UxGT("Tlačiareň je uzamknutá,");     // ProUI
-  LSTR MSG_LOCKSCREEN_UNLOCK              = _UxGT("potiahnite pre odomknutie.");  // ProUI
-  LSTR MSG_PLEASE_WAIT_REBOOT             = _UxGT("Prosím čakajte do reštartu."); // ProUI
-  LSTR MSG_MEDIA_NOT_INSERTED             = _UxGT("Žiadna karta");                // ProUI
-  LSTR MSG_PLEASE_PREHEAT                 = _UxGT("Prosím zahrejte");             // ProUI
-
   LSTR MSG_INFO_PRINT_COUNT               = _UxGT("Tlače");
   LSTR MSG_INFO_PRINT_TIME                = _UxGT("Čas");
   LSTR MSG_INFO_PRINT_LONGEST             = _UxGT("Najdlhšia");
@@ -677,7 +655,31 @@ namespace LanguageNarrow_sk {
   LSTR MSG_FANCHECK                       = _UxGT("Kontrola rýchl.");
   LSTR MSG_KILL_HOMING_FAILED             = _UxGT("Parkovanie zlyhalo");
   LSTR MSG_LCD_PROBING_FAILED             = _UxGT("Kalibrácia zlyhala");
+  LSTR MSG_HOTEND_IDLE_TIMEOUT            = _UxGT("Vypr.čas nečinnosti");
+  LSTR MSG_FAN_SPEED_FAULT                = _UxGT("Chyba rýchl. vent.");
+  LSTR MSG_KILL_EXPECTED_PRINTER          = _UxGT("Nesprávna tlačiareň");
 
+  LSTR MSG_CASE_LIGHT                     = _UxGT("Osvetlenie");
+  LSTR MSG_CASE_LIGHT_BRIGHTNESS          = _UxGT("Jas svetla");
+
+  // Ender-3 V2 DWIN - ProUI / JyersUI
+  LSTR MSG_COLORS_GET                     = _UxGT("Zvoliť farbu");                // ProUI
+  LSTR MSG_COLORS_SELECT                  = _UxGT("Zvoliť farby");                // ProUI
+  LSTR MSG_COLORS_APPLIED                 = _UxGT("Farby aplikované");            // ProUI
+  LSTR MSG_COLORS_RED                     = _UxGT("Červená");                     // ProUI / JyersUI
+  LSTR MSG_COLORS_GREEN                   = _UxGT("Zelená");                      // ProUI / JyersUI
+  LSTR MSG_COLORS_BLUE                    = _UxGT("Modrá");                       // ProUI / JyersUI
+  LSTR MSG_COLORS_WHITE                   = _UxGT("Biela");                       // ProUI
+  LSTR MSG_UI_LANGUAGE                    = _UxGT("Jazyk rozhrania");             // ProUI
+  LSTR MSG_SOUND_ENABLE                   = _UxGT("Povoliť zvuky");               // ProUI
+  LSTR MSG_LOCKSCREEN                     = _UxGT("Uzamknúť obrazovku");          // ProUI
+  LSTR MSG_LOCKSCREEN_LOCKED              = _UxGT("Tlačiareň je uzamknutá,");     // ProUI
+  LSTR MSG_LOCKSCREEN_UNLOCK              = _UxGT("potiahnite pre odomknutie.");  // ProUI
+  LSTR MSG_PLEASE_WAIT_REBOOT             = _UxGT("Prosím čakajte do reštartu."); // ProUI
+  LSTR MSG_MEDIA_NOT_INSERTED             = _UxGT("Žiadna karta");                // ProUI
+  LSTR MSG_PLEASE_PREHEAT                 = _UxGT("Prosím zahrejte");             // ProUI
+
+  // Prusa MMU 2
   LSTR MSG_MMU2_CHOOSE_FILAMENT_HEADER    = _UxGT("VYBERTE FILAMENT");
   LSTR MSG_MMU2_MENU                      = _UxGT("MMU2");
   LSTR MSG_KILL_MMU2_FIRMWARE             = _UxGT("Aktualizujte FW MMU!");

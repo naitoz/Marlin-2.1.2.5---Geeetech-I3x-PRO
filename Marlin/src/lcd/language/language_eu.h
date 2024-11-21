@@ -102,7 +102,6 @@ namespace LanguageNarrow_eu {
   LSTR MSG_UBL_MESH_HEIGHT_ADJUST         = _UxGT("Sarearen altuera doitu");
   LSTR MSG_UBL_VALIDATE_MESH_MENU         = _UxGT("Sarea balioetsi");
   LSTR MSG_UBL_CONTINUE_MESH              = _UxGT("Ohe sarea balioetsi");
-  LSTR MSG_UBL_MESH_LEVELING              = _UxGT("Sare berdinketa");
   LSTR MSG_UBL_3POINT_MESH_LEVELING       = _UxGT("3 puntuko berdinketa");
   LSTR MSG_UBL_GRID_MESH_LEVELING         = _UxGT("Lauki-sare berdinketa");
   LSTR MSG_UBL_MESH_LEVEL                 = _UxGT("Sarea berdindu");
@@ -258,31 +257,30 @@ namespace LanguageNarrow_eu {
   LSTR MSG_DELTA_DIAG_ROD                 = _UxGT("Barra diagonala");
   LSTR MSG_DELTA_HEIGHT                   = _UxGT("Altuera");
   LSTR MSG_DELTA_RADIUS                   = _UxGT("Erradioa");
-  LSTR MSG_INFO_MENU                      = _UxGT("Inprimagailu Inf.");
-  LSTR MSG_INFO_PRINTER_MENU              = _UxGT("Inprimagailu Inf.");
   LSTR MSG_3POINT_LEVELING                = _UxGT("3 puntuko berdinketa");
   LSTR MSG_LINEAR_LEVELING                = _UxGT("Berdinketa lineala");
   LSTR MSG_BILINEAR_LEVELING              = _UxGT("Berdinketa bilinearra");
   LSTR MSG_UBL_LEVELING                   = _UxGT("Unified Bed Leveling");
   LSTR MSG_MESH_LEVELING                  = _UxGT("Sare berdinketa");
+  LSTR MSG_MESH_SETTINGS                  = _UxGT("Sarearen ezarpenak");
+
+  LSTR MSG_INFO_MENU                      = _UxGT("Inprimagailu Buruz");
+  LSTR MSG_INFO_PRINTER_MENU              = _UxGT("Inprimagailu Info.");
   LSTR MSG_INFO_STATS_MENU                = _UxGT("Inprima. estatis.");
   LSTR MSG_INFO_BOARD_MENU                = _UxGT("Txartelaren Info.");
   LSTR MSG_INFO_THERMISTOR_MENU           = _UxGT("Termistoreak");
   LSTR MSG_INFO_EXTRUDERS                 = _UxGT("Estrusoreak");
   LSTR MSG_INFO_BAUDRATE                  = _UxGT("Baudioak");
   LSTR MSG_INFO_PROTOCOL                  = _UxGT("Protokoloa");
-  LSTR MSG_CASE_LIGHT                     = _UxGT("Kabina Argia");
-  LSTR MSG_CASE_LIGHT_BRIGHTNESS          = _UxGT("Argiaren Distira");
-
   LSTR MSG_INFO_PRINT_COUNT               = _UxGT("Inprimatze");
   LSTR MSG_INFO_COMPLETED_PRINTS          = _UxGT("Burututa");
   LSTR MSG_INFO_PRINT_TIME                = _UxGT("Guztira");
   LSTR MSG_INFO_PRINT_LONGEST             = _UxGT("Luzeena");
   LSTR MSG_INFO_PRINT_FILAMENT            = _UxGT("Estrusio");
-
   LSTR MSG_INFO_MIN_TEMP                  = _UxGT("Tenp. Minimoa");
   LSTR MSG_INFO_MAX_TEMP                  = _UxGT("Tenp. Maximoa");
   LSTR MSG_INFO_PSU                       = _UxGT("Elikadura-iturria");
+
   LSTR MSG_DRIVE_STRENGTH                 = _UxGT("Driver-aren potentzia");
   LSTR MSG_DAC_PERCENT_N                  = _UxGT("@ Driver %");
   LSTR MSG_DAC_EEPROM_WRITE               = _UxGT("Idatzi DAC EEPROM");
@@ -294,8 +292,10 @@ namespace LanguageNarrow_eu {
   LSTR MSG_FILAMENT_CHANGE_NOZZLE         = _UxGT("  Pita: ");
   LSTR MSG_KILL_HOMING_FAILED             = _UxGT("Hasi. huts egin du");
   LSTR MSG_LCD_PROBING_FAILED             = _UxGT("Neurketak huts egin du");
-
   LSTR MSG_KILL_EXPECTED_PRINTER          = _UxGT("Inprimagailu okerra");
+
+  LSTR MSG_CASE_LIGHT                     = _UxGT("Kabina Argia");
+  LSTR MSG_CASE_LIGHT_BRIGHTNESS          = _UxGT("Argiaren Distira");
 
   //
   // Filament Change screens show up to 3 lines on a 4-line display

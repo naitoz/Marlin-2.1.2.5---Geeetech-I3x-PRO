@@ -266,7 +266,6 @@ namespace LanguageNarrow_en {
   LSTR MSG_G26_CANCELED                   = _UxGT("G26 Canceled");
   LSTR MSG_G26_LEAVING                    = _UxGT("Leaving G26");
   LSTR MSG_UBL_CONTINUE_MESH              = _UxGT("Continue Bed Mesh");
-  LSTR MSG_UBL_MESH_LEVELING              = _UxGT("Mesh Leveling");
   LSTR MSG_UBL_3POINT_MESH_LEVELING       = _UxGT("3-Point Leveling");
   LSTR MSG_UBL_GRID_MESH_LEVELING         = _UxGT("Grid Mesh Leveling");
   LSTR MSG_UBL_MESH_LEVEL                 = _UxGT("Level Mesh");
@@ -677,27 +676,28 @@ namespace LanguageNarrow_en {
   LSTR MSG_CHAMBER_COOLING                = _UxGT("Chamber Cooling...");
   LSTR MSG_LASER_COOLING                  = _UxGT("Laser Cooling...");
   LSTR MSG_DELTA_CALIBRATE                = _UxGT("Delta Calibration");
-  LSTR MSG_DELTA_CALIBRATION_IN_PROGRESS  = _UxGT("Delta Calibration in progress");
   LSTR MSG_DELTA_CALIBRATE_X              = _UxGT("Calibrate X");
   LSTR MSG_DELTA_CALIBRATE_Y              = _UxGT("Calibrate Y");
   LSTR MSG_DELTA_CALIBRATE_Z              = _UxGT("Calibrate Z");
   LSTR MSG_DELTA_CALIBRATE_CENTER         = _UxGT("Calibrate Center");
+  LSTR MSG_DELTA_CALIBRATION_IN_PROGRESS  = _UxGT("Delta Calibration in progress");
   LSTR MSG_DELTA_SETTINGS                 = _UxGT("Delta Settings");
   LSTR MSG_DELTA_AUTO_CALIBRATE           = _UxGT("Auto Calibration");
   LSTR MSG_DELTA_DIAG_ROD                 = _UxGT("Diag Rod");
   LSTR MSG_DELTA_HEIGHT                   = _UxGT("Height");
   LSTR MSG_DELTA_RADIUS                   = _UxGT("Radius");
-  LSTR MSG_INFO_MENU                      = _UxGT("About Printer");
-  LSTR MSG_INFO_PRINTER_MENU              = _UxGT("Printer Info");
   LSTR MSG_3POINT_LEVELING                = _UxGT("3-Point Leveling");
   LSTR MSG_LINEAR_LEVELING                = _UxGT("Linear Leveling");
   LSTR MSG_BILINEAR_LEVELING              = _UxGT("Bilinear Leveling");
   LSTR MSG_UBL_LEVELING                   = _UxGT("Unified Bed Leveling");
   LSTR MSG_MESH_LEVELING                  = _UxGT("Mesh Leveling");
   LSTR MSG_MESH_DONE                      = _UxGT("Mesh probing done");
-  LSTR MSG_INFO_PRINTER_STATS_MENU        = _UxGT("Printer Stats");
-  LSTR MSG_INFO_STATS_MENU                = _UxGT("Stats");
+  LSTR MSG_MESH_SETTINGS                  = _UxGT("Mesh Settings");
+
   LSTR MSG_RESET_STATS                    = _UxGT("Reset Print Stats?");
+  LSTR MSG_INFO_MENU                      = _UxGT("About Printer");
+  LSTR MSG_INFO_PRINTER_MENU              = _UxGT("Printer Info");
+  LSTR MSG_INFO_STATS_MENU                = _UxGT("Printer Stats");
   LSTR MSG_INFO_BOARD_MENU                = _UxGT("Board Info");
   LSTR MSG_INFO_THERMISTOR_MENU           = _UxGT("Thermistors");
   LSTR MSG_INFO_EXTRUDERS                 = _UxGT("Extruders");
@@ -705,17 +705,6 @@ namespace LanguageNarrow_en {
   LSTR MSG_INFO_PROTOCOL                  = _UxGT("Protocol");
   LSTR MSG_INFO_RUNAWAY_OFF               = _UxGT("Runaway Watch: OFF");
   LSTR MSG_INFO_RUNAWAY_ON                = _UxGT("Runaway Watch: ON");
-  LSTR MSG_HOTEND_IDLE_TIMEOUT            = _UxGT("Hotend Idle Timeout");
-  LSTR MSG_BED_IDLE_TIMEOUT               = _UxGT("Bed Idle Timeout");
-  LSTR MSG_HOTEND_IDLE_DISABLE            = _UxGT("Disable Timeout");
-  LSTR MSG_HOTEND_IDLE_NOZZLE_TARGET      = _UxGT("Nozzle Idle Temp");
-  LSTR MSG_HOTEND_IDLE_BED_TARGET         = _UxGT("Bed Idle Temp");
-  LSTR MSG_FAN_SPEED_FAULT                = _UxGT("Fan speed fault");
-
-  LSTR MSG_CASE_LIGHT                     = _UxGT("Case Light");
-  LSTR MSG_CASE_LIGHT_BRIGHTNESS          = _UxGT("Light Brightness");
-  LSTR MSG_KILL_EXPECTED_PRINTER          = _UxGT("INCORRECT PRINTER");
-
   LSTR MSG_INFO_PRINT_COUNT               = _UxGT("Prints");
   LSTR MSG_INFO_PRINT_TIME                = _UxGT("Total");
   LSTR MSG_INFO_PRINT_LONGEST             = _UxGT("Longest");
@@ -745,6 +734,16 @@ namespace LanguageNarrow_en {
   LSTR MSG_FANCHECK                       = _UxGT("Fan Tacho Check");
   LSTR MSG_KILL_HOMING_FAILED             = _UxGT("Homing Failed");
   LSTR MSG_LCD_PROBING_FAILED             = _UxGT("Probing Failed");
+  LSTR MSG_BED_IDLE_TIMEOUT               = _UxGT("Bed Idle Timeout");
+  LSTR MSG_HOTEND_IDLE_TIMEOUT            = _UxGT("Hotend Idle Timeout");
+  LSTR MSG_HOTEND_IDLE_DISABLE            = _UxGT("Disable Timeout");
+  LSTR MSG_HOTEND_IDLE_NOZZLE_TARGET      = _UxGT("Nozzle Idle Temp");
+  LSTR MSG_HOTEND_IDLE_BED_TARGET         = _UxGT("Bed Idle Temp");
+  LSTR MSG_FAN_SPEED_FAULT                = _UxGT("Fan speed fault");
+  LSTR MSG_KILL_EXPECTED_PRINTER          = _UxGT("INCORRECT PRINTER");
+
+  LSTR MSG_CASE_LIGHT                     = _UxGT("Case Light");
+  LSTR MSG_CASE_LIGHT_BRIGHTNESS          = _UxGT("Light Brightness");
 
   // Ender-3 V2 DWIN - ProUI / JyersUI
   LSTR MSG_COLORS_GET                     = _UxGT("Get Color");               // ProUI

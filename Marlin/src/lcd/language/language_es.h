@@ -158,7 +158,6 @@ namespace LanguageNarrow_es {
   LSTR MSG_G26_CANCELED                   = _UxGT("G26 Cancelado");
   LSTR MSG_G26_LEAVING                    = _UxGT("Dejando G26");
   LSTR MSG_UBL_CONTINUE_MESH              = _UxGT("Contin. Mallado cama");
-  LSTR MSG_UBL_MESH_LEVELING              = _UxGT("Nivelando Mallado");
   LSTR MSG_UBL_3POINT_MESH_LEVELING       = _UxGT("Nivelando 3Puntos");
   LSTR MSG_UBL_GRID_MESH_LEVELING         = _UxGT("Niv. Mall. cuadri");
   LSTR MSG_UBL_MESH_LEVEL                 = _UxGT("Nivel de Mallado");
@@ -427,13 +426,15 @@ namespace LanguageNarrow_es {
   LSTR MSG_DELTA_DIAG_ROD                 = _UxGT("Barra Diagonal");
   LSTR MSG_DELTA_HEIGHT                   = _UxGT("Altura");
   LSTR MSG_DELTA_RADIUS                   = _UxGT("Radio");
-  LSTR MSG_INFO_MENU                      = _UxGT("Info. Impresora");
-  LSTR MSG_INFO_PRINTER_MENU              = _UxGT("Info. Impresora");
   LSTR MSG_3POINT_LEVELING                = _UxGT("Nivelando 3puntos");
   LSTR MSG_LINEAR_LEVELING                = _UxGT("Nivelando Lineal");
   LSTR MSG_BILINEAR_LEVELING              = _UxGT("Nivelando Bilineal");
   LSTR MSG_UBL_LEVELING                   = _UxGT("Nivelando UBL");
   LSTR MSG_MESH_LEVELING                  = _UxGT("Nivelando en Mallado");
+  LSTR MSG_MESH_SETTINGS                  = _UxGT("Ajustes en Mallado");
+
+  LSTR MSG_INFO_MENU                      = _UxGT("Acerca de Impresora");
+  LSTR MSG_INFO_PRINTER_MENU              = _UxGT("Info. Impresora");
   LSTR MSG_INFO_STATS_MENU                = _UxGT("Estadísticas Imp.");
   LSTR MSG_INFO_BOARD_MENU                = _UxGT("Info. Controlador");
   LSTR MSG_INFO_THERMISTOR_MENU           = _UxGT("Termistores");
@@ -442,20 +443,15 @@ namespace LanguageNarrow_es {
   LSTR MSG_INFO_PROTOCOL                  = _UxGT("Protocolo");
   LSTR MSG_INFO_RUNAWAY_OFF               = _UxGT("Vig. Fuga Térm.: OFF");
   LSTR MSG_INFO_RUNAWAY_ON                = _UxGT("Vig. Fuga Térm.: ON");
-
-  LSTR MSG_CASE_LIGHT                     = _UxGT("Luz cabina");
-  LSTR MSG_CASE_LIGHT_BRIGHTNESS          = _UxGT("Brillo cabina");
-  LSTR MSG_KILL_EXPECTED_PRINTER          = _UxGT("Impresora incorrecta");
-
   LSTR MSG_INFO_PRINT_COUNT               = _UxGT("Impresiones");
   LSTR MSG_INFO_COMPLETED_PRINTS          = _UxGT("Completadas");
   LSTR MSG_INFO_PRINT_TIME                = _UxGT("Total");
   LSTR MSG_INFO_PRINT_LONGEST             = _UxGT("Más larga");
   LSTR MSG_INFO_PRINT_FILAMENT            = _UxGT("Extruido");
-
   LSTR MSG_INFO_MIN_TEMP                  = _UxGT("Temp. Mínima");
   LSTR MSG_INFO_MAX_TEMP                  = _UxGT("Temp. Máxima");
   LSTR MSG_INFO_PSU                       = _UxGT("F. Aliment.");
+
   LSTR MSG_DRIVE_STRENGTH                 = _UxGT("Fuerza de empuje");
   LSTR MSG_DAC_PERCENT_N                  = _UxGT("@ Driver %");
   LSTR MSG_ERROR_TMC                      = _UxGT("ERROR CONEX. TMC");
@@ -472,6 +468,10 @@ namespace LanguageNarrow_es {
   LSTR MSG_RUNOUT_DISTANCE_MM             = _UxGT("Dist. filamento mm");
   LSTR MSG_KILL_HOMING_FAILED             = _UxGT("Ir a origen Fallado");
   LSTR MSG_LCD_PROBING_FAILED             = _UxGT("Sondeo Fallado");
+  LSTR MSG_KILL_EXPECTED_PRINTER          = _UxGT("Impresora incorrecta");
+
+  LSTR MSG_CASE_LIGHT                     = _UxGT("Luz cabina");
+  LSTR MSG_CASE_LIGHT_BRIGHTNESS          = _UxGT("Brillo cabina");
 
   LSTR MSG_MMU2_CHOOSE_FILAMENT_HEADER    = _UxGT("ELIJE FILAMENTO");
   LSTR MSG_MMU2_MENU                      = _UxGT("MMU");
