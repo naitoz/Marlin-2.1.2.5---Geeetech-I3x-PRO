@@ -163,10 +163,11 @@
  * M123 - Report fan tachometers. (Requires En_FAN_TACHO_PIN) Optionally set auto-report interval. (Requires AUTO_REPORT_FANS)
  * M125 - Save current position and move to filament change position. (Requires PARK_HEAD_ON_PAUSE)
  *
- * M126 - Solenoid Air Valve Open. (Requires BARICUDA)
- * M127 - Solenoid Air Valve Closed. (Requires BARICUDA)
- * M128 - EtoP Open. (Requires BARICUDA)
- * M129 - EtoP Closed. (Requires BARICUDA)
+ *** BARICUDA ***
+ * M126 - Solenoid Air Valve Open.
+ * M127 - Solenoid Air Valve Closed.
+ * M128 - EtoP Open.
+ * M129 - EtoP Closed.
  *
  * M140 - Set bed target temp. S<temp>
  * M141 - Set heated chamber target temp. S<temp> (Requires a chamber heater)

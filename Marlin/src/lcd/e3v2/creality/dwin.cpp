@@ -357,6 +357,10 @@ void clearPopupArea() {
   dwinDrawRectangle(1, COLOR_BG_BLACK, 0, 31, DWIN_WIDTH, DWIN_HEIGHT);
 }
 
+void drawPopupBkgd60() {
+  dwinDrawRectangle(1, COLOR_BG_WINDOW, 14, 60, 258, 330);
+}
+
 void drawPopupBkgd105() {
   dwinDrawRectangle(1, COLOR_BG_WINDOW, 14, 105, 258, 374);
 }
@@ -1083,10 +1087,6 @@ void drawMotionMenu() {
 
 #endif
 
-void drawPopupBkgd60() {
-  dwinDrawRectangle(1, COLOR_BG_WINDOW, 14, 60, 258, 330);
-}
-
 #if HAS_HOTEND
 
   void popupWindowETempTooLow() {
@@ -1127,7 +1127,7 @@ void popupWindowResume() {
 void popupWindowHome(const bool parking/*=false*/) {
   clearMainWindow();
   drawPopupBkgd60();
-  dwinIconShow(ICON, ICON_BLTouch, 101, 105);
+  dwinIconShow(ICON, ICON_Printer_0, 101, 105);
   if (hmiIsChinese()) {
     dwinFrameAreaCopy(1, 0, 371, 33, 386, 85, 240);       // Wait for Move to Complete
     dwinFrameAreaCopy(1, 203, 286, 271, 302, 118, 240);
@@ -1827,6 +1827,14 @@ void MarlinUI::update() {
 #if HAS_LCD_BRIGHTNESS
   void MarlinUI::_set_brightness() { dwinLCDBrightness(backlight ? brightness : 0); }
 #endif
+
+void MarlinUI::kill_screen(FSTR_P const lcd_error, FSTR_P const) {
+  clearMainWindow();
+  drawPopupBkgd60();
+  dwinIconShow(ICON, ICON_Printer_0, 101, 105);
+  dwinDrawString(true, font8x16, COLOR_POPUP_TEXT, COLOR_BG_WINDOW, (272 - 8 * 15) / 2, 230, GET_TEXT_F(MSG_PRINTER_KILLED));
+  dwinDrawString(true, font8x16, COLOR_POPUP_TEXT, COLOR_BG_WINDOW, (272 - 8 * 20) / 2, 260, GET_TEXT_F(MSG_TURN_OFF));
+}
 
 #if ENABLED(SCROLL_LONG_FILENAMES)
 
