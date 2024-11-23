@@ -1118,7 +1118,7 @@ void popupWindowResume() {
   else {
     dwinDrawString(true, font8x16, COLOR_POPUP_TEXT, COLOR_BG_WINDOW, (272 - 8 * 14) / 2, 115, F("Continue Print"));
     dwinDrawString(true, font8x16, COLOR_POPUP_TEXT, COLOR_BG_WINDOW, (272 - 8 * 22) / 2, 192, F("It looks like the last"));
-    dwinDrawString(true, font8x16, COLOR_POPUP_TEXT, COLOR_BG_WINDOW, (272 - 8 * 22) / 2, 212, F("file was interrupted."));
+    dwinDrawString(true, font8x16, COLOR_POPUP_TEXT, COLOR_BG_WINDOW, (272 - 8 * 21) / 2, 212, F("file was interrupted."));
     dwinIconShow(ICON, ICON_Cancel_E,    26, 307);
     dwinIconShow(ICON, ICON_Continue_E, 146, 307);
   }
@@ -1150,7 +1150,7 @@ void popupWindowHome(const bool parking/*=false*/) {
       dwinFrameAreaCopy(1, 0, 389, 150, 402, 61, 280);
     }
     else {
-      dwinDrawString(true, font8x16, COLOR_POPUP_TEXT, COLOR_BG_WINDOW, (272 - 8 * 13) / 2, 230, GET_TEXT_F(MSG_BED_LEVELING));
+      dwinDrawString(true, font8x16, COLOR_POPUP_TEXT, COLOR_BG_WINDOW, (272 - 8 * 12) / 2, 230, GET_TEXT_F(MSG_BED_LEVELING));
       dwinDrawString(true, font8x16, COLOR_POPUP_TEXT, COLOR_BG_WINDOW, (272 - 8 * 23) / 2, 260, F("Please wait until done."));
     }
   }
@@ -1171,8 +1171,8 @@ void popupwindowPauseOrStop() {
   clearMainWindow();
   drawPopupBkgd60();
   if (hmiIsChinese()) {
-         if (select_print.now == PRINT_PAUSE_RESUME) dwinFrameAreaCopy(1, 237, 338, 269, 356, 98, 150);    // Pause
-    else if (select_print.now == PRINT_STOP) dwinFrameAreaCopy(1, 221, 320, 253, 336, 98, 150);    // Stop
+         if (select_print.now == PRINT_PAUSE_RESUME) dwinFrameAreaCopy(1, 237, 338, 269, 356, 98, 150); // Pause
+    else if (select_print.now == PRINT_STOP) dwinFrameAreaCopy(1, 221, 320, 253, 336, 98, 150);         // Stop
     dwinFrameAreaCopy(1, 220, 304, 264, 319, 130, 150); // Print
     dwinIconShow(ICON, ICON_Confirm_C, 26, 280);
     dwinIconShow(ICON, ICON_Cancel_C, 146, 280);
