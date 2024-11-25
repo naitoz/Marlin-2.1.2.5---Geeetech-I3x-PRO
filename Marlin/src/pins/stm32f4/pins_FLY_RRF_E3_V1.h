@@ -309,12 +309,11 @@
   #error "SD CUSTOM_CABLE is not compatible with Fly RRF E3 V1."
 #endif
 
-// TODO ? board has inbuilt WiFi (ESP8266) but probably already runs a version of DuetWebServer if you've ever used it on RRF before and i have no idea what you'd need to flash it with to get it to work
+//
+// WIFI
+//
 
 #if ENABLED(WIFISUPPORT)
-  //
-  // WIFI
-  //
   #define ESP_WIFI_MODULE_COM                  3  // Must also set either SERIAL_PORT or SERIAL_PORT_2 to this
   #define ESP_WIFI_MODULE_BAUDRATE      BAUDRATE  // Must use same BAUDRATE as SERIAL_PORT & SERIAL_PORT_2
   #define ESP_WIFI_MODULE_RESET_PIN         PE15
