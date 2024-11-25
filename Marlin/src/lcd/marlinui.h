@@ -513,7 +513,7 @@ public:
   static void status_printf(int8_t level, FSTR_P const ffmt, Args... more) { status_printf_P(level, FTOP(ffmt), more...); }
 
   // Periodic or as-needed display update
-  static void update() IF_DISABLED(HAS_UI_UPDATE, {});
+  static void update() IF_DISABLED(HAS_DISPLAY, {});
 
   // Tell the screen to redraw on the next call
   FORCE_INLINE static void refresh() {
