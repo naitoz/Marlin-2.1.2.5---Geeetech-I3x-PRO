@@ -154,9 +154,12 @@ void menu_backlash();
 
     #if HAS_FILAMENT_RUNOUT_DISTANCE
       editable.decimal = runout.runout_distance();
-      EDIT_ITEM_FAST(TERN(FILAMENT_MOTION_SENSOR,  float31, float3), MSG_RUNOUT_DISTANCE_MM, &editable.decimal, TERN(FILAMENT_MOTION_SENSOR, 0.1, 1), TERN(FILAMENT_MOTION_SENSOR, 10, 999),
-        []{ runout.set_runout_distance(editable.decimal); }, true
-      );
+      auto set_runout_distance = []{ runout.set_runout_distance(editable.decimal); };
+      #if ENABLED(FILAMENT_MOTION_SENSOR)
+        EDIT_ITEM_FAST(float31, MSG_RUNOUT_DISTANCE_MM, &editable.decimal, 0.1, 10, set_runout_distance, true);
+      #else
+        EDIT_ITEM_FAST(float3, MSG_RUNOUT_DISTANCE_MM, &editable.decimal, 1, 999, set_runout_distance, true);
+      #endif
     #endif
 
     END_MENU();
