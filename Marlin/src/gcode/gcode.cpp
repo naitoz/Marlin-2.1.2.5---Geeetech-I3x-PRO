@@ -28,6 +28,10 @@
 #include "gcode.h"
 GcodeSuite gcode;
 
+#ifdef CAN_MASTER // IRON
+  #include HAL_PATH(.., CAN.h)
+#endif
+
 #if ENABLED(WIFI_CUSTOM_COMMAND)
   extern bool wifi_custom_command(char * const command_ptr);
 #endif
@@ -322,6 +326,17 @@ void GcodeSuite::process_parsed_command(const bool no_ok/*=false*/) {
   TERN_(HAS_FANCHECK, fan_check.check_deferred_error());
 
   KEEPALIVE_STATE(IN_HANDLER);
+
+#ifdef CAN_MASTER
+  if (CAN_Send_Gcode() != HAL_OK) // IRON, SEND COMMAND TO HEAD
+  {  
+    SERIAL_ECHOPGM("Error: FAILED TO SEND GCODE CAN COMMAND TO HEAD: ");
+    SERIAL_ECHOLN_P(parser.command_ptr);
+  #ifndef IRON_DEBUG
+    BUZZ(1, SOUND_ERROR);
+  #endif
+  }
+#endif // IRON
 
  /**
   * Block all Gcodes except M511 Unlock Printer, if printer is locked

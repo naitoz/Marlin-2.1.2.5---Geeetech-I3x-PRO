@@ -37,6 +37,8 @@
  */
 #define CONFIGURATION_H_VERSION 02010300
 
+// ENABLE CAN SUPPORT HERE
+// #define CAN_MASTER
 //===========================================================================
 //============================= Getting Started =============================
 //===========================================================================
@@ -68,7 +70,7 @@
 
 // Choose the name from boards.h that matches your setup
 #ifndef MOTHERBOARD
-  #define MOTHERBOARD BOARD_RAMPS_14_EFB
+  #define MOTHERBOARD #define MOTHERBOARD BOARD_MKS_MONSTER8_V2
 #endif
 
 // @section serial

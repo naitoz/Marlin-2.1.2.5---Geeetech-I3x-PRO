@@ -33,6 +33,10 @@
 #include "pause.h" // for did_pause_print
 #include "../MarlinCore.h" // for printingIsActive()
 
+#ifdef CAN_MASTER // IRON, ADDED
+  #include HAL_PATH(.., CAN.h)
+#endif
+
 #include "../inc/MarlinConfig.h"
 
 #if ENABLED(EXTENSIBLE_UI)
@@ -207,7 +211,13 @@ class FilamentSensorBase {
 
     // Return a bitmask of runout pin states
     static uint8_t poll_runout_pins() {
+
+#ifdef CAN_MASTER // IRON, VIRTUAL FILAMENT RUNOUT PIN
+      #define _OR_RUNOUT(N) | ((CAN_io_state & CAN_FILAMENT_MASK) ? _BV((N) - 1) : 0)
+#else
       #define _OR_RUNOUT(N) | (READ(FIL_RUNOUT##N##_PIN) ? _BV((N) - 1) : 0)
+#endif // IRON
+
       return (0 REPEAT_1(NUM_RUNOUT_SENSORS, _OR_RUNOUT));
       #undef _OR_RUNOUT
     }

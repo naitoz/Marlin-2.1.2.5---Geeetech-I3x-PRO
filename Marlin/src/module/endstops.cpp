@@ -78,7 +78,13 @@ Endstops::endstop_mask_t Endstops::live_state = 0;
     #define READ_ENDSTOP(P) READ(P)
   #endif
 #else
+
+#ifdef CAN_MASTER // IRON, READ VIRTUAL CAN IO PROBE STATUS IF NEEDED
+  #define READ_ENDSTOP(P) ((P == Z_MIN_PIN) ? ((CAN_io_state & CAN_PROBE_MASK)) : READ(P))
+#else
   #define READ_ENDSTOP(P) READ(P)
+#endif // IRON, ADDED
+
 #endif
 
 #if ENDSTOP_NOISE_THRESHOLD
@@ -526,7 +532,13 @@ void __O2 Endstops::report_states() {
     }
     #undef _CASE_RUNOUT
   #elif HAS_FILAMENT_SENSOR
+
+  #ifdef CAN_MASTER // IRON
+    print_es_state((!!(CAN_io_state & CAN_FILAMENT_MASK)) != FIL_RUNOUT1_STATE, F(STR_FILAMENT));
+  #else
     print_es_state(READ(FIL_RUNOUT1_PIN) != FIL_RUNOUT1_STATE, F(STR_FILAMENT));
+  #endif // IRON
+
   #endif
 
   TERN_(BLTOUCH, bltouch._reset_SW_mode());

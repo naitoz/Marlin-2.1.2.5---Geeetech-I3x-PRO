@@ -226,7 +226,12 @@ bool load_filament(const_float_t slow_load_length/*=0*/, const_float_t fast_load
             REPEAT_1(NUM_RUNOUT_SENSORS, _CASE_INSERTED)
           }
         #else
+        #ifdef CAN_MASTER // IRON, USE VIRTUAL CAN FILAMENT RUNOUT STATUS
+          if ((!!(CAN_io_state & CAN_FILAMENT_MASK)) != FIL_RUNOUT_STATE)
+            wait_for_user = false;
+        #else
           if (!FILAMENT_IS_OUT()) wait_for_user = false;
+        #endif // IRON
         #endif
       #endif
       idle_no_sleep();
