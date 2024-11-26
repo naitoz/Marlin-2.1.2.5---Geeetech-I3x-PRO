@@ -110,8 +110,8 @@ public:
   static void smart_fill_wlsf(const_float_t ) __O2; // O2 gives smaller code than Os on A2560
 
   static int8_t storage_slot;
-
   static bed_mesh_t z_values;
+
   #if ENABLED(OPTIMIZED_MESH_STORAGE)
     static void set_store_from_mesh(const bed_mesh_t &in_values, mesh_store_t &stored_values);
     static void set_mesh_from_store(const mesh_store_t &stored_values, bed_mesh_t &out_values);
