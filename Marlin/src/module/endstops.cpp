@@ -58,6 +58,10 @@
   #include "probe.h"
 #endif
 
+#if HAS_FILAMENT_SENSOR && !MULTI_FILAMENT_SENSOR
+  #include "../feature/runout.h"
+#endif
+
 #define DEBUG_OUT ALL(USE_SENSORLESS, DEBUG_LEVELING_FEATURE)
 #include "../core/debug_out.h"
 
@@ -77,14 +81,14 @@ Endstops::endstop_mask_t Endstops::live_state = 0;
   #else
     #define READ_ENDSTOP(P) READ(P)
   #endif
-#else
-
-#ifdef CAN_MASTER // IRON, READ VIRTUAL CAN IO PROBE STATUS IF NEEDED
-  #define READ_ENDSTOP(P) ((P == Z_MIN_PIN) ? ((CAN_io_state & CAN_PROBE_MASK)) : READ(P))
+#elif ENABLED(CAN_MASTER) // Read virtual CAN IO Probe status if needed
+  #if HAS_BED_PROBE
+    #define READ_ENDSTOP(P) ((P == Z_MIN_PIN) ? PROBE_READ() : READ(P))
+  #else
+    #define READ_ENDSTOP(P) READ(P)
+  #endif
 #else
   #define READ_ENDSTOP(P) READ(P)
-#endif // IRON, ADDED
-
 #endif
 
 #if ENDSTOP_NOISE_THRESHOLD
@@ -531,13 +535,10 @@ void __O2 Endstops::report_states() {
       print_es_state(extDigitalRead(pin) != state);
     }
     #undef _CASE_RUNOUT
+
   #elif HAS_FILAMENT_SENSOR
 
-  #ifdef CAN_MASTER // IRON
-    print_es_state((!!(CAN_io_state & CAN_FILAMENT_MASK)) != FIL_RUNOUT1_STATE, F(STR_FILAMENT));
-  #else
-    print_es_state(READ(FIL_RUNOUT1_PIN) != FIL_RUNOUT1_STATE, F(STR_FILAMENT));
-  #endif // IRON
+    print_es_state(RUNOUT_STATE(1) != FIL_RUNOUT1_STATE, F(STR_FILAMENT));
 
   #endif
 

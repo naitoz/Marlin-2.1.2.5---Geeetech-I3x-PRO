@@ -28,10 +28,6 @@
 #include "gcode.h"
 GcodeSuite gcode;
 
-#ifdef CAN_MASTER // IRON
-  #include HAL_PATH(.., CAN.h)
-#endif
-
 #if ENABLED(WIFI_CUSTOM_COMMAND)
   extern bool wifi_custom_command(char * const command_ptr);
 #endif
@@ -71,6 +67,11 @@ GcodeSuite gcode;
 
 #if HAS_FANCHECK
   #include "../feature/fancheck.h"
+#endif
+
+#if ENABLED(CAN_MASTER)
+  #include "../HAL/shared/CAN.h"
+  #include "../libs/buzzer.h"
 #endif
 
 #include "../MarlinCore.h" // for idle, kill
@@ -327,16 +328,14 @@ void GcodeSuite::process_parsed_command(const bool no_ok/*=false*/) {
 
   KEEPALIVE_STATE(IN_HANDLER);
 
-#ifdef CAN_MASTER
-  if (CAN_Send_Gcode() != HAL_OK) // IRON, SEND COMMAND TO HEAD
-  {  
-    SERIAL_ECHOPGM("Error: FAILED TO SEND GCODE CAN COMMAND TO HEAD: ");
-    SERIAL_ECHOLN_P(parser.command_ptr);
-  #ifndef IRON_DEBUG
-    BUZZ(1, SOUND_ERROR);
+  #if ENABLED(CAN_MASTER)
+    if (CAN_Send_Gcode() != HAL_OK) { // Send command to head
+      SERIAL_ECHOLN(F("Error: CAN failed to send \""), parser.command_ptr, '"');
+      #ifndef CAN_DEBUG
+        BUZZ(1, SOUND_ERROR);
+      #endif
+    }
   #endif
-  }
-#endif // IRON
 
  /**
   * Block all Gcodes except M511 Unlock Printer, if printer is locked

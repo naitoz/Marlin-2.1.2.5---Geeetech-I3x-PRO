@@ -29,8 +29,8 @@
 
 #include "motion.h"
 
-#ifdef CAN_MASTER // IRON
-  #include HAL_PATH(.., CAN.h)
+#if ENABLED(CAN_MASTER)
+  #include "../HAL/shared/CAN.h"
 #endif
 
 #if ENABLED(BLTOUCH)
@@ -51,23 +51,13 @@
 
 #if ENABLED(BD_SENSOR)
   #define PROBE_READ() bdp_state
+#elif ENABLED(CAN_MASTER)
+  #define PROBE_READ() bool(CAN_io_state & CAN_PROBE_MASK)
 #elif USE_Z_MIN_PROBE
-
-  #ifdef CAN_MASTER
-    #define PROBE_READ() ((CAN_io_state & CAN_PROBE_MASK)) // IRON, READ VIRTUAL IO
-  #else
-    #define PROBE_READ() READ(Z_MIN_PROBE_PIN)
-  #endif // IRON
-
+  #define PROBE_READ() READ(Z_MIN_PROBE_PIN)
 #else
-
-  #ifdef CAN_MASTER // IRON, VIRTUAL IO
-    #define PROBE_READ() ((CAN_io_state & CAN_PROBE_BIT)) // IRON, READ VIRTUAL IO
-  #else
-    #define PROBE_READ() READ(Z_MIN_PIN)
-  #endif
-
-#endif // IRON
+  #define PROBE_READ() READ(Z_MIN_PIN)
+#endif
 
 #if USE_Z_MIN_PROBE
   #define PROBE_HIT_STATE Z_MIN_PROBE_ENDSTOP_HIT_STATE

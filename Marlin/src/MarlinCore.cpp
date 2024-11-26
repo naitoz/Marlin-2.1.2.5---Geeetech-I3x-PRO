@@ -34,8 +34,8 @@
 #include "HAL/shared/esp_wifi.h"
 #include "HAL/shared/cpu_exception/exception_hook.h"
 
-#ifdef CAN_MASTER // IRON, ADDED
-  #include HAL_PATH(., CAN.h)
+#if ENABLED(CAN_MASTER)
+  #include "HAL/shared/CAN.h"
 #endif
 
 #if ENABLED(WIFISUPPORT)
@@ -1194,14 +1194,15 @@ void setup() {
       while (!MYSERIAL3.connected() && PENDING(millis(), serial_connect_timeout)) { /*nada*/ }
     #endif
   #endif
-  SERIAL_ECHOLNPGM("\nstart\n"); // IRON, ADDED \n
 
-#ifdef CAN_MASTER // IRON, REPORT CAN START STATUS
-  if (CAN1_Start() == HAL_OK)
-    SERIAL_ECHOLNPGM(">>> CAN1 Start: OK");
-  else
-    SERIAL_ECHOLNPGM(">>> CAN1 Start: FAILED!");
-#endif
+  SERIAL_ECHOLNPGM(TERN(CAN_MASTER, "\nstart\n", "start"));
+
+  #if ENABLED(CAN_MASTER)
+    SERIAL_ECHOLN(
+      F(">>> CAN1 Start: "),
+      CAN1_Start() == HAL_OK ? F("OK") : F("FAILED!")
+    );
+  #endif
 
   // Set up these pins early to prevent suicide
   #if HAS_KILL

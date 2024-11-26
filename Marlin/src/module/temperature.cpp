@@ -50,6 +50,10 @@
   #include "motion.h"
 #endif
 
+#if ENABLED(CAN_MASTER)
+  #include "../HAL/shared/CAN.h"
+#endif
+
 #if ENABLED(DWIN_CREALITY_LCD)
   #include "../lcd/e3v2/creality/dwin.h"
 #elif ENABLED(SOVOL_SV06_RTS)
@@ -2734,11 +2738,9 @@ void Temperature::updateTemperaturesFromRawValues() {
     temp_bed.setraw(read_max_tc_bed());
   #endif
 
-#ifndef CAN_MASTER // IRON, NOT FOR MASTER, DON'T READ TEMPERATURE FROM SENSOR, GET IT VIA CAN BUS FROM HEAD
-  #if HAS_HOTEND
+  #if HAS_HOTEND && DISABLED(CAN_MASTER) // For CAN Master we'll get temperature from CAN bus
     HOTEND_LOOP() temp_hotend[e].celsius = analog_to_celsius_hotend(temp_hotend[e].getraw(), e);
   #endif
-#endif // IRON
 
   TERN_(HAS_HEATED_BED,     temp_bed.celsius       = analog_to_celsius_bed(temp_bed.getraw()));
   TERN_(HAS_TEMP_CHAMBER,   temp_chamber.celsius   = analog_to_celsius_chamber(temp_chamber.getraw()));
@@ -2751,9 +2753,7 @@ void Temperature::updateTemperaturesFromRawValues() {
   TERN_(FILAMENT_WIDTH_SENSOR, filwidth.update_measured_mm());
   TERN_(HAS_POWER_MONITOR,     power_monitor.capture_values());
 
-  #if HAS_HOTEND
-
-#ifndef CAN_MASTER // IRON, ONLY FOR HEAD, NO TEMP SAMPLING ON MASTER
+  #if HAS_HOTEND && DISABLED(CAN_MASTER) // Only for Head, no temp sampling on Master
 
     #define _TEMPDIR(N) TEMP_SENSOR_IS_ANY_MAX_TC(N) ? 0 : TEMPDIR(N),
     static constexpr int8_t temp_dir[HOTENDS] = { REPEAT(HOTENDS, _TEMPDIR) };
@@ -2780,9 +2780,8 @@ void Temperature::updateTemperaturesFromRawValues() {
         TERN_(MULTI_MAX_CONSECUTIVE_LOW_TEMP_ERR, consecutive_low_temperature_error[e] = 0);
       }
     }
-#endif // IRON, !CAN_MASTER
 
-  #endif // HAS_HOTEND
+  #endif // HAS_HOTEND && !CAN_MASTER
 
   #if ENABLED(THERMAL_PROTECTION_BED)
     if (TP_CMP(BED, temp_bed.getraw(), temp_sensor_range_bed.raw_max))
@@ -3382,16 +3381,17 @@ void Temperature::disable_all_heaters() {
 
   #if HAS_HOTEND
 
-#ifdef CAN_MASTER // IRON, SHUTDOWN HOTEND IN HEAD TOO
-    CAN_Send_Gcode_2params('M', 104, 'S',   0, 0, 0); // IRON, M104 S0, switch off hotend heating
-    CAN_Send_Gcode_2params('M', 107,   0,   0, 0, 0); // IRON, M107, switch off part cooling fan
-    CAN_Send_Gcode_2params('M', 150, 'R', 255, 0, 0); // IRON, M150 R255, SET NEOPIXEL TO RED
-#endif
+    #if ENABLED(CAN_MASTER) // Shut down the hotend in the head too
+      CAN_Send_Gcode_2params('M', 104, 'S',   0, 0, 0); // M104 S0 .... Switch off hotend heating
+      CAN_Send_Gcode_2params('M', 107,   0,   0, 0, 0); // M107 ....... Switch off part cooling fan
+      CAN_Send_Gcode_2params('M', 150, 'R', 255, 0, 0); // M150 R255 .. Set NeoPixel to red
+    #endif
 
     HOTEND_LOOP() {
       setTargetHotend(0, e);
       temp_hotend[e].soft_pwm_amount = 0;
     }
+
   #endif
 
   #if HAS_TEMP_HOTEND

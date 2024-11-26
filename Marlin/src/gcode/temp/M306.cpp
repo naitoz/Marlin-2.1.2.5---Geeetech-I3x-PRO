@@ -27,7 +27,6 @@
 #include "../gcode.h"
 #include "../../lcd/marlinui.h"
 #include "../../module/temperature.h"
-#include "../../libs/numtostr.h" // IRON, ADDED
 
 /**
  * M306: MPC settings and autotune
@@ -59,23 +58,30 @@ void GcodeSuite::M306() {
   #if ENABLED(MPC_AUTOTUNE)
     if (parser.seen_test('T')) {
 
-#ifdef CAN_MASTER // IRON, MPC AUTOTUNE INFO
-  SERIAL_ECHOLNPGM(">>> Forwarding M306 to head board");
-  SERIAL_ECHOLNPGM(">>> Store MPC setup in the host Configuration.h or use M500");
-  SERIAL_ECHOLNPGM(">>> MPC heater power is: ", ftostr31ns(MPC_HEATER_POWER), " Watt");
-  SERIAL_ECHOLNPGM(">>> Please wait for the auto tune results...");
-#else
-      Temperature::MPCTuningType tuning_type;
-      const uint8_t type = parser.byteval('S', 0);
-      switch (type) {
-        case 1: tuning_type = Temperature::MPCTuningType::FORCE_DIFFERENTIAL; break;
-        case 2: tuning_type = Temperature::MPCTuningType::FORCE_ASYMPTOTIC; break;
-        default: tuning_type = Temperature::MPCTuningType::AUTO; break;
-      }
-      LCD_MESSAGE(MSG_MPC_AUTOTUNE);
-      thermalManager.MPC_autotune(e, tuning_type);
-      ui.reset_status();
-#endif // IRON
+      #if ENABLED(CAN_MASTER) // MPC Autotune info
+
+        SERIAL_ECHOLNPGM(
+          ">>> Forwarding M306 to head board\n"
+          ">>> Store MPC setup in the host Configuration.h or use M500\n"
+          ">>> MPC heater power is: ", p_float_t(MPC_HEATER_POWER, 1), " Watts\n"
+          ">>> Please wait for the auto tune results..."
+        );
+
+      #else
+
+        Temperature::MPCTuningType tuning_type;
+        const uint8_t type = parser.byteval('S', 0);
+        switch (type) {
+          case 1: tuning_type = Temperature::MPCTuningType::FORCE_DIFFERENTIAL; break;
+          case 2: tuning_type = Temperature::MPCTuningType::FORCE_ASYMPTOTIC; break;
+          default: tuning_type = Temperature::MPCTuningType::AUTO; break;
+        }
+        LCD_MESSAGE(MSG_MPC_AUTOTUNE);
+        thermalManager.MPC_autotune(e, tuning_type);
+        ui.reset_status();
+
+      #endif
+
       return;
     }
   #endif
@@ -101,11 +107,10 @@ void GcodeSuite::M306_report(const bool forReplay/*=true*/) {
 
   report_heading(forReplay, F("Model predictive control"));
 
-#ifdef CAN_MASTER // IRON, MPC AUTOTUNE INFO  
-  if (forReplay)
-    SERIAL_ECHOLNPGM(">>> HOST M306 MPC SETTINGS:");
-#endif  
-  
+  #if ENABLED(CAN_MASTER) // MPC Autotune info
+    if (forReplay) SERIAL_ECHOLNPGM(">>> Host M306 MPC settings:");
+  #endif
+
   HOTEND_LOOP() {
     report_echo_start(forReplay);
     MPC_t &mpc = thermalManager.temp_hotend[e].mpc;

@@ -1,63 +1,85 @@
-// IRON NOTES:
-// NOTE 1: For MKS Monster 8 V1/V2 on Arduino use: Board "Generic STM32F4 series", Board part number "Generic F407VETx"
-// NOTE 2: Make sure to define "HAL_CAN_MODULE_ENABLED". In VSCode add "build_flags = -D HAL_CAN_MODULE_ENABLED" in platformio.ini.
-//         For Arduino IDE include "hal_conf_extra.h" holding "#define HAL_CAN_MODULE_ENABLED"
-// NOTE 3: To accept all CAN messages, enable 1 filter (FilterBank = 0) in "FilterMode = CAN_FILTERMODE_IDMASK", mask and ID = 0 (0=don't care)
-// NOTE 4: Serial communication in ISR causes issues! Hangs etc. so avoid this!
-// NOTE 5: A FIFO storage cell is called a Mailbox in STM32F4xx, FIFO0 and FiFO1 can hold 3 CAN message each.
-// NOTE 6: The filter ID/mask numbers (LOW/HIGH) do not directly relate to the message ID numbers (See Figure 342 in RM0090)
+/**
+ * Marlin 3D Printer Firmware
+ * Copyright (c) 2024 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
+ *
+ * Based on Sprinter and grbl.
+ * Copyright (c) 2011 Camiel Gubbels / Erik van der Zalm
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ */
 
-#include "../../inc/MarlinConfig.h"
+/**
+ * Contributor Notes:
+ * NOTE 1: For MKS Monster 8 V1/V2 on Arduino use: Board "Generic STM32F4 series", Board part number "Generic F407VETx"
+ * NOTE 2: Requires `HAL_CAN_MODULE_ENABLED`, e.g., with `-DHAL_CAN_MODULE_ENABLED`
+ *         For Arduino IDE use "hal_conf_extra.h" with `#define HAL_CAN_MODULE_ENABLED`
+ * NOTE 3: To accept all CAN messages, enable 1 filter (FilterBank = 0) in "FilterMode = CAN_FILTERMODE_IDMASK", mask and ID = 0 (0=don't care)
+ * NOTE 4: Serial communication in ISR causes issues! Hangs etc. so avoid this!
+ * NOTE 5: A FIFO storage cell is called a "Mailbox" in STM32F4xx, FIFO0 and FiFO1 can hold 3 CAN messages each.
+ * NOTE 6: The filter ID/mask numbers (LOW/HIGH) do not directly relate to the message ID numbers (See Figure 342 in RM0090)
+ */
 
-#ifdef CAN_MASTER
-  #include "../platforms.h"
-  #include "../../gcode/gcode.h"
-  #include "../../module/temperature.h"
-  #include "../../module/motion.h"  // For current_position variable
-  #include "../../module/planner.h" // For steps/mm parameters variables
-  #include "../../feature/tmc_util.h"
-  #include "../../module/stepper.h"
-  #include "../../module/endstops.h"
-  #include "../../feature/controllerfan.h" // For controllerFan settings
-  #include "../../libs/numtostr.h"  // For float to string conversion
+#include "../../inc/MarlinConfigPre.h"
 
-  // #define CAN_DEBUG // Define to show gcodes send to HEAD
+#if ENABLED(CAN_MASTER)
 
-  #define CAN_EXTENDED_ID CAN_ID_EXT
-  #define CAN_STANDARD_ID CAN_ID_STD
+#include "../platforms.h"
+#include "../../gcode/parser.h"
+#include "../../module/temperature.h"
+#include "../../module/motion.h"  // For current_position variable
+#include "../../module/planner.h" // For steps/mm parameters variables
+#include "../../feature/tmc_util.h"
+#include "../../module/endstops.h"
+#include "../../feature/controllerfan.h" // For controllerFan settings
+#include "../../libs/numtostr.h"  // For float to string conversion
 
-  #define STDID_FIFO_BIT       0b10000000000
-  #define EXTID_FIFO_BIT          0x10000000
+#define CAN_EXTENDED_ID CAN_ID_EXT
+#define CAN_STANDARD_ID CAN_ID_STD
 
-  #define CAN_IO_MASK                0b11111 // Masks for the 5 virtual IO bits (see below)
-  #define GCODE_NUMBER_MASK  0b1111111111111
-  #define PARAMETER_MASK             0b11111
-  #define PARAMETER_COUNT_MASK         0b111 
-  #define GCODE_TYPE_MASK               0b11 
-  #define CAN_PROBE_MASK                   1 // Virtual IO bit for probe
-  #define CAN_FILAMENT_MASK                2 // Virtual IO bit for filament
-  #define CAN_X_ENDSTOP_MASK               4 // Virtual IO bit for X-endstop
-  #define CAN_Y_ENDSTOP_MASK               8 // Virtual IO bit for Y-endstop
-  #define CAN_Z_ENDSTOP_MASK              16 // Virtual IO bit for Z-endstop
-  #define CAN_STRING_MESSAGE_MASK         32 // Signals the head sent a string message
-  #define CAN_REQUEST_SETUP_MASK          64 // Signals the head requests setup information
-  #define CAN_TMC_OT_MASK                128 // Signals the head signals a TMC Over Temp error
-  #define CAN_E0_TARGET_MASK             256 // Signals E0 or E1
-  #define CAN_ERROR_MASK                 512 // Signals the head encountered an error
+#define STDID_FIFO_BIT       0b10000000000
+#define EXTID_FIFO_BIT          0x10000000
 
-  #define PARAMETER1_OFFSET                0
-  #define PARAMETER2_OFFSET                5
-  #define GCODE_NUMBER_OFFSET             10
-  #define GCODE_TYPE_OFFSET               23
-  #define PARAMETER_COUNT_OFFSET          25
+#define CAN_IO_MASK                0b11111 // Masks for the 5 virtual IO bits (see below)
+#define GCODE_NUMBER_MASK  0b1111111111111
+#define PARAMETER_MASK             0b11111
+#define PARAMETER_COUNT_MASK         0b111
+#define GCODE_TYPE_MASK               0b11
+#define CAN_PROBE_MASK                   1 // Virtual IO bit for probe
+#define CAN_FILAMENT_MASK                2 // Virtual IO bit for filament
+#define CAN_X_ENDSTOP_MASK               4 // Virtual IO bit for X-endstop
+#define CAN_Y_ENDSTOP_MASK               8 // Virtual IO bit for Y-endstop
+#define CAN_Z_ENDSTOP_MASK              16 // Virtual IO bit for Z-endstop
+#define CAN_STRING_MESSAGE_MASK         32 // Signals the head sent a string message
+#define CAN_REQUEST_SETUP_MASK          64 // Signals the head requests setup information
+#define CAN_TMC_OT_MASK                128 // Signals the head signals a TMC Over Temp error
+#define CAN_E0_TARGET_MASK             256 // Signals E0 or E1
+#define CAN_ERROR_MASK                 512 // Signals the head encountered an error
 
-  #define GCODE_TYPE_D                     0
-  #define GCODE_TYPE_G                     1
-  #define GCODE_TYPE_M                     2
-  #define GCODE_TYPE_T                     3
-  
-extern "C" void CAN1_RX0_IRQHandler(void); // Override weak CAN FIFO0 interrupt handler
-extern "C" void CAN1_RX1_IRQHandler(void); // Override weak CAN FIFO1 interrupt handler
+#define PARAMETER1_OFFSET                0
+#define PARAMETER2_OFFSET                5
+#define GCODE_NUMBER_OFFSET             10
+#define GCODE_TYPE_OFFSET               23
+#define PARAMETER_COUNT_OFFSET          25
+
+#define GCODE_TYPE_D                     0
+#define GCODE_TYPE_G                     1
+#define GCODE_TYPE_M                     2
+#define GCODE_TYPE_T                     3
+
+extern "C" void CAN1_RX0_IRQHandler(); // Override weak CAN FIFO0 interrupt handler
+extern "C" void CAN1_RX1_IRQHandler(); // Override weak CAN FIFO1 interrupt handler
 extern "C" void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan); // Override weak CAN interrupt callback for FIFO0
 extern "C" void HAL_CAN_RxFifo1MsgPendingCallback(CAN_HandleTypeDef *hcan); // Override weak CAN interrupt callback for FIFO1
 extern "C" void HAL_CAN_ErrorCallback(CAN_HandleTypeDef *hcan);             // Override weak CAN interrupt callback
@@ -73,71 +95,70 @@ volatile uint32_t HAL_CAN_error_code   = 0;     // Record a host CAN error messa
 volatile bool FirstE0Error             = true;  // First CAN bus error, show warning only once
 volatile bool string_message_complete  = false; // Signals a complete string message was received
 volatile uint32_t string_message_index = 0;     // Index into the CAN string that is being received
-uint32_t Last_CAN_Temp_Report          = 0;     // Track when the last head temperature report was received
+uint32_t Next_CAN_Temp_Report          = 0;     // Track when the next head temperature report will be received
 uint32_t Last_CAN_Error_Message        = 0;     // Track when the last CAN error messaget was shown
 char string_message[128]               = "\0";  // CAN string message buffer for incoming message, max 128 characters
 
-void CAN1_RX0_IRQHandler(void) // CAN FIFO0 Interrupt handler overrides standard weak CAN1_RX0_IRQHandler
-{ 
+void CAN1_RX0_IRQHandler() { // CAN FIFO0 Interrupt handler overrides standard weak CAN1_RX0_IRQHandler
   HAL_CAN_IRQHandler(&hcan1); // Forwarded for callbacks --> HAL_CAN_RxFifo0MsgPendingCallback/HAL_CAN_ErrorCallback
-// OR
-// HAL_CAN_RxFifo0MsgPendingCallback(&hcan1); // Call the required callback directly, faster but no error reporting
+  // OR
+  //HAL_CAN_RxFifo0MsgPendingCallback(&hcan1); // Call the required callback directly, faster but no error reporting
 }
 
-void CAN1_RX1_IRQHandler(void) // CAN FIFO1 Interrupt handler overrides standard weak CAN1_RX0_IRQHandler
-{ 
+void CAN1_RX1_IRQHandler() { // CAN FIFO1 Interrupt handler overrides standard weak CAN1_RX0_IRQHandler
   HAL_CAN_IRQHandler(&hcan1); // Forwarded for callbacks --> HAL_CAN_RxFifo1MsgPendingCallback/HAL_CAN_ErrorCallback
-// OR
-// HAL_CAN_RxFifo1MsgPendingCallback(&hcan1); // Call the required callback directly, faster but no error reporting
+  // OR
+  //HAL_CAN_RxFifo1MsgPendingCallback(&hcan1); // Call the required callback directly, faster but no error reporting
 }
 
 // Send specified Gcode with max 2 parameters and 2 values via CAN bus
-HAL_StatusTypeDef CAN_Send_Gcode_2params(uint32_t Gcode_type, uint32_t Gcode_no, uint32_t parameter1, float value1, uint32_t parameter2, float value2)
-{
-  switch (Gcode_type)
-  {
-    case 'D': Gcode_type = GCODE_TYPE_D;
-    break;
-    
-    case 'G': Gcode_type = GCODE_TYPE_G;
-    break;
-    
-    case 'M': Gcode_type = GCODE_TYPE_M;
+HAL_StatusTypeDef CAN_Send_Gcode_2params(uint32_t Gcode_type, uint32_t Gcode_no, uint32_t parameter1, float value1, uint32_t parameter2, float value2) {
+  switch (Gcode_type) {
+    case 'D':
+      Gcode_type = GCODE_TYPE_D;
+      break;
 
-#ifdef CAN_DEBUG      
-      SERIAL_ECHOPGM(">>> CAN TO HEAD: M", Gcode_no);
-      if (parameter1) {
-        SERIAL_CHAR(' ', parameter1);
-        if (value1 == int(value1))
-          SERIAL_ECHO(i16tostr3left(value1)); // Integer value
-        else
-          SERIAL_ECHO(p_float_t(value1, 4));  // Float with 4 digits
-      }
+    case 'G':
+      Gcode_type = GCODE_TYPE_G;
+      break;
 
-      if (parameter2) {
-        SERIAL_CHAR(' ', parameter2);
-        if (value2 == int(value2))
-          SERIAL_ECHO(i16tostr3left(value2)); // Integer value
-        else
-          SERIAL_ECHO(p_float_t(value2, 4));  // Float with 4 digits
-      }
-      SERIAL_EOL();
-#endif
+    case 'M':
+      Gcode_type = GCODE_TYPE_M;
 
-    break;
-    
+      #ifdef CAN_DEBUG
+        SERIAL_ECHOPGM(">>> CAN TO HEAD: M", Gcode_no);
+        if (parameter1) {
+          SERIAL_CHAR(' ', parameter1);
+          if (value1 == int(value1))
+            SERIAL_ECHO(i16tostr3left(value1)); // Integer value
+          else
+            SERIAL_ECHO(p_float_t(value1, 4));  // Float with 4 digits
+        }
+
+        if (parameter2) {
+          SERIAL_CHAR(' ', parameter2);
+          if (value2 == int(value2))
+            SERIAL_ECHO(i16tostr3left(value2)); // Integer value
+          else
+            SERIAL_ECHO(p_float_t(value2, 4));  // Float with 4 digits
+        }
+        SERIAL_EOL();
+      #endif // CAN_DEBUG
+
+      break;
+
     case 'T': Gcode_type = GCODE_TYPE_T;
-    break;
-    
+      break;
+
     default: return HAL_ERROR; // UNKNOWN GCODE TYPE
   }
 
   HAL_StatusTypeDef status = HAL_OK;
-  uint32_t TxMailbox;  // Stores which Mailbox (0-2) is used to store the Sent TX message 
+  uint32_t TxMailbox;  // Stores which Mailbox (0-2) is used to store the Sent TX message
 
   if (parameter1 > 31)
     parameter1 -= 64; // Format 'A' = 1, 'B' = 2, etc.
-  
+
   if (parameter2 > 31)
     parameter2 -= 64; // Format 'A' = 1, 'B' = 2, etc.
 
@@ -146,18 +167,18 @@ HAL_StatusTypeDef CAN_Send_Gcode_2params(uint32_t Gcode_type, uint32_t Gcode_no,
   TxHeader.StdId = (TxHeader.StdId  ^ STDID_FIFO_BIT);                       // Toggle FIFO bit 10, keep FIFO toggling in sync
   TxHeader.ExtId = ((TxHeader.ExtId ^ EXTID_FIFO_BIT) & EXTID_FIFO_BIT) +    // Toggle FIFO bit 28
                    ((TxHeader.DLC >> 2) << PARAMETER_COUNT_OFFSET) +         // Data bytes (4 or 8)
-                   (Gcode_type << GCODE_TYPE_OFFSET) +                       // G/M/T/D-code 
+                   (Gcode_type << GCODE_TYPE_OFFSET) +                       // G/M/T/D-code
                    ((Gcode_no & GCODE_NUMBER_MASK) << GCODE_NUMBER_OFFSET) + // Gcode number
                    ((parameter2 & PARAMETER_MASK) << PARAMETER2_OFFSET) +    // First parameter
-                   ((parameter1 & PARAMETER_MASK) << PARAMETER1_OFFSET);     // Second parameter 
+                   ((parameter1 & PARAMETER_MASK) << PARAMETER1_OFFSET);     // Second parameter
   uint8_t CAN_tx_buffer[8];            // 8 bytes CAN data TX buffer
-  float * fp = (float *)CAN_tx_buffer; // Point to TX buffer    
+  float * fp = (float *)CAN_tx_buffer; // Point to TX buffer
   *fp++ = value1;
   *fp-- = value2;
-  
-  uint32_t ms = millis(); // Don't send too fast!
+
+  const uint32_t ms = millis(); // Don't send too fast!
   while ((HAL_CAN_GetTxMailboxesFreeLevel(&hcan1) == 0) && (millis() - ms < 25)) { } // BLOCKING! Wait max 25ms!
-  // SERIAL_ECHOLNPGM(">>> Waited1: ", millis() - ms, " FreeTX: ", HAL_CAN_GetTxMailboxesFreeLevel(&hcan1)); // IRON, DEBUGGING
+  //SERIAL_ECHOLNPGM(">>> Waited1: ", millis() - ms, " FreeTX: ", HAL_CAN_GetTxMailboxesFreeLevel(&hcan1)); // IRON, DEBUGGING
   status = HAL_CAN_AddTxMessage(&hcan1, &TxHeader, CAN_tx_buffer, &TxMailbox); // Send message
 
   if (status == HAL_OK) // Count sent gcode messages
@@ -166,25 +187,26 @@ HAL_StatusTypeDef CAN_Send_Gcode_2params(uint32_t Gcode_type, uint32_t Gcode_no,
   return status;
 }
 
-HAL_StatusTypeDef CAN_Send_Setup() // Send setup to HEAD
-{
+HAL_StatusTypeDef CAN_Send_Setup() { // Send setup to HEAD
   CAN_head_setup_request = false;
   SERIAL_ECHOLNPGM(">>> CAN: SENDING CONFIG TO HEAD =====");
-// NOTE: Sending many command too fast will cause a Marlin command buffer overrun at the head, add delays if needed
-// CAN_Send_Gcode_2params('M', 104, 'S', 0, 0, 0); // M104 S0, switch off hotend heating, NOT NEEDED ANYMORE
-// CAN_Send_Gcode_2params('M', 107,   0, 0, 0, 0); // M107, switch off cooling fan, NOT NEEDED ANYMORE
-// CAN_Send_Gcode_2params('M',  18,   0, 0, 0, 0); // M18, switch off steppers, NOT NEEDED ANYMORE
+  // NOTE: Sending many command too fast will cause a Marlin command buffer overrun at the head, add delays if needed
+  //CAN_Send_Gcode_2params('M', 104, 'S', 0, 0, 0); // M104 S0, switch off hotend heating, NOT NEEDED ANYMORE
+  //CAN_Send_Gcode_2params('M', 107,   0, 0, 0, 0); // M107, switch off cooling fan, NOT NEEDED ANYMORE
+  //CAN_Send_Gcode_2params('M',  18,   0, 0, 0, 0); // M18, switch off steppers, NOT NEEDED ANYMORE
 
-  // M306 MPC settings (managed by host)
-  MPC_t &mpc = thermalManager.temp_hotend[0].mpc;
+  #if ENABLED(MPCTEMP)
+    // M306 MPC settings (managed by host)
+    MPC_t &mpc = thermalManager.temp_hotend[0].mpc;
 
-  CAN_Send_Gcode_2params('M', 306, 'A', mpc.ambient_xfer_coeff_fan0, 'C', mpc.block_heat_capacity);          // M306 R<sensor_responsiveness> A<Ambient heat transfer coefficient> 
-  CAN_Send_Gcode_2params('M', 306, 'F', mpc.fanCoefficient(),        'H', mpc.filament_heat_capacity_permm); // M306 F<sensor_responsiveness> H<filament_heat_capacity_permm>
-  CAN_Send_Gcode_2params('M', 306, 'P', mpc.heater_power,            'R', mpc.sensor_responsiveness);        // M306 P<heater_power> C<Heatblock Capacity (joules/kelvin)>
+    CAN_Send_Gcode_2params('M', 306, 'A', mpc.ambient_xfer_coeff_fan0, 'C', mpc.block_heat_capacity);          // M306 R<sensor_responsiveness> A<Ambient heat transfer coefficient>
+    CAN_Send_Gcode_2params('M', 306, 'F', mpc.fanCoefficient(),        'H', mpc.filament_heat_capacity_permm); // M306 F<sensor_responsiveness> H<filament_heat_capacity_permm>
+    CAN_Send_Gcode_2params('M', 306, 'P', mpc.heater_power,            'R', mpc.sensor_responsiveness);        // M306 P<heater_power> C<Heatblock Capacity (joules/kelvin)>
+  #endif
 
-// CAN_Send_Gcode_2params('M', 150, 0, 0, 0, 0); // M150, SWITCH NEOPIXEL OFF
+  //CAN_Send_Gcode_2params('M', 150, 0, 0, 0, 0); // M150, SWITCH NEOPIXEL OFF
 
-/*
+  /*
   extern Planner planner; // M92 Steps per mm
   CAN_Send_Gcode_2params('M', 92, 'X', planner.settings.axis_steps_per_mm[X_AXIS], 'Y', planner.settings.axis_steps_per_mm[Y_AXIS]);
   CAN_Send_Gcode_2params('M', 92, 'Z', planner.settings.axis_steps_per_mm[Z_AXIS], 'E', planner.settings.axis_steps_per_mm[E_AXIS]);
@@ -198,7 +220,7 @@ HAL_StatusTypeDef CAN_Send_Setup() // Send setup to HEAD
   // M201 Max acceleration
   CAN_Send_Gcode_2params('M', 201, 'X', planner.settings.max_acceleration_mm_per_s2[X_AXIS], 'Y', planner.settings.max_acceleration_mm_per_s2[Y_AXIS]);
   CAN_Send_Gcode_2params('M', 201, 'Z', planner.settings.max_acceleration_mm_per_s2[Z_AXIS], 'E', planner.settings.max_acceleration_mm_per_s2[E_AXIS]);
-  
+
   // M203 Max feedrate
   CAN_Send_Gcode_2params('M', 203, 'X', planner.settings.max_feedrate_mm_s[X_AXIS], 'Y', planner.settings.max_feedrate_mm_s[Y_AXIS]);
   CAN_Send_Gcode_2params('M', 203, 'Z', planner.settings.max_feedrate_mm_s[Z_AXIS], 'E', planner.settings.max_feedrate_mm_s[E_AXIS]);
@@ -208,16 +230,16 @@ HAL_StatusTypeDef CAN_Send_Setup() // Send setup to HEAD
   CAN_Send_Gcode_2params('M', 204, 'T', planner.settings.travel_acceleration, 0, 0);
 
   // M205
-  #ifdef CLASSIC_JERK
+  #if ENABLED(CLASSIC_JERK)
     CAN_Send_Gcode_2params('M', 205,'S')) planner.settings.min_feedrate_mm_s, 'T')) planner.settings.min_travel_feedrate_mm_s);
     CAN_Send_Gcode_2params('M', 205, M205_MIN_SEG_TIME_PARAM, planner.settings.min_segment_time_us, 'J', planner.junction_deviation_mm);
     CAN_Send_Gcode_2params('M', 205, 'X', LINEAR_UNIT(planner.max_jerk.x), 'Y', LINEAR_UNIT(planner.max_jerk.y));
     CAN_Send_Gcode_2params('M', 205, 'Z', LINEAR_UNIT(planner.max_jerk.z), 'E', LINEAR_UNIT(planner.max_jerk.e));
-    CAN_Send_Gcode_2params('M', 205, 'J', LINEAR_UNIT(planner.junction_deviation_mm), 0, 0); 
+    CAN_Send_Gcode_2params('M', 205, 'J', LINEAR_UNIT(planner.junction_deviation_mm), 0, 0);
   #endif
 
   // M206 Home offset
-  #ifndef NO_HOME_OFFSETS
+  #if DISABLED(NO_HOME_OFFSETS)
     _CAN_Send_Gcode_2params('M', 206, 'X', LINEAR_UNIT(home_offset.x), 'Y', LINEAR_UNIT(home_offset.y));
     CAN_Send_Gcode_2params('M', 206, 'Z', LINEAR_UNIT(home_offset.z), 0, 0);
   #endif
@@ -225,14 +247,14 @@ HAL_StatusTypeDef CAN_Send_Setup() // Send setup to HEAD
   // M207 Set Firmware Retraction
   // M208 - Firmware Recover
   // M209 - Set Auto Retract
-  
+
   // M220 Speed/feedrate
   CAN_Send_Gcode_2params('M', 220, 'S', feedrate_percentage, 0, 0);
- 
+
   // M221 Flow percentage
   CAN_Send_Gcode_2params('M', 221, 'T', 0, 'S', planner.flow_percentage[0]);
   // CAN_Send_Gcode_2params('M', 221, 'T', 1, 'S', planner.flow_percentage[1]); // For 2nd extruder
-  
+
   // M302 Cold extrude settings
   #if ENABLED(PREVENT_COLD_EXTRUSION)
     CAN_Send_Gcode_2params('M', 302, 'P', '0' + thermalManager.allow_cold_extrude, 'S', thermalManager.extrude_min_temp); // P0 enable cold extrusion checking, P1 = disabled, S=Minimum temperature
@@ -249,31 +271,32 @@ HAL_StatusTypeDef CAN_Send_Setup() // Send setup to HEAD
   // M919 TMC Chopper timing for E only
   CAN_Send_Gcode_2params('M', 919, 'O', off, 'P' , Hysteresis End);
   CAN_Send_Gcode_2params('M', 919, 'S', Hysteresis Start, 0, 0);
-*/
-/*
-CAN_Send_Gcode_2params('M', 710, 'E', 1, 'P', int(controllerFan.settings.probing_auto_fan_speed)); // M710 E<auto fan speed> P<probing fan speed>
-CAN_Send_Gcode_2params('M', 710, 'E', 2, 'P', int(controllerFan.settings.probing_auto_fan_speed)); // M710 E<auto fan speed> P<probing fan speed>
-CAN_Send_Gcode_2params('M', 710, 'E', 3, 'P', int(controllerFan.settings.probing_auto_fan_speed)); // M710 E<auto fan speed> P<probing fan speed>
-CAN_Send_Gcode_2params('M', 710, 'E', 4, 'P', int(controllerFan.settings.probing_auto_fan_speed)); // M710 E<auto fan speed> P<probing fan speed>
-CAN_Send_Gcode_2params('M', 710, 'E', 5, 'P', int(controllerFan.settings.probing_auto_fan_speed)); // M710 E<auto fan speed> P<probing fan speed>
-CAN_Send_Gcode_2params('M', 710, 'E', 6, 'P', int(controllerFan.settings.probing_auto_fan_speed)); // M710 E<auto fan speed> P<probing fan speed>
-CAN_Send_Gcode_2params('M', 710, 'E', 7, 'P', int(controllerFan.settings.probing_auto_fan_speed)); // M710 E<auto fan speed> P<probing fan speed>
-CAN_Send_Gcode_2params('M', 710, 'E', 8, 'P', int(controllerFan.settings.probing_auto_fan_speed)); // M710 E<auto fan speed> P<probing fan speed>
-CAN_Send_Gcode_2params('M', 710, 'E', 9, 'P', int(controllerFan.settings.probing_auto_fan_speed)); // M710 E<auto fan speed> P<probing fan speed>
-CAN_Send_Gcode_2params('M', 710, 'E', 10, 'P', int(controllerFan.settings.probing_auto_fan_speed)); // M710 E<auto fan speed> P<probing fan speed>
-CAN_Send_Gcode_2params('M', 710, 'E', 11, 'P', int(controllerFan.settings.probing_auto_fan_speed)); // M710 E<auto fan speed> P<probing fan speed>
-*/
-  // IRON, M710 SIGNALS TO THE HEAD THAT THE CAN CONFIGURATION IS COMPLETE, USE IT AS THE LAST GCODE TO SEND
-  return CAN_Send_Gcode_2params('M', 710, 'E', int(controllerFan.settings.extruder_auto_fan_speed), 'P', int(controllerFan.settings.probing_auto_fan_speed)); // M710 E<auto fan speed> P<probing fan speed>
+  */
+  #if USE_CONTROLLER_FAN
+    /*
+    CAN_Send_Gcode_2params('M', 710, 'E', 1, 'P', int(controllerFan.settings.probing_auto_fan_speed)); // M710 E<auto fan speed> P<probing fan speed>
+    CAN_Send_Gcode_2params('M', 710, 'E', 2, 'P', int(controllerFan.settings.probing_auto_fan_speed)); // M710 E<auto fan speed> P<probing fan speed>
+    CAN_Send_Gcode_2params('M', 710, 'E', 3, 'P', int(controllerFan.settings.probing_auto_fan_speed)); // M710 E<auto fan speed> P<probing fan speed>
+    CAN_Send_Gcode_2params('M', 710, 'E', 4, 'P', int(controllerFan.settings.probing_auto_fan_speed)); // M710 E<auto fan speed> P<probing fan speed>
+    CAN_Send_Gcode_2params('M', 710, 'E', 5, 'P', int(controllerFan.settings.probing_auto_fan_speed)); // M710 E<auto fan speed> P<probing fan speed>
+    CAN_Send_Gcode_2params('M', 710, 'E', 6, 'P', int(controllerFan.settings.probing_auto_fan_speed)); // M710 E<auto fan speed> P<probing fan speed>
+    CAN_Send_Gcode_2params('M', 710, 'E', 7, 'P', int(controllerFan.settings.probing_auto_fan_speed)); // M710 E<auto fan speed> P<probing fan speed>
+    CAN_Send_Gcode_2params('M', 710, 'E', 8, 'P', int(controllerFan.settings.probing_auto_fan_speed)); // M710 E<auto fan speed> P<probing fan speed>
+    CAN_Send_Gcode_2params('M', 710, 'E', 9, 'P', int(controllerFan.settings.probing_auto_fan_speed)); // M710 E<auto fan speed> P<probing fan speed>
+    CAN_Send_Gcode_2params('M', 710, 'E', 10, 'P', int(controllerFan.settings.probing_auto_fan_speed)); // M710 E<auto fan speed> P<probing fan speed>
+    CAN_Send_Gcode_2params('M', 710, 'E', 11, 'P', int(controllerFan.settings.probing_auto_fan_speed)); // M710 E<auto fan speed> P<probing fan speed>
+    */
+    // IRON, M710 SIGNALS TO THE HEAD THAT THE CAN CONFIGURATION IS COMPLETE, USE IT AS THE LAST GCODE TO SEND
+    return CAN_Send_Gcode_2params('M', 710, 'E', int(controllerFan.settings.extruder_auto_fan_speed), 'P', int(controllerFan.settings.probing_auto_fan_speed)); // M710 E<auto fan speed> P<probing fan speed>
+  #endif
+  return HAL_OK;
 }
 
-void CAN_Idle() // Tasks that cannot be done in the ISR
-{
+void CAN_Idle() { // Tasks that cannot be done in the ISR
   if (CAN_head_setup_request) // The head requested the setup data
     CAN_Send_Setup();
-  
-  if (string_message_complete) // Received string message is complete
-  {
+
+  if (string_message_complete) { // Received string message is complete
     BUZZ(1, SOUND_OK);
     SERIAL_ECHOPGM(">>> CAN MSG FROM HEAD: ");
     for (uint32_t i = 0; i < string_message_index; i++)
@@ -283,15 +306,13 @@ void CAN_Idle() // Tasks that cannot be done in the ISR
     string_message_index    = 0;
   }
 
-  if ((hcan1.ErrorCode || CAN_head_error || HAL_CAN_error_code) && (millis() - Last_CAN_Error_Message > 6000))
-  {
-    BUZZ(1, SOUND_ERROR); // Warn with sound
-    if (CAN_head_error)
-      SERIAL_ECHOLNPGM(">>> CAN ERROR REPORTED BY HEAD");
+  if ((hcan1.ErrorCode || CAN_head_error || HAL_CAN_error_code) && (millis() - Last_CAN_Error_Message > 6000)) {
+    BUZZ(1, SOUND_ERROR);
+    if (CAN_head_error) SERIAL_ECHOLNPGM(">>> CAN Error reported by head");
     CAN_head_error = false; // Reset, but will be repeated by the head
 
     if (HAL_CAN_error_code)
-      SERIAL_ECHOLNPGM(">>> HAL CAN ERROR REPORTED: ", HAL_CAN_error_code);
+      SERIAL_ECHOLNPGM(">>> HAL CAN Error reported: ", HAL_CAN_error_code);
 
     if (hcan1.ErrorCode)
       SERIAL_ECHOLNPGM(">>> hcan1.ErrorCode=", hcan1.ErrorCode);
@@ -299,27 +320,25 @@ void CAN_Idle() // Tasks that cannot be done in the ISR
     Last_CAN_Error_Message = millis();
   }
 
-  if ((millis() - Last_CAN_Temp_Report) > 10000) // IRON, ERROR, NO TEMP UPDATE RECEIVED IN 10 SECONDS, KILL PRINTER
-  {
-    Last_CAN_Temp_Report = millis();
-    if (FirstE0Error) // Send error notification
-    {
+  if (ELAPSED(millis(), Next_CAN_Temp_Report)) { // IRON, ERROR, NO TEMP UPDATE RECEIVED IN 10 SECONDS, KILL PRINTER
+    Next_CAN_Temp_Report = millis() +  10000;
+    if (FirstE0Error) { // Send error notification
       BUZZ(1, SOUND_ERROR); // Warn with sound
-      SERIAL_ECHOLNPGM("Error: NO CAN E0 TEMP UPDATES!");   
+      SERIAL_ECHOLNPGM("Error: No CAN E0 temp updates!");
     }
     else // Send only error message
-      SERIAL_ECHOLNPGM(">>> CAN ERROR, NO E0 TEMP UPDATES!");
+      SERIAL_ECHOLNPGM(">>> CAN ERROR, No E0 temp updates!");
 
     FirstE0Error = false; // Warn only once
 
-  #ifndef IRON_DEBUG // Only kill if not debugging
-    kill(F("CAN ERROR, NO E0 TEMPERATURE UPDATES"));
-  #endif
+    #ifndef CAN_DEBUG // Only kill if not debugging
+      kill(F("CAN ERROR, NO E0 TEMPERATURE UPDATES"));
+    #endif
   }
 }
 
-HAL_StatusTypeDef CAN_Send_Gcode() // Forward a Marlin Gcode via CAN (uses parser.command_letter, Gcode_no, parser.value_float())
-{ // Send a Gcode to the head with parameters and values
+HAL_StatusTypeDef CAN_Send_Gcode() { // Forward a Marlin Gcode via CAN (uses parser.command_letter, Gcode_no, parser.value_float())
+  // Send a Gcode to the head with parameters and values
   // Gcode starts with extended frame which can send the Gcode with max 2 parameters and values.
   // Extended frames are send to complete all parameters and values (max 2 per extended message).
   // 1. Analyze Gcode command
@@ -328,25 +347,25 @@ HAL_StatusTypeDef CAN_Send_Gcode() // Forward a Marlin Gcode via CAN (uses parse
   // char s[] = "G0 X123.45678 Y124.45678 Z125.45678 E126.45678 F127.45678\n";
 
   HAL_StatusTypeDef status = HAL_OK;
-  uint32_t TxMailbox; // Stores which Mailbox (0-2) is used to store the Sent TX message 
- 
+  uint32_t TxMailbox; // Stores which Mailbox (0-2) is used to store the Sent TX message
+
   if (parser.command_letter != 'M') // Only forward Mxxx Gcode to head
     return HAL_OK;
- 
+
   uint32_t Gcode_type = GCODE_TYPE_M; // M-code, fixed for now
   uint32_t Gcode_no = parser.codenum;
 
   if (Gcode_no == 109) // Convert M109(Hotend wait) to M104 (no wait) to keep the head responsive
     Gcode_no = 104;
-  
+
   if ((Gcode_no == 501) || (Gcode_no == 502)) // M501=Restore settings, M502=Factory defaults
     CAN_head_setup_request = true; // Also update settings for the head
 
   if ((Gcode_no != 104) && // Set hotend target temp
       (Gcode_no != 106) && // Set cooling fan speed
       (Gcode_no != 107) && // Cooling fan off
-      (Gcode_no != 150) && // Set NeoPixel values    
-//      (Gcode_no != 108) && // Break and Continue
+      (Gcode_no != 150) && // Set NeoPixel values
+      //(Gcode_no != 108) && // Break and Continue
       (Gcode_no != 280) && // Servo position
       (Gcode_no != 306) && // MPC settings/tuning
       (Gcode_no != 710) && // Control fan PWM
@@ -414,7 +433,7 @@ HAL_StatusTypeDef CAN_Send_Gcode() // Forward a Marlin Gcode via CAN (uses parse
         case 510: case 511: case 512: // No locking of the machine
         case 605:                     // No IDEX commands
         case 810: case 811: case 812: case 813: case 814: case 815: case 816: case 817: case 818: case 819:
-        case 851:                     // 
+        case 851:                     //
         case 871:                     // No Probe temp config
         case 876:                     // No handle prompt response
         case 913:                     // No Set Hybrid Threshold Speed
@@ -424,7 +443,7 @@ HAL_StatusTypeDef CAN_Send_Gcode() // Forward a Marlin Gcode via CAN (uses parse
         return HAL_OK;                // NO CAM MESSAGE
       }
     break;
-    
+
     case 'T': Gcode_type = GCODE_TYPE_T;
       switch (Gcode_no)
       {
@@ -432,7 +451,7 @@ HAL_StatusTypeDef CAN_Send_Gcode() // Forward a Marlin Gcode via CAN (uses parse
         break;
       }
     break;
-    
+
     case 'D': Gcode_type = GCODE_TYPE_D;
       switch (Gcode_no)
       {
@@ -442,7 +461,7 @@ HAL_StatusTypeDef CAN_Send_Gcode() // Forward a Marlin Gcode via CAN (uses parse
     break;
     default: return HAL_OK; // Invalid command, nothing to do
   }
-*/
+  */
 
   #ifdef CAN_DEBUG
     SERIAL_ECHOPGM(">>> CAN GCODE TO HEAD: "); // IRON, DEBUGGING
@@ -451,37 +470,32 @@ HAL_StatusTypeDef CAN_Send_Gcode() // Forward a Marlin Gcode via CAN (uses parse
   #endif
 
   if (strlen(parser.command_ptr) > 4) // "M107\0", ONLY SCAN FOR PARAMETERS IF STRING IS LONG ENOUGH
-  for (index = 0; index < sizeof(letters); index++) // Scan parameters
-  {
-    if (parser.seen(letters[index]))
-    {   
+  for (index = 0; index < sizeof(letters); index++) { // Scan parameters
+    if (parser.seen(letters[index])) {
       parameters[parameter_counter] = letters[index] - 64; // Store parameter letter, A=1, B=2...
-      
-  #ifdef CAN_DEBUG      
-      SERIAL_CHAR(' ', letters[index]); // IRON, DEBUGGING
-  #endif
 
-      if (parser.has_value()) // Check if there is a value
-      {
+      #ifdef CAN_DEBUG
+        SERIAL_CHAR(' ', letters[index]); // IRON, DEBUGGING
+      #endif
+
+      if (parser.has_value()) { // Check if there is a value
         values[parameter_counter++] = parser.value_float();
 
-  #ifdef CAN_DEBUG
-        if (values[parameter_counter - 1] == int(values[parameter_counter - 1]))
-          SERIAL_ECHO(i16tostr3left(values[parameter_counter - 1])); // Integer value
-        else
-          SERIAL_ECHO(p_float_t(values[parameter_counter - 1], 4));  // Float with 4 digits    
-  #endif
+        #ifdef CAN_DEBUG
+          if (values[parameter_counter - 1] == int(values[parameter_counter - 1]))
+            SERIAL_ECHO(i16tostr3left(values[parameter_counter - 1])); // Integer value
+          else
+            SERIAL_ECHO(p_float_t(values[parameter_counter - 1], 4));  // Float with 4 digits
+        #endif
 
       }
       else // No value for parameter
-        values[parameter_counter++] = NAN; // Not A Number, indicates no parameter value is present 
+        values[parameter_counter++] = NAN; // Not A Number, indicates no parameter value is present
     }
-    
-    if (parameter_counter == 8) 
-    {
+
+    if (parameter_counter == 8) { // Max 8 parameters
       parameter_counter--; // Max is 7 parameters
-      SERIAL_ECHOPGM("\nError: TOO MANY PARAMETERS (> 7): ");
-      SERIAL_ECHOLN_P(parser.command_ptr);
+      SERIAL_ECHOLNPGM("\nError: TOO MANY PARAMETERS (> 7): ", parser.command_ptr);
       BUZZ(1, SOUND_ERROR);
       break;
     }
@@ -492,13 +506,13 @@ HAL_StatusTypeDef CAN_Send_Gcode() // Forward a Marlin Gcode via CAN (uses parse
 
   parameters[parameter_counter] = 0; // Set next parameter to 0 (0=no parameter), send in pairs
   index = 0;
-  float * fp = (float *)CAN_tx_buffer; // Points to TX buffer 
-  
+  float * fp = (float *)CAN_tx_buffer; // Points to TX buffer
+
   if ((Gcode_no == 710) && (parameters[0] == 3)) // "M710 C" INDICATES REQUEST FOR GCODE COUNT
     SERIAL_ECHOLNPGM(">>> GCODES SENT: ", gcode_counter);
-  
-  gcode_counter++;  
-  
+
+  gcode_counter++;
+
   TxHeader.IDE = CAN_EXTENDED_ID; // Start with EXTENDED_ID then send STANDARD_ID if needed
   //TxHeader.ExtId &= EXTID_FIFO_BIT; // Clear ID, keep FIFO bit
   TxHeader.ExtId = (TxHeader.ExtId & EXTID_FIFO_BIT) +  // KEEP FIFO BIT
@@ -508,8 +522,7 @@ HAL_StatusTypeDef CAN_Send_Gcode() // Forward a Marlin Gcode via CAN (uses parse
                    ((parameters[1] & PARAMETER_MASK) << PARAMETER2_OFFSET) +   // PARAMETER2
                    ((parameters[0] & PARAMETER_MASK) << PARAMETER1_OFFSET);    // PARAMETER1
   uint32_t ms = millis(); // Record message send start time
-  do
-  {  
+  do {
     TxHeader.DLC = MIN(8, (parameter_counter - index) << 2); // Maximum 8 bytes, 4 bytes if there is only 1 parameter, 8 bytes if there are 2
     //TxHeader.StdId =  (TxHeader.StdId ^ STDID_FIFO_BIT) & STDID_FIFO_BIT;            // Toggle FIFO bit 10, clear other bits
     TxHeader.StdId = ((TxHeader.StdId ^ STDID_FIFO_BIT) & STDID_FIFO_BIT) +            // Toggle FIFO bit
@@ -518,32 +531,29 @@ HAL_StatusTypeDef CAN_Send_Gcode() // Forward a Marlin Gcode via CAN (uses parse
     TxHeader.ExtId ^= EXTID_FIFO_BIT; // Toggle FIFO bit 28
     *fp++ = values[index++]; // Copy first parameter value to data, move pointer to next 4 bytes
     *fp-- = values[index++]; // Copy 2nd parameter value to data, move pointer to beginning of data array for next round
-    
+
     while ((HAL_CAN_GetTxMailboxesFreeLevel(&hcan1) == 0) && (millis() - ms < 50)) { } // BLOCKING! Wait max 50ms
     status = HAL_CAN_AddTxMessage(&hcan1, &TxHeader, CAN_tx_buffer, &TxMailbox); // Send message
 
     if (status != HAL_OK)
       return status;
-    
+
     TxHeader.IDE = CAN_STANDARD_ID; // All following messages have standard ID for parameter values, 11 bits identifier
   } while (index < parameter_counter);
- 
+
   return HAL_OK;
 }
 
-void CAN_Send_Position() // Send the X, Y, Z and E position to the HEAD
-{ 
+void CAN_Send_Position() { // Send the X, Y, Z and E position to the HEAD
   CAN_Send_Gcode_2params('G', 92, 'X', current_position.x, 'Y', current_position.y); // M92 X<pos> Y<pos>
   CAN_Send_Gcode_2params('G', 92, 'Z', current_position.z, 'E', current_position.e); // M92 E<pos> Z<pos>
 }
 
-void HAL_CAN_MspInit(CAN_HandleTypeDef* canHandle) // Called by HAL_CAN_Init
-{
+void HAL_CAN_MspInit(CAN_HandleTypeDef* canHandle) { // Called by HAL_CAN_Init
   GPIO_InitTypeDef GPIO_InitStruct       = {0};
   RCC_PeriphCLKInitTypeDef PeriphClkInit = {0};
 
-  if (canHandle->Instance == CAN1)
-  {
+  if (canHandle->Instance == CAN1) {
     RCC_PeriphCLKInitTypeDef periphClkInit = { };
     HAL_RCCEx_GetPeriphCLKConfig(&periphClkInit);
     periphClkInit.PeriphClockSelection |= RCC_APB1ENR_CAN1EN; // DONE IN __HAL_RCC_CAN1_CLK_ENABLE?
@@ -560,7 +570,7 @@ void HAL_CAN_MspInit(CAN_HandleTypeDef* canHandle) // Called by HAL_CAN_Init
     // CAN1 GPIO Configuration
     // PB8     ------> CAN1_RX
     // PB9     ------> CAN1_TX
-    
+
     GPIO_InitStruct.Pin       = GPIO_PIN_8 | GPIO_PIN_9; // Pin PB8 and Pin PB9
     GPIO_InitStruct.Mode      = GPIO_MODE_AF_PP;
     GPIO_InitStruct.Pull      = GPIO_NOPULL;
@@ -569,21 +579,19 @@ void HAL_CAN_MspInit(CAN_HandleTypeDef* canHandle) // Called by HAL_CAN_Init
     HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);              // Port B
 
     // CAN1 interrupt Init
-    HAL_NVIC_SetPriority(CAN1_RX0_IRQn, 1, 1); 
+    HAL_NVIC_SetPriority(CAN1_RX0_IRQn, 1, 1);
     HAL_NVIC_EnableIRQ(CAN1_RX0_IRQn);         // Enable CAN FIFO1 interrupt handler
 
-    HAL_NVIC_SetPriority(CAN1_RX1_IRQn, 1, 1); 
+    HAL_NVIC_SetPriority(CAN1_RX1_IRQn, 1, 1);
     HAL_NVIC_EnableIRQ(CAN1_RX1_IRQn);         // Enable CAN FIFO1 interrupt handler
   }
 }
 
-HAL_StatusTypeDef CAN1_Stop(void)
-{
+HAL_StatusTypeDef CAN1_Stop() {
   return HAL_CAN_Stop(&hcan1);
 }
 
-HAL_StatusTypeDef CAN1_Start(void)
-{
+HAL_StatusTypeDef CAN1_Start() {
   HAL_StatusTypeDef status = HAL_OK;
 
   // Init TxHeader with constant values
@@ -601,7 +609,7 @@ HAL_StatusTypeDef CAN1_Start(void)
   hcan1.Init.AutoBusOff           = DISABLE;         // DISABLE: Software controlled Bus-off. ENABLE: Automatic hardware controlled (no send/receive)
   hcan1.Init.AutoWakeUp           = ENABLE;          // ENABLE: Automatic hardware controlled bus wakeup. DISABLE: Software controlled bus wakeup.
   hcan1.Init.AutoRetransmission   = ENABLE;          // DISABLE / ENABLE, resend if transmission failed, but locks up if communication fails/cable not connected!!!!!!!!!!!!!!!!!
-  hcan1.Init.SyncJumpWidth        = CAN_SJW_1TQ;     // CAN_SJW_1TQ 
+  hcan1.Init.SyncJumpWidth        = CAN_SJW_1TQ;     // CAN_SJW_1TQ
   hcan1.Init.TimeSeg1             = CAN_BS1_11TQ;    // CAN_BS1_11TQ
   hcan1.Init.TimeSeg2             = CAN_BS2_2TQ;     // CAN_BS2_2TQ
   hcan1.Init.Mode                 = CAN_MODE_NORMAL; // CAN_MODE_NORMAL / CAN_MODE_SILENT / CAN_MODE_LOOPBACK / CAN_MODE_SILENT_LOOPBACK
@@ -612,7 +620,7 @@ HAL_StatusTypeDef CAN1_Start(void)
   status = HAL_CAN_Init(&hcan1); // Calls HAL_CAN_MspInit
   if (status != HAL_OK)
     return status;
-  
+
   CAN_FilterTypeDef  sFilterConfig;
 
   // Catch CAN messags with highest bit of StdId set in FIFO0
@@ -621,7 +629,7 @@ HAL_StatusTypeDef CAN1_Start(void)
   sFilterConfig.FilterScale          = CAN_FILTERSCALE_32BIT; // CAN_FILTERSCALE_16BIT / CAN_FILTERSCALE_32BIT (See Figure 342 in RM0090)
   sFilterConfig.FilterIdHigh         = 0b1000000000000000;    // ID MSB:   (0-0xFFFF) (StdId[10-0] [ExtId17-13]) (See Figure 342 in RM0090)
   sFilterConfig.FilterIdLow          = 0;                     // ID LSB:   (0-0xFFFF) ([ExtId12-0][IDE][RTR]  0) (0="don't care")
-  sFilterConfig.FilterMaskIdHigh     = 0b1000000000000000;    // Mask MSB: (0-0xFFFF) (StdId[10-0] [ExtId17-13]) (See Figure 342 in RM0090) 
+  sFilterConfig.FilterMaskIdHigh     = 0b1000000000000000;    // Mask MSB: (0-0xFFFF) (StdId[10-0] [ExtId17-13]) (See Figure 342 in RM0090)
   sFilterConfig.FilterMaskIdLow      = 0;                     // Mask LSB: (0-0xFFFF) ([ExtId12-0][IDE][RTR]  0) (0="don't care")
   sFilterConfig.FilterFIFOAssignment = CAN_FILTER_FIFO0;      // Store message in FIFO1 (CAN_FILTER_FIFO0 / CAN_FILTER_FIFO1)
   sFilterConfig.FilterActivation     = CAN_FILTER_ENABLE;     // CAN_FILTER_ENABLE / CAN_FILTER_DISABLE
@@ -634,7 +642,7 @@ HAL_StatusTypeDef CAN1_Start(void)
   sFilterConfig.FilterScale          = CAN_FILTERSCALE_32BIT; // CAN_FILTERSCALE_16BIT / CAN_FILTERSCALE_32BIT (See Figure 342 in RM0090)
   sFilterConfig.FilterIdHigh         = 0b0000;                // ID MSB:   (0-0xFFFF) (StdId[10-0] [ExtId17-13]) (See Figure 342 in RM0090)
   sFilterConfig.FilterIdLow          = 0x0000;                // ID LSB:   (0-0xFFFF) ([ExtId12-0][IDE][RTR]  0) (0="don't care")
-  sFilterConfig.FilterMaskIdHigh     = 0b0000;                // Mask MSB: (0-0xFFFF) (StdId[10-0] [ExtId17-13]) (See Figure 342 in RM0090) 
+  sFilterConfig.FilterMaskIdHigh     = 0b0000;                // Mask MSB: (0-0xFFFF) (StdId[10-0] [ExtId17-13]) (See Figure 342 in RM0090)
   sFilterConfig.FilterMaskIdLow      = 0x0000;                // Mask LSB: (0-0xFFFF) ([ExtId12-0][IDE][RTR]  0) (0="don't care")
   sFilterConfig.FilterFIFOAssignment = CAN_FILTER_FIFO1;      // Store message in FIFO0 (CAN_FILTER_FIFO0 / CAN_FILTER_FIFO1)
   sFilterConfig.FilterActivation     = CAN_FILTER_ENABLE;     // CAN_FILTER_ENABLE / CAN_FILTER_DISABLE
@@ -644,10 +652,10 @@ HAL_StatusTypeDef CAN1_Start(void)
   // Activate RX FIFO0/FIFO1 new message interrupt
   HAL_CAN_ActivateNotification(&hcan1, CAN_IT_RX_FIFO0_MSG_PENDING); // Calls CAN1_RX0_IRQHandler -> HAL_CAN_IRQHandler -> HAL_CAN_RxFifo0MsgPendingCallback
   HAL_CAN_ActivateNotification(&hcan1, CAN_IT_RX_FIFO1_MSG_PENDING); // Calls CAN1_RX1_IRQHandler -> HAL_CAN_IRQHandler -> HAL_CAN_RxFifo1MsgPendingCallback
-  
+
 // Activate RX FIFO0/FIFO1 overrun interrupt
   HAL_CAN_ActivateNotification(&hcan1, CAN_IT_RX_FIFO0_OVERRUN); // Calls CAN1_RX0_IRQHandler -> HAL_CAN_ErrorCallback
-  HAL_CAN_ActivateNotification(&hcan1, CAN_IT_RX_FIFO1_OVERRUN); // Calls CAN1_RX1_IRQHandler -> HAL_CAN_ErrorCallback 
+  HAL_CAN_ActivateNotification(&hcan1, CAN_IT_RX_FIFO1_OVERRUN); // Calls CAN1_RX1_IRQHandler -> HAL_CAN_ErrorCallback
 
   HAL_CAN_ActivateNotification(&hcan1, CAN_IT_ERROR); // Calls CAN1_RX0_IRQHandler -> HAL_CAN_ErrorCallback
 
@@ -658,39 +666,31 @@ HAL_StatusTypeDef CAN1_Start(void)
   return CAN_Send_Gcode_2params('M', 997, 0, 0, 0, 0); // M997, reset head at host startup
 }
 
-void HAL_CAN_RxFifoMsgPending(CAN_HandleTypeDef *hcan, uint32_t RxFifo) // ISR! New FIFO 0/1 message interrupt handler
-{
+void HAL_CAN_RxFifoMsgPending(CAN_HandleTypeDef *hcan, uint32_t RxFifo) { // ISR! New FIFO 0/1 message interrupt handler
   CAN_RxHeaderTypeDef RxHeader;  // RX Header buffer for FIFO0
   uint8_t CAN_RX_buffer_Fifo[8]; // CAN MESSAGE DATA BUFFER
 
-  if (HAL_CAN_GetRxMessage(&hcan1, RxFifo, &RxHeader, CAN_RX_buffer_Fifo) == HAL_OK) // Get message from CAN_RX_FIFO0
-  {
-    if ((RxHeader.StdId & CAN_IO_MASK) != CAN_io_state) // First handle time critical IO update
-    {
+  if (HAL_CAN_GetRxMessage(&hcan1, RxFifo, &RxHeader, CAN_RX_buffer_Fifo) == HAL_OK) { // Get message from CAN_RX_FIFO0
+    if ((RxHeader.StdId & CAN_IO_MASK) != CAN_io_state) { // First handle time critical IO update
       CAN_io_state = (RxHeader.StdId & CAN_IO_MASK);
       endstops.update();
     }
 
-    if (RxHeader.StdId & CAN_STRING_MESSAGE_MASK) // Head sends a string message
-    {
+    if (RxHeader.StdId & CAN_STRING_MESSAGE_MASK) { // Head sends a string message
       char * CAN_RX_p = (char *)CAN_RX_buffer_Fifo;
-      for (uint32_t i = 0; i < RxHeader.DLC; i++)
-      {
+      for (uint32_t i = 0; i < RxHeader.DLC; i++) {
         string_message[string_message_index++ % 128] = CAN_RX_p[i]; // Copy message to global buffer
-        
-        if (CAN_RX_p[i] == '\n') 
-        {
+
+        if (CAN_RX_p[i] == '\n') {
           string_message_complete = true; // Print buffer
           string_message[string_message_index % 128] = 0; // Close string with \0
         }
       }
     }
-    else
-    if (RxHeader.DLC == 4) // FIFO0, head sent a temperature update (DLC = Data Length Code == 4 bytes)
-    {
+    else if (RxHeader.DLC == 4) { // FIFO0, head sent a temperature update (DLC = Data Length Code == 4 bytes)
       float * fp = (float *)CAN_RX_buffer_Fifo;   // FIFO0
       thermalManager.temp_hotend[0].celsius = *fp; // Set E0 hotend temperature
-      Last_CAN_Temp_Report = millis();
+      Next_CAN_Temp_Report = millis() + 10000;
       FirstE0Error = true; // Reset error status
     }
 
@@ -699,18 +699,15 @@ void HAL_CAN_RxFifoMsgPending(CAN_HandleTypeDef *hcan, uint32_t RxFifo) // ISR! 
   }
 }
 
-void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan) // ISR! New FIFO0 message interrupt handler
-{
-  HAL_CAN_RxFifoMsgPending(hcan, CAN_RX_FIFO0); 
+void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan) { // ISR! New FIFO0 message interrupt handler
+  HAL_CAN_RxFifoMsgPending(hcan, CAN_RX_FIFO0);
 }
 
-void HAL_CAN_RxFifo1MsgPendingCallback(CAN_HandleTypeDef *hcan) // ISR! New FIFO1 message interrupt handler
-{
-  HAL_CAN_RxFifoMsgPending(hcan, CAN_RX_FIFO1); 
+void HAL_CAN_RxFifo1MsgPendingCallback(CAN_HandleTypeDef *hcan) { // ISR! New FIFO1 message interrupt handler
+  HAL_CAN_RxFifoMsgPending(hcan, CAN_RX_FIFO1);
 }
 
-void HAL_CAN_ErrorCallback(CAN_HandleTypeDef *hcan) // Interrupt handler for any CAN error
-{
+void HAL_CAN_ErrorCallback(CAN_HandleTypeDef *hcan) { // Interrupt handler for any CAN error
   HAL_CAN_error_code = hcan->ErrorCode; // Store the received error code
 }
 

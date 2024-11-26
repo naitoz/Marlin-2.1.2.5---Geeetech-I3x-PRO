@@ -37,8 +37,6 @@
  */
 #define CONFIGURATION_H_VERSION 02010300
 
-// ENABLE CAN SUPPORT HERE
-// #define CAN_MASTER
 //===========================================================================
 //============================= Getting Started =============================
 //===========================================================================
@@ -70,7 +68,7 @@
 
 // Choose the name from boards.h that matches your setup
 #ifndef MOTHERBOARD
-  #define MOTHERBOARD BOARD_MKS_MONSTER8_V2
+  #define MOTHERBOARD BOARD_RAMPS_14_EFB
 #endif
 
 // @section serial
@@ -125,6 +123,9 @@
   //#define M485_PROTOCOL 1   // Check your host for protocol compatibility
   //#define RS485_BUS_BUFFER_SIZE 128
 #endif
+
+// Enable CAN bus support and protocol
+//#define CAN_MASTER
 
 // Enable the Bluetooth serial interface on AT90USB devices
 //#define BLUETOOTH

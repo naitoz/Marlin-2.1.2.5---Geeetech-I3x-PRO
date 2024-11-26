@@ -29,6 +29,10 @@
 
 #include "Servo.h"
 
+#if ENABLED(CAN_MASTER)
+  #include "../shared/CAN.h"
+#endif
+
 static uint_fast8_t servoCount = 0;
 static libServo *servos[NUM_SERVOS] = {0};
 constexpr millis_t servoDelay[] = SERVO_DELAY;
@@ -72,19 +76,16 @@ int8_t libServo::attach(const int pin, const int min, const int max) {
 
 void libServo::move(const int value) {
 
-#ifdef CAN_MASTER // IRON, FORWARD UNDERWATER SERVO COMMAND TO HEAD
-  int angles[2] = Z_SERVO_ANGLES;
-
-  // Translate M280 S10 to M401, M280 S90 to M402
-  HAL_StatusTypeDef CAN_Send_Gcode_2params(uint32_t Gcode_type, uint32_t Gcode_no, uint32_t parameter1, float value1, uint32_t parameter2, float value2); // PROTOTYPE
-  if (value == angles[0]) // Deploy angle
-    CAN_Send_Gcode_2params('M', 401, 0, 0, 0, 0); // IRON, send "M401" instead, enables interrupt etc.
-  else
-  if (value == angles[1]) // Stow angle
-    CAN_Send_Gcode_2params('M', 402, 0, 0, 0, 0); // IRON, send "M401" instead, enables interrupt etc.
-  else
-    CAN_Send_Gcode_2params('M', 280, 'S', value, 'P', 0); // M280 S[value] P0
-#endif // IRON
+  #if ENABLED(CAN_MASTER) // Forward direct Servo command to head
+    constexpr int angles[2] = Z_SERVO_ANGLES;
+    // Translate M280 S10 to M401, M280 S90 to M402
+    if (value == angles[0])
+      CAN_Send_Gcode_2params('M', 401, 0, 0, 0, 0); // Deploy Angle: Send "M401" instead, enables interrupt etc.
+    else if (value == angles[1])
+      CAN_Send_Gcode_2params('M', 402, 0, 0, 0, 0); // Stow Angle: Send "M402" instead, enables interrupt etc.
+    else
+      CAN_Send_Gcode_2params('M', 280, 'S', value, 'P', 0); // M280 S[value] P0
+  #endif
 
   if (attach(0) >= 0) {
     stm32_servo.write(value);

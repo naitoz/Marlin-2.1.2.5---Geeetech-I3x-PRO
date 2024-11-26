@@ -800,7 +800,7 @@
 #elif MB(MKS_MONSTER8_V1)
   #include "stm32f4/pins_MKS_MONSTER8_V1.h"         // STM32F4                              env:mks_monster8 env:mks_monster8_usb_flash_drive env:mks_monster8_usb_flash_drive_msc
 #elif MB(MKS_MONSTER8_V2)
-  #include "stm32f4/pins_MKS_MONSTER8_V2.h"         // STM32F4                              env:mks_monster8 env:mks_monster8_usb_flash_drive env:mks_monster8_usb_flash_drive_msc
+  #include "stm32f4/pins_MKS_MONSTER8_V2.h"         // STM32F4                              env:mks_monster8 env:mks_monster8_usb_flash_drive env:mks_monster8_usb_flash_drive_msc env:mks_monster8_usb_flash_drive_msc_CAN
 #elif MB(ANET_ET4)
   #include "stm32f4/pins_ANET_ET4.h"                // STM32F4                              env:Anet_ET4_no_bootloader env:Anet_ET4_OpenBLT
 #elif MB(ANET_ET4P)
