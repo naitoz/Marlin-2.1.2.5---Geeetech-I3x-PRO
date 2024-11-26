@@ -968,7 +968,7 @@
     #endif
     TMC_REPORT("CS actual",          TMC_CS_ACTUAL);
     TMC_REPORT("PWM scale",          TMC_PWM_SCALE);
-    #if HAS_DRIVER(TMC2130) || HAS_DRIVER(TMC2224) || HAS_DRIVER(TMC2660) || HAS_TMC220x
+    #if HAS_DRIVER(TMC2130) || HAS_DRIVER(TMC2660) || HAS_TMC220x
       TMC_REPORT("vsense\t",         TMC_VSENSE);
     #endif
     TMC_REPORT("stealthChop",        TMC_STEALTHCHOP);
