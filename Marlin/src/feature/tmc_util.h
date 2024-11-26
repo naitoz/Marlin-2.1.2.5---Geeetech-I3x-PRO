@@ -133,9 +133,9 @@ class TMCMarlin : public TMC, public TMCStorage<AXIS_LETTER, DRIVER_ID> {
     #endif
 
     #if USE_SENSORLESS
-      int16_t homing_threshold() { return TMC::sgt(); }
-      void homing_threshold(int16_t sgt_val) {
-        sgt_val = (int16_t)constrain(sgt_val, sgt_min, sgt_max);
+      int8_t homing_threshold() { return TMC::sgt(); }
+      void homing_threshold(int8_t sgt_val) {
+        sgt_val = (int8_t)constrain(sgt_val, sgt_min, sgt_max);
         TMC::sgt(sgt_val);
         TERN_(HAS_MARLINUI_MENU, this->stored.homing_thrs = sgt_val);
       }
@@ -257,9 +257,9 @@ class TMCMarlin<TMC2209Stepper, AXIS_LETTER, DRIVER_ID, AXIS_ID> : public TMC220
       }
     #endif
     #if USE_SENSORLESS
-      int16_t homing_threshold() { return TMC2209Stepper::SGTHRS(); }
-      void homing_threshold(int16_t sgt_val) {
-        sgt_val = (int16_t)constrain(sgt_val, sgt_min, sgt_max);
+      uint8_t homing_threshold() { return TMC2209Stepper::SGTHRS(); }
+      void homing_threshold(uint8_t sgt_val) {
+        sgt_val = (uint8_t)constrain(sgt_val, sgt_min, sgt_max);
         TMC2209Stepper::SGTHRS(sgt_val);
         TERN_(HAS_MARLINUI_MENU, this->stored.homing_thrs = sgt_val);
       }
@@ -285,7 +285,7 @@ class TMCMarlin<TMC2240Stepper, AXIS_LETTER, DRIVER_ID, AXIS_ID> : public TMC224
       TMC2240Stepper(cs_pin, axis_chain_index)
       {}
     TMCMarlin(const uint16_t CS, const uint16_t pinMOSI, const uint16_t pinMISO, const uint16_t pinSCK, const uint8_t axis_chain_index) :
-      TMC2240Stepper(CS, pinMOSI, pinMISO, pinSCK ,axis_chain_index )
+      TMC2240Stepper(CS, pinMOSI, pinMISO, pinSCK, axis_chain_index )
       {}
 
     //uint8_t get_address() { return slave_address; }
@@ -325,9 +325,9 @@ class TMCMarlin<TMC2240Stepper, AXIS_LETTER, DRIVER_ID, AXIS_ID> : public TMC224
       }
     #endif
     #if USE_SENSORLESS
-      int16_t homing_threshold() { return TMC2240Stepper::sgt(); }
-      void homing_threshold(int16_t sgt_val) {
-        sgt_val = (int16_t)constrain(sgt_val, sgt_min, sgt_max);
+      int8_t homing_threshold() { return TMC2240Stepper::sgt(); }
+      void homing_threshold(int8_t sgt_val) {
+        sgt_val = (int8_t)constrain(sgt_val, sgt_min, sgt_max);
         TMC2240Stepper::sgt(sgt_val);
         TERN_(HAS_MARLINUI_MENU, this->stored.homing_thrs = sgt_val);
       }
@@ -371,9 +371,9 @@ class TMCMarlin<TMC2660Stepper, AXIS_LETTER, DRIVER_ID, AXIS_ID> : public TMC266
     }
 
     #if USE_SENSORLESS
-      int16_t homing_threshold() { return TMC2660Stepper::sgt(); }
-      void homing_threshold(int16_t sgt_val) {
-        sgt_val = (int16_t)constrain(sgt_val, sgt_min, sgt_max);
+      int8_t homing_threshold() { return TMC2660Stepper::sgt(); }
+      void homing_threshold(int8_t sgt_val) {
+        sgt_val = (int8_t)constrain(sgt_val, sgt_min, sgt_max);
         TMC2660Stepper::sgt(sgt_val);
         TERN_(HAS_MARLINUI_MENU, this->stored.homing_thrs = sgt_val);
       }
