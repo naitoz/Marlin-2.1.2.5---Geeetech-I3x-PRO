@@ -4330,7 +4330,7 @@ void drawMaxAccelMenu() {
         EDIT_ITEM(ICON_MeshEditX, MSG_MESH_X, onDrawPInt8Menu, setEditMeshX, &bedLevelTools.mesh_x);
         EDIT_ITEM(ICON_MeshEditY, MSG_MESH_Y, onDrawPInt8Menu, setEditMeshY, &bedLevelTools.mesh_y);
         editZValueItem = EDIT_ITEM(ICON_MeshEditZ, MSG_MESH_EDIT_Z, onDrawPFloat3Menu, setEditZValue, &bedlevel.z_values[bedLevelTools.mesh_x][bedLevelTools.mesh_y]);
-        TERN_(HAS_BED_PROBE, MENU_ITEM(ICON_Probe, MSG_PROBE_WIZARD_PROBING, onDrawMenuItem, bedLevelTools.ProbeXY);)
+        TERN_(HAS_BED_PROBE, MENU_ITEM(ICON_Probe, MSG_PROBE_WIZARD_PROBING, onDrawMenuItem, bedLevelTools.probeXY);)
         MENU_ITEM(ICON_SetZOffset, MSG_ZERO_MESH, onDrawMenuItem, zeroPoint);
       }
       updateMenu(editMeshMenu);
