@@ -57,12 +57,12 @@
   #include "../feature/joystick.h"
 #endif
 
-#if HAS_BED_PROBE
-  #include "probe.h"
-#endif
-
 #if HAS_FILAMENT_SENSOR
   #include "../feature/runout.h"
+#endif
+
+#if HAS_BED_PROBE
+  #include "probe.h"
 #endif
 
 #define DEBUG_OUT ALL(USE_SENSORLESS, DEBUG_LEVELING_FEATURE)
