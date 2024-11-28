@@ -56,7 +56,7 @@ TESTENV='-'
 CHOICE=0
 DEBUG=0
 
-while getopts 'abdhmrsuvyn:t:-:' OFLAG; do
+while getopts 'adhmn:rst:uvy-:' OFLAG; do
   case "${OFLAG}" in
     a) AUTO_BUILD=1 ; bugout "Auto-Build target..." ;;
     d) DL_DEFAULTS=1 ; bugout "Restore to defaults..." ;;

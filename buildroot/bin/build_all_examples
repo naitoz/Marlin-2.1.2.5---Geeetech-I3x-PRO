@@ -53,22 +53,22 @@ unset FIRST_CONF
 EXIT_USAGE=
 LIMIT=1000
 
-while getopts 'aB:b:ce:fdhl:no:pr:sv-:' OFLAG; do
+while getopts 'aB:b:cde:fhl:no:pr:sv-:' OFLAG; do
   case "${OFLAG}" in
     a) ARCHIVE=1                ; bugout "Archiving" ;;
     B) CBASE=${OPTARG%/}        ; bugout "Base: $CBASE" ;;
     b) BRANCH=$OPTARG           ; bugout "Branch: $BRANCH" ;;
-    f) NOFAIL=1                 ; bugout "Continue on Fail" ;;
-    r) ISRES=1 ; FIRST_CONF=$OPTARG ; bugout "Resume: $FIRST_CONF" ;;
     c) CONTINUE=1               ; bugout "Continue" ;;
-    s) CONTSKIP=1               ; bugout "Continue, skipping" ;;
     e) CEXPORT=$OPTARG          ; bugout "Export $CEXPORT" ;;
-    o) OUTBASE="${OPTARG%/}"    ; bugout "Archive to $OUTBASE" ;;
+    f) NOFAIL=1                 ; bugout "Continue on Fail" ;;
     h) EXIT_USAGE=1 ; break ;;
     l) LIMIT=$OPTARG            ; bugout "Limit to $LIMIT build(s)" ;;
-  d|v) DEBUG=1                  ; bugout "Debug ON" ;;
     n) DRYRUN=1                 ; bugout "Dry Run" ;;
+    o) OUTBASE="${OPTARG%/}"    ; bugout "Archive to $OUTBASE" ;;
     p) PURGE=1                  ; bugout "Purge stat file" ;;
+    r) ISRES=1 ; FIRST_CONF=$OPTARG ; bugout "Resume: $FIRST_CONF" ;;
+    s) CONTSKIP=1               ; bugout "Continue, skipping" ;;
+  d|v) DEBUG=1                  ; bugout "Debug ON" ;;
     -) ONAM="${OPTARG%%=*}" ; OVAL="${OPTARG#*=}"
        case "$ONAM" in
       archive) ARCHIVE=1        ; bugout "Archiving" ;;
