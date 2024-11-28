@@ -53,7 +53,7 @@ EXPNUM=
 NOFAIL=
 OUTBASE=
 BUILDINDEX=1
-while getopts 'ab:c:e:fhin:o:r-:' OFLAG; do
+while getopts 'ab:c:e:fhn:o:r-:' OFLAG; do
   case "${OFLAG}" in
     a) ARCHIVE=1 ;;
     b) BASE="${OPTARG%/}" ;;
