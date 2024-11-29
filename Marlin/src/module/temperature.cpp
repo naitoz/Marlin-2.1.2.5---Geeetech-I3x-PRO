@@ -4431,6 +4431,13 @@ void Temperature::isr() {
   // Poll endstops state, if required
   endstops.poll();
 
+#if ENABLED(CAN_TOOLHEAD)  
+  HAL_StatusTypeDef CAN_Send_Message(bool TempUpdate); // Function Prototype
+  static uint32_t loopCounter = 0;
+  if ((loopCounter++ % 512) == 0) // Update E0 Temp every  512ms
+    CAN_Send_Message(true); // Send temp report with IO report
+#endif // CAN_TOOLHEAD
+
   // Periodically call the planner timer service routine
   planner.isr();
 }

@@ -64,7 +64,7 @@
 #define CAN_STRING_MESSAGE_MASK         32 // Signals the head sent a string message
 #define CAN_REQUEST_SETUP_MASK          64 // Signals the head requests setup information
 #define CAN_TMC_OT_MASK                128 // Signals the head signals a TMC Over Temp error
-#define CAN_E0_TARGET_MASK             256 // Signals E0 or E1
+  #define CAN_REQUEST_TIME_SYNC_MASK   256 // Signals E0 or E1
 #define CAN_ERROR_MASK                 512 // Signals the head encountered an error
 
 #define PARAMETER1_OFFSET                0
@@ -78,6 +78,8 @@
 #define GCODE_TYPE_M                     2
 #define GCODE_TYPE_T                     3
 
+#define GCODE_TIME_SYNC_NO            7777 // Just a unique unused number M7777
+
 extern "C" void CAN1_RX0_IRQHandler(); // Override weak CAN FIFO0 interrupt handler
 extern "C" void CAN1_RX1_IRQHandler(); // Override weak CAN FIFO1 interrupt handler
 extern "C" void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan); // Override weak CAN interrupt callback for FIFO0
@@ -88,7 +90,9 @@ CAN_HandleTypeDef hcan1                = { 0 }; // The CAN1 handle
 CAN_TxHeaderTypeDef TxHeader           = { 0 }; // Header to send a CAN message
 volatile uint32_t CAN_io_state         = 0;     // Virtual IO state variable
 volatile bool CAN_head_error           = 0;     // Register if an error was reported by the head
-volatile bool CAN_head_setup_request   = false; // Signals the head requesting setup information
+volatile bool CAN_head_setup_request   = false; // Signals the head requested setup information
+volatile bool CAN_time_sync_request    = false; // Signals the head requested a time sync
+volatile uint32_t time_sync_request_time = 0;   // Record the time the time sync request was received
 volatile uint32_t gcode_counter        = 0;     // Count amount of gcodes received
 volatile uint32_t HAL_CAN_error_code   = 0;     // Record a host CAN error message
 
@@ -109,6 +113,37 @@ void CAN1_RX1_IRQHandler() { // CAN FIFO1 Interrupt handler overrides standard w
   HAL_CAN_IRQHandler(&hcan1); // Forwarded for callbacks --> HAL_CAN_RxFifo1MsgPendingCallback/HAL_CAN_ErrorCallback
   // OR
   //HAL_CAN_RxFifo1MsgPendingCallback(&hcan1); // Call the required callback directly, faster but no error reporting
+}
+
+// Send sync timestamp
+HAL_StatusTypeDef CAN_Send_Timestamp() // Request receive timestamp + request response timestamp
+{
+  HAL_StatusTypeDef status = HAL_OK;
+  uint32_t TxMailbox;  // Stores which Mailbox (0-2) is used to store the Sent TX message 
+
+  TxHeader.IDE   = CAN_EXTENDED_ID;
+  TxHeader.DLC   = 8; // Send sync time t1(receive time, uint32_t) and t2(response time, uint32_t)
+  TxHeader.StdId = (TxHeader.StdId  ^ STDID_FIFO_BIT);                       // Toggle FIFO bit 10, keep FIFO toggling in sync
+  TxHeader.ExtId = ((TxHeader.ExtId ^ EXTID_FIFO_BIT) & EXTID_FIFO_BIT) +    // Toggle FIFO bit 28
+                   ((TxHeader.DLC >> 2) << PARAMETER_COUNT_OFFSET) +         // Data bytes (4 or 8)
+                   (GCODE_TYPE_M << GCODE_TYPE_OFFSET) +                     // G/M/T/D-code 
+                   ((GCODE_TIME_SYNC_NO & GCODE_NUMBER_MASK) << GCODE_NUMBER_OFFSET) + // Gcode number
+                   ((2 & PARAMETER_MASK) << PARAMETER2_OFFSET) +    // Second parameter
+                   ((1 & PARAMETER_MASK) << PARAMETER1_OFFSET);     // First parameter 
+  uint8_t CAN_tx_buffer[8];            // 8 bytes CAN data TX buffer
+  uint32_t * uint32p = (uint32_t *)CAN_tx_buffer; // Point to TX buffer    
+  *uint32p++ = time_sync_request_time;
+  
+  uint32_t ms = millis(); // Wait until the FIFO is empty
+  while ((HAL_CAN_GetTxMailboxesFreeLevel(&hcan1) < 3) && (millis() - ms < 25)) { } // BLOCKING! Wait max 25ms!
+
+  *uint32p = micros(); // Only record the response time at the last possible moment
+  status = HAL_CAN_AddTxMessage(&hcan1, &TxHeader, CAN_tx_buffer, &TxMailbox); // Send message
+
+  if (status == HAL_OK) // Count sent gcode messages
+    gcode_counter++;
+
+  return status;
 }
 
 // Send specified Gcode with max 2 parameters and 2 values via CAN bus
@@ -169,12 +204,12 @@ HAL_StatusTypeDef CAN_Send_Gcode_2params(uint32_t Gcode_type, uint32_t Gcode_no,
                    ((TxHeader.DLC >> 2) << PARAMETER_COUNT_OFFSET) +         // Data bytes (4 or 8)
                    (Gcode_type << GCODE_TYPE_OFFSET) +                       // G/M/T/D-code
                    ((Gcode_no & GCODE_NUMBER_MASK) << GCODE_NUMBER_OFFSET) + // Gcode number
-                   ((parameter2 & PARAMETER_MASK) << PARAMETER2_OFFSET) +    // First parameter
-                   ((parameter1 & PARAMETER_MASK) << PARAMETER1_OFFSET);     // Second parameter
+                   ((parameter2 & PARAMETER_MASK) << PARAMETER2_OFFSET) +    // Second parameter
+                   ((parameter1 & PARAMETER_MASK) << PARAMETER1_OFFSET);     // First parameter
   uint8_t CAN_tx_buffer[8];            // 8 bytes CAN data TX buffer
   float * fp = (float *)CAN_tx_buffer; // Point to TX buffer
   *fp++ = value1;
-  *fp-- = value2;
+  *fp   = value2;
 
   const uint32_t ms = millis(); // Don't send too fast!
   while ((HAL_CAN_GetTxMailboxesFreeLevel(&hcan1) == 0) && (millis() - ms < 25)) { } // BLOCKING! Wait max 25ms!
@@ -272,27 +307,20 @@ HAL_StatusTypeDef CAN_Send_Setup() { // Send setup to HEAD
   CAN_Send_Gcode_2params('M', 919, 'O', off, 'P' , Hysteresis End);
   CAN_Send_Gcode_2params('M', 919, 'S', Hysteresis Start, 0, 0);
   */
-  #if USE_CONTROLLER_FAN
-    /*
-    CAN_Send_Gcode_2params('M', 710, 'E', 1, 'P', int(controllerFan.settings.probing_auto_fan_speed)); // M710 E<auto fan speed> P<probing fan speed>
-    CAN_Send_Gcode_2params('M', 710, 'E', 2, 'P', int(controllerFan.settings.probing_auto_fan_speed)); // M710 E<auto fan speed> P<probing fan speed>
-    CAN_Send_Gcode_2params('M', 710, 'E', 3, 'P', int(controllerFan.settings.probing_auto_fan_speed)); // M710 E<auto fan speed> P<probing fan speed>
-    CAN_Send_Gcode_2params('M', 710, 'E', 4, 'P', int(controllerFan.settings.probing_auto_fan_speed)); // M710 E<auto fan speed> P<probing fan speed>
-    CAN_Send_Gcode_2params('M', 710, 'E', 5, 'P', int(controllerFan.settings.probing_auto_fan_speed)); // M710 E<auto fan speed> P<probing fan speed>
-    CAN_Send_Gcode_2params('M', 710, 'E', 6, 'P', int(controllerFan.settings.probing_auto_fan_speed)); // M710 E<auto fan speed> P<probing fan speed>
-    CAN_Send_Gcode_2params('M', 710, 'E', 7, 'P', int(controllerFan.settings.probing_auto_fan_speed)); // M710 E<auto fan speed> P<probing fan speed>
-    CAN_Send_Gcode_2params('M', 710, 'E', 8, 'P', int(controllerFan.settings.probing_auto_fan_speed)); // M710 E<auto fan speed> P<probing fan speed>
-    CAN_Send_Gcode_2params('M', 710, 'E', 9, 'P', int(controllerFan.settings.probing_auto_fan_speed)); // M710 E<auto fan speed> P<probing fan speed>
-    CAN_Send_Gcode_2params('M', 710, 'E', 10, 'P', int(controllerFan.settings.probing_auto_fan_speed)); // M710 E<auto fan speed> P<probing fan speed>
-    CAN_Send_Gcode_2params('M', 710, 'E', 11, 'P', int(controllerFan.settings.probing_auto_fan_speed)); // M710 E<auto fan speed> P<probing fan speed>
-    */
-    // IRON, M710 SIGNALS TO THE HEAD THAT THE CAN CONFIGURATION IS COMPLETE, USE IT AS THE LAST GCODE TO SEND
-    return CAN_Send_Gcode_2params('M', 710, 'E', int(controllerFan.settings.extruder_auto_fan_speed), 'P', int(controllerFan.settings.probing_auto_fan_speed)); // M710 E<auto fan speed> P<probing fan speed>
+  #if ENABLED(USE_CONTROLLER_FAN)
+    // M710 SIGNALS TO THE HEAD THAT THE CAN CONFIGURATION IS COMPLETE, USE IT AS THE LAST GCODE TO SEND
+    return CAN_Send_Gcode_2params('M', 710, 'E', controllerFan.settings.extruder_auto_fan_speed, 0, 0); // M710 E<auto fan speed>
   #endif
   return HAL_OK;
 }
 
-void CAN_Idle() { // Tasks that cannot be done in the ISR
+void CAN_idle() { // Tasks that cannot be done in the ISR
+  if (CAN_time_sync_request) {
+    if (CAN_Send_Timestamp() == HAL_OK) {
+      CAN_time_sync_request = false;
+    }
+  }
+
   if (CAN_head_setup_request) // The head requested the setup data
     CAN_Send_Setup();
 
@@ -493,8 +521,8 @@ HAL_StatusTypeDef CAN_Send_Gcode() { // Forward a Marlin Gcode via CAN (uses par
         values[parameter_counter++] = NAN; // Not A Number, indicates no parameter value is present
     }
 
-    if (parameter_counter == 8) { // Max 8 parameters
-      parameter_counter--; // Max is 7 parameters
+    if (parameter_counter == 8) { // Max is 7 parameters
+      parameter_counter--;
       SERIAL_ECHOLNPGM("\nError: TOO MANY PARAMETERS (> 7): ", parser.command_ptr);
       BUZZ(1, SOUND_ERROR);
       break;
@@ -694,7 +722,12 @@ void HAL_CAN_RxFifoMsgPending(CAN_HandleTypeDef *hcan, uint32_t RxFifo) { // ISR
       FirstE0Error = true; // Reset error status
     }
 
-    CAN_head_setup_request = (RxHeader.StdId & CAN_REQUEST_SETUP_MASK) > 0; // FIFO0, head signals request for data
+    if (RxHeader.StdId & CAN_REQUEST_TIME_SYNC_MASK) {; // FIFO0, head signals request for time stamp
+      time_sync_request_time = micros(); // Record the time sync request receive time
+      CAN_time_sync_request = true;
+    }
+
+    CAN_head_setup_request = (RxHeader.StdId & CAN_REQUEST_SETUP_MASK) > 0; // FIFO0, head signals request for setup data
     CAN_head_error = (RxHeader.StdId & CAN_ERROR_MASK) > 0; // FIFO0, head signals an error
   }
 }

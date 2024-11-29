@@ -80,6 +80,9 @@ void GcodeSuite::M306() {
         thermalManager.MPC_autotune(e, tuning_type);
         ui.reset_status();
 
+        #if ENABLED(CAN_TOOLHEAD)
+          M306_report(true); // Report M306 settings to CAN host
+        #endif
       #endif
 
       return;
@@ -125,6 +128,24 @@ void GcodeSuite::M306_report(const bool forReplay/*=true*/) {
     #endif
     SERIAL_ECHOLNPGM(" H", p_float_t(mpc.filament_heat_capacity_permm, 4));
   }
+
+  #if ENABLED(CAN_TOOLHEAD) // Report M306 Autotune results to host
+    if (forReplay) {
+      MPC_t &mpc = thermalManager.temp_hotend[0].mpc;
+      MString<100> buffer(F("M306 E0 P"), p_float_t(mpc.heater_power, 2),
+                                   " C", p_float_t(mpc.block_heat_capacity, 2),
+                                   " R", p_float_t(mpc.sensor_responsiveness, 4),
+                                   " A", p_float_t(mpc.ambient_xfer_coeff_fan0, 4),
+      #if ENABLED(MPC_INCLUDE_FAN)
+                                   " F", p_float_t(mpc.fanCoefficient(), 4),
+      #endif
+                                   " H", p_float_t(mpc.filament_heat_capacity_permm, 4),
+                                   '\n');
+
+      HAL_StatusTypeDef CAN_Send_String(const char * message); // Function Prototype
+      CAN_Send_String(buffer);
+    }
+  #endif // CAN_TOOLHEAD
 }
 
 #endif // MPCTEMP

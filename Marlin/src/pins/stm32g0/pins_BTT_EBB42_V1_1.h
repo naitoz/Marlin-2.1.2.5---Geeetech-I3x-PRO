@@ -147,3 +147,6 @@
   #define BTN_EN2                           PB5
   #define BTN_ENC                           PB6
 #endif
+
+#define CAN_RX                              PB0
+#define CAN_TX                              PB1
