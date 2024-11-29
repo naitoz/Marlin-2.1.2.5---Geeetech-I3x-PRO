@@ -63,6 +63,9 @@
     #endif
     constexpr uint16_t sazp[] = Z_SERVO_ANGLES;
     static_assert(COUNT(sazp) == 2, "Z_SERVO_ANGLES needs 2 angles.");
+  #elif defined(MAG_MOUNTED_PROBE_SERVO_ANGLES)
+    constexpr uint16_t sazp[] = MAG_MOUNTED_PROBE_SERVO_ANGLES;
+    static_assert(COUNT(sazp) == 2, "MAG_MOUNTED_PROBE_SERVO_ANGLES needs 2 angles.");
   #else
     constexpr uint16_t sazp[2] = { 0 };
   #endif
@@ -79,6 +82,9 @@
   #ifndef Z_PROBE_SERVO_NR
     #define Z_PROBE_SERVO_NR -1
   #endif
+  #ifndef MAG_MOUNTED_PROBE_SERVO_NR
+    #define MAG_MOUNTED_PROBE_SERVO_NR -1
+  #endif
 
   #define SASN(J,I) TERN(SWITCHING_NOZZLE_TWO_SERVOS, sasn[J][I], sasn[I])
 
@@ -88,6 +94,7 @@
                                        : N == SWITCHING_NOZZLE_SERVO_NR       ? SASN(0,I)   \
     TERN_(SWITCHING_NOZZLE_TWO_SERVOS, : N == SWITCHING_NOZZLE_E1_SERVO_NR    ? SASN(1,I))  \
                                        : N == Z_PROBE_SERVO_NR                ? sazp[I]     \
+                                       : N == MAG_MOUNTED_PROBE_SERVO_NR      ? sazp[I]     \
                                        : 0                                                  )
 
   #if ENABLED(EDITABLE_SERVO_ANGLES)
