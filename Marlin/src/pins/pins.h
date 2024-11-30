@@ -562,7 +562,7 @@
 //
 
 #elif MB(BTT_EBB42_V1_1)
-  #include "stm32g0/pins_BTT_EBB42_V1_1.h"          // STM32G0                              env:BTT_EBB42_V1_1_filament_extruder env:BTT_EBB42_V1_1_FDCAN
+  #include "stm32g0/pins_BTT_EBB42_V1_1.h"          // STM32G0                              env:BTT_EBB42_V1_1_FDCAN env:BTT_EBB42_V1_1_filament_extruder
 #elif MB(BTT_SKR_MINI_E3_V3_0)
   #include "stm32g0/pins_BTT_SKR_MINI_E3_V3_0.h"    // STM32G0                              env:STM32G0B1RE_btt env:STM32G0B1RE_btt_xfer
 #elif MB(BTT_MANTA_E3_EZ_V1_0)
