@@ -222,6 +222,12 @@
 // :[0, 1, 2, 3, 4, 5, 6, 7, 8]
 #define EXTRUDERS 1
 
+//// Beginning of a Differential Extruder block  1/6  ////
+// This is defined when a differential extruder is present.
+// Currently applicable to Cartesian / RepRap only!
+#define DIFFERENTIAL_EXTRUDER
+//// End of a Differential Extruder block  1/6  ////
+
 // Generally expected filament diameter (1.75, 2.85, 3.0, ...). Used for Volumetric, Filament Width Sensor, etc.
 #define DEFAULT_NOMINAL_FILAMENT_DIA 1.75
 
