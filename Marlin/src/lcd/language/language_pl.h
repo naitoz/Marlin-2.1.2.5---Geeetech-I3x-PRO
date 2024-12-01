@@ -134,8 +134,8 @@ namespace LanguageNarrow_pl {
   LSTR MSG_IDEX_MODE_DUPLICATE            = _UxGT("Duplikowanie");
   LSTR MSG_IDEX_MODE_MIRRORED_COPY        = _UxGT("Kopia lustrzana");
   LSTR MSG_IDEX_MODE_FULL_CTRL            = _UxGT("Pełne sterowanie");
-  LSTR MSG_HOTEND_OFFSET_Z                = _UxGT("2ga dysza Z");
-  LSTR MSG_HOTEND_OFFSET_N                = _UxGT("2ga dysza @");
+  LSTR MSG_TOOL_OFFSET_Z                  = _UxGT("2ga dysza Z");
+  LSTR MSG_TOOL_OFFSET_N                  = _UxGT("2ga dysza @");
   LSTR MSG_UBL_DOING_G29                  = _UxGT("Wykonywanie G29");
   LSTR MSG_UBL_TOOLS                      = _UxGT("Narzędzia UBL");
   LSTR MSG_LCD_TILTING_MESH               = _UxGT("Punkt pochylenia");
