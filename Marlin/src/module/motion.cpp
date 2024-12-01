@@ -122,17 +122,17 @@ xyze_pos_t destination; // {0}
   float e_move_accumulator; // = 0
 #endif
 
-// Extruder offsets
+// Tool offsets
 #if HAS_TOOL_OFFSETS
-  xyz_pos_t tool_offset[NUM_TOOLS]; // Initialized by settings.load()
+  xyz_pos_t tool_offset[NUM_TOOLS]; // Initialized by settings.load
   void reset_tool_offsets() {
     constexpr float tmp[XYZ][NUM_TOOLS] = { HOTEND_OFFSET_X, HOTEND_OFFSET_Y, HOTEND_OFFSET_Z };
     static_assert(
       !tmp[X_AXIS][0] && !tmp[Y_AXIS][0] && !tmp[Z_AXIS][0],
-      "Offsets for the first hotend must be 0.0."
+      "Offsets for the first tool must be 0.0."
     );
 
-    // Transpose from [XYZ][HOTENDS] to [HOTENDS][XYZ]
+    // Transpose from [XYZ][TOOL] to [TOOL][XYZ]
     TERN(MANUAL_SWITCHING_TOOLHEAD, TOOLHEAD_LOOP(), HOTEND_LOOP())
       LOOP_ABC(a) tool_offset[e][a] = tmp[a][e];
 
@@ -149,6 +149,9 @@ xyze_pos_t destination; // {0}
 #endif
 feedRate_t feedrate_mm_s = MMM_TO_MMS(DEFAULT_FEEDRATE_MM_M);
 int16_t feedrate_percentage = 100;
+#if ENABLED(EDITABLE_HOMING_FEEDRATE)
+  xyz_feedrate_t homing_feedrate_mm_m = HOMING_FEEDRATE_MM_M;
+#endif
 
 // Cartesian conversion result goes here:
 xyz_pos_t cartes;
@@ -1519,7 +1522,7 @@ void restore_feedrate_and_scaling() {
       if (TERN0(DELTA, !all_axes_homed())) return;
 
       #if ALL(HAS_TOOL_OFFSETS, DELTA)
-        // The effector center position will be the target minus the hotend offset.
+        // The effector center position will be the target minus the tool offset.
         const xy_pos_t offs = tool_offset[active_extruder];
       #elif ENABLED(POLARGRAPH)
         // POLARGRAPH uses draw_area_* below...
@@ -2687,8 +2690,12 @@ void prepare_line_to_destination() {
     //
     // Homing Z with a probe? Raise Z (maybe) and deploy the Z probe.
     //
-    if (TERN0(HOMING_Z_WITH_PROBE, axis == Z_AXIS && probe.deploy()))
-      return;
+    #if HOMING_Z_WITH_PROBE
+      if (axis == Z_AXIS && probe.deploy()) {
+        probe.stow();
+        return;
+      }
+    #endif
 
     // Set flags for X, Y, Z motor locking
     #if HAS_EXTRA_ENDSTOPS
@@ -2706,8 +2713,16 @@ void prepare_line_to_destination() {
     //
     #if HOMING_Z_WITH_PROBE
       if (axis == Z_AXIS) {
-        if (TERN0(BLTOUCH, bltouch.deploy())) return;   // BLTouch was deployed above, but get the alarm state.
-        if (TERN0(PROBE_TARE, probe.tare())) return;
+        #if ENABLED(BLTOUCH)
+          if (bltouch.deploy()) {  // BLTouch was deployed above, but get the alarm state.
+            bltouch.stow();
+            return;
+          }
+        #endif
+        if (TERN0(PROBE_TARE, probe.tare())) {
+          probe.stow();
+          return;
+        }
         TERN_(BD_SENSOR, bdl.config_state = BDS_HOMING_Z);
       }
     #endif
@@ -2789,8 +2804,10 @@ void prepare_line_to_destination() {
       #endif // DETECT_BROKEN_ENDSTOP
 
       #if ALL(HOMING_Z_WITH_PROBE, BLTOUCH)
-        if (axis == Z_AXIS && !bltouch.high_speed_mode && bltouch.deploy())
+        if (axis == Z_AXIS && !bltouch.high_speed_mode && bltouch.deploy()) {
+          bltouch.stow();
           return; // Intermediate DEPLOY (in LOW SPEED MODE)
+        }
       #endif
 
       // Slow move towards endstop until triggered
