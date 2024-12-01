@@ -189,8 +189,8 @@ namespace LanguageNarrow_sk {
   LSTR MSG_IDEX_MODE_MIRRORED_COPY        = _UxGT("Zrkadlená kópia");
   LSTR MSG_IDEX_MODE_FULL_CTRL            = _UxGT("Plná kontrola");
   LSTR MSG_IDEX_DUPE_GAP                  = _UxGT("Duplik. medz.-X");
-  LSTR MSG_HOTEND_OFFSET_Z                = _UxGT("2. tryska Z");
-  LSTR MSG_HOTEND_OFFSET_N                = _UxGT("2. tryska @");
+  LSTR MSG_TOOL_OFFSET_Z                  = _UxGT("2. tryska Z");
+  LSTR MSG_TOOL_OFFSET_N                  = _UxGT("2. tryska @");
   LSTR MSG_UBL_DOING_G29                  = _UxGT("Vykonávam G29");
   LSTR MSG_UBL_TOOLS                      = _UxGT("Nástroje UBL");
   LSTR MSG_LCD_TILTING_MESH               = _UxGT("Vyrovnávam bod");
