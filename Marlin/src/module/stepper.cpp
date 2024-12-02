@@ -267,7 +267,7 @@ uint32_t Stepper::advance_divisor = 0,
     float Stepper::a_max;
     float Stepper::xy_to_e_steps;
   #endif
-#endif
+#endif // LIN_ADVANCE
 
 #if ENABLED(NONLINEAR_EXTRUSION)
   ne_coeff_t Stepper::ne;
@@ -1525,6 +1525,7 @@ void Stepper::isr() {
   #if ENABLED(LA_ZERO_SLOWDOWN)
     static hal_timer_t zeroSlowdonISR = 0;
   #endif
+
   #ifndef __AVR__
     // Disable interrupts, to avoid ISR preemption while we reprogram the period
     // (AVR enters the ISR with global interrupts disabled, so no need to do it here)
@@ -2010,26 +2011,19 @@ void Stepper::pulse_phase_isr() {
       #endif
 
       #if ANY(HAS_E0_STEP, MIXING_EXTRUDER)
+
         PULSE_PREP(E);
 
         #if ENABLED(LIN_ADVANCE)
-          #if ENABLED(LA_ZERO_SLOWDOWN)
-            if (step_needed.e) {
-              // don't actually step here, but do subtract movements steps
-              // from the linear advance step count
-              step_needed.e = false;
-              la_advance_steps--;
-            }
-          #else
-            if (la_active && step_needed.e) {
-              // don't actually step here, but do subtract movements steps
-              // from the linear advance step count
-              step_needed.e = false;
-              la_advance_steps--;
-            }
-          #endif
+          if (TERN1(HAS_LA_WITH_SLOWDOWN, la_active) && step_needed.e) {
+            // Don't actually step here, but do subtract movements steps
+            // from the linear advance step count
+            step_needed.e = false;
+            la_advance_steps--;
+          }
         #endif
-      #endif
+
+      #endif // HAS_E0_STEP || MIXING_EXTRUDER
 
       #if HAS_ZV_SHAPING
         // record an echo if a step is needed in the primary bresenham
@@ -2785,28 +2779,21 @@ hal_timer_t Stepper::block_phase_isr() {
 
       // Initialize the trapezoid generator from the current block.
       #if ENABLED(LIN_ADVANCE)
+
         la_active = (current_block->la_advance_rate != 0);
+
         #if DISABLED(MIXING_EXTRUDER) && E_STEPPERS > 1
           // If the now active extruder wasn't in use during the last move, its pressure is most likely gone.
           if (stepper_extruder != last_moved_extruder) la_advance_steps = 0;
         #endif
-        #if ENABLED(LA_ZERO_SLOWDOWN)
-          // Apply LA scaling and discount the effect of frequency scaling
-          if (current_block->steps.e) {
-            la_dividend = (advance_dividend.e << current_block->la_scaling) << oversampling_factor;
-          }
-          else {
-            // travel move
-            la_dividend = (current_block->step_event_count  << current_block->la_scaling) << oversampling_factor;
-          }
-        #else
-          if (la_active) {
-            // Apply LA scaling and discount the effect of frequency scaling
-            la_dividend = (advance_dividend.e << current_block->la_scaling) << oversampling_factor;
-          }
-        #endif
 
-      #endif
+        if (TERN1(HAS_LA_WITH_SLOWDOWN, la_active)) {
+          const bool use_advance_dividend = TERN1(LA_ZERO_SLOWDOWN, bool(current_block->steps.e))
+          const int32_t steps = use_advance_dividend ? advance_dividend.e : current_block->step_event_count;
+          la_dividend = (steps << current_block->la_scaling) << oversampling_factor;
+        }
+
+      #endif // LIN_ADVANCE
 
       if ( ENABLED(DUAL_X_CARRIAGE) // TODO: Find out why this fixes "jittery" small circles
         || current_block->direction_bits != last_direction_bits
@@ -2881,43 +2868,44 @@ hal_timer_t Stepper::block_phase_isr() {
       #if ENABLED(NONLINEAR_EXTRUSION)
         calc_nonlinear_e(current_block->initial_rate << oversampling_factor);
       #endif
-      #if ENABLED(LIN_ADVANCE)
-        #if ENABLED(LA_ZERO_SLOWDOWN)
-          /*
-            1. [x] compensate for jerk and line width changes
-            2. [x] keep computations in movement step scale
-            3. [ ] precompute a_max in movement step scale and inter block correction factors in the planner
-            4. [ ] use int arithmetic
-          */
-          if (current_block->step_event_count != 0) {
-            curr_step_rate = current_block->initial_rate;
-            float old_xy_to_e_steps = xy_to_e_steps;
-            if (current_block->steps.e) {
-              xy_to_e_steps = float(current_block->steps.e) / float(current_block->step_event_count);
-            }
-            else {
-              // travel move.
-              xy_to_e_steps = 1;
-            }
-            /*
-              Due to jerk, the exit speed of one block doesn't exactly match the entry speed of the next one.
-              Also, changes of line width between blocks result in different motion to e rations.
-              la_step variables are scaled to compensate for that.
-            */
-            current_la_step_count = current_la_step_count * old_xy_to_e_steps / xy_to_e_steps;
-            current_la_step_rate = current_la_step_rate * old_xy_to_e_steps / xy_to_e_steps;
-            a_max = float(planner.max_acceleration_steps_per_s2[E_AXIS + E_INDEX_N(extruder)]) / xy_to_e_steps;
+
+      #if ENABLED(LA_ZERO_SLOWDOWN)
+        /**
+         * 1. [x] compensate for jerk and line width changes
+         * 2. [x] keep computations in movement step scale
+         * 3. [ ] precompute a_max in movement step scale and inter block correction factors in the planner
+         * 4. [ ] use int arithmetic
+         */
+        if (current_block->step_event_count != 0) {
+          curr_step_rate = current_block->initial_rate;
+          const float old_xy_to_e_steps = xy_to_e_steps;
+          if (current_block->steps.e) {
+            xy_to_e_steps = float(current_block->steps.e) / float(current_block->step_event_count);
           }
           else {
-            // not sure if this case exists, probably not
-            a_max = 0;
+            // travel move
+            xy_to_e_steps = 1.0f;
           }
-        #else
-          if (la_active) {
-            const uint32_t la_step_rate = la_advance_steps < current_block->max_adv_steps ? current_block->la_advance_rate : 0;
-            la_interval = calc_timer_interval((current_block->initial_rate + la_step_rate) >> current_block->la_scaling);
-          }
-        #endif
+
+          /**
+           * Due to jerk, the exit speed of one block doesn't exactly match the entry speed of the next one.
+           * Also, changes of line width between blocks result in different motion to e rations.
+           * la_step variables are scaled to compensate for that.
+           */
+          const float xy_to_e_steps_ratio = old_xy_to_e_steps / xy_to_e_steps;
+          current_la_step_count = current_la_step_count * xy_to_e_steps_ratio;
+          current_la_step_rate = current_la_step_rate * xy_to_e_steps_ratio;
+          a_max = float(planner.max_acceleration_steps_per_s2[E_AXIS + E_INDEX_N(extruder)]) / xy_to_e_steps;
+        }
+        else {
+          // not sure if this case exists, probably not
+          a_max = 0;
+        }
+      #elif HAS_LA_WITH_SLOWDOWN
+        if (la_active) {
+          const uint32_t la_step_rate = la_advance_steps < current_block->max_adv_steps ? current_block->la_advance_rate : 0;
+          la_interval = calc_timer_interval((current_block->initial_rate + la_step_rate) >> current_block->la_scaling);
+        }
       #endif
     }
   } // !current_block
