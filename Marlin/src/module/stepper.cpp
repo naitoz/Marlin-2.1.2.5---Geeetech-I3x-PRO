@@ -108,6 +108,8 @@ Stepper stepper; // Singleton
 #include "../MarlinCore.h"
 #include "../HAL/shared/Delay.h"
 
+#include "printcounter.h" // Just to make sure it's included for the Differential Extruder
+
 #if ENABLED(BD_SENSOR)
   #include "../feature/bedlevel/bdl/bdl.h"
 #endif
