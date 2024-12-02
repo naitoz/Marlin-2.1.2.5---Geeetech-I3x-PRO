@@ -2789,7 +2789,7 @@ hal_timer_t Stepper::block_phase_isr() {
 
         if (TERN1(HAS_LA_WITH_SLOWDOWN, la_active)) {
           // Apply LA scaling and discount the effect of frequency scaling
-          const bool use_advance_dividend = TERN1(LA_ZERO_SLOWDOWN, bool(current_block->steps.e))
+          const bool use_advance_dividend = TERN1(LA_ZERO_SLOWDOWN, bool(current_block->steps.e));
           const int32_t steps = use_advance_dividend ? advance_dividend.e : current_block->step_event_count;
           la_dividend = (steps << current_block->la_scaling) << oversampling_factor;
         }
