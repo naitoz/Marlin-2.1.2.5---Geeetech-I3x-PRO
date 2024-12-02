@@ -513,7 +513,7 @@ class Stepper {
       static void advance_isr();
       #if ENABLED(LA_ZERO_SLOWDOWN)
         static hal_timer_t zero_slowdown_isr();
-      #endif 
+      #endif
     #endif
 
     #if ENABLED(BABYSTEPPING)

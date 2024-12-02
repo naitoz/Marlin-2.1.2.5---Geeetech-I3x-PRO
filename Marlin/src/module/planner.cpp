@@ -2455,19 +2455,22 @@ bool Planner::_populate_block(
         if (block->la_advance_rate >> block->la_scaling > 10000)
           SERIAL_ECHOLNPGM("eISR running at > 10kHz: ", block->la_advance_rate);
       #endif
-    } 
-    #if ENABLED(LA_ZERO_SLOWDOWN)
-      else if (block->steps.e){
-        // Retraction/deretraction are still managed by the zero_slowdown_isr, because the current_la_rate may not be zero when they start
-        for (uint32_t dividend = block->steps.e << 1; dividend <= (block->step_event_count >> 2); dividend <<= 1)
-          block->la_scaling++;
-      } else if (block->step_event_count){
-        // Travel move
-        // dividend = block->step_event_count
-        // block->la_scaling = 0
-      }
-    #endif
-  #endif
+    }
+    else {
+      #if ENABLED(LA_ZERO_SLOWDOWN)
+        if (block->steps.e) {
+          // Retraction/deretraction are still managed by the zero_slowdown_isr, because the current_la_rate may not be zero when they start
+          for (uint32_t dividend = block->steps.e << 1; dividend <= (block->step_event_count >> 2); dividend <<= 1)
+            block->la_scaling++;
+        }
+        else if (block->step_event_count) {
+          // Travel move
+          //dividend = block->step_event_count
+          //block->la_scaling = 0
+        }
+      #endif
+    }
+  #endif // LIN_ADVANCE
 
   // Formula for the average speed over a 1 step worth of distance if starting from zero and
   // accelerating at the current limit. Since we can only change the speed every step this is a
@@ -2694,7 +2697,7 @@ bool Planner::_populate_block(
       }
     #endif
 
-    // In the LA_ZERO_SLOWDOWN case, the extra jerk will be applied by the residual curent_la_step_rate. 
+    // In the LA_ZERO_SLOWDOWN case, the extra jerk will be applied by the residual curent_la_step_rate.
     #if ENABLED(LIN_ADVANCE) && DISABLED(LA_ZERO_SLOWDOWN)
       // Advance affects E_AXIS speed and therefore jerk. Add a speed correction whenever
       // LA is turned OFF. No correction is applied when LA is turned ON (because it didn't

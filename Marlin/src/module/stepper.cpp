@@ -1602,8 +1602,9 @@ void Stepper::isr() {
       // ^== Time critical. NOTHING besides pulse generation should be above here!!!
 
       if (!nextMainISR) nextMainISR = block_phase_isr();  // Manage acc/deceleration, get next block
+
       #if ENABLED(LA_ZERO_SLOWDOWN)
-        if (!zeroSlowdonISR) zeroSlowdonISR = zero_slowdown_isr();  // Manage la
+        if (!zeroSlowdonISR) zeroSlowdonISR = zero_slowdown_isr();  // Manage LA
       #endif
 
       #if ENABLED(BABYSTEPPING)
@@ -2014,7 +2015,7 @@ void Stepper::pulse_phase_isr() {
       #if ANY(HAS_E0_STEP, MIXING_EXTRUDER)
         PULSE_PREP(E);
 
-        #if ENABLED(LIN_ADVANCE) 
+        #if ENABLED(LIN_ADVANCE)
           #if ENABLED(LA_ZERO_SLOWDOWN)
             if (step_needed.e) {
               // don't actually step here, but do subtract movements steps
@@ -2796,7 +2797,8 @@ hal_timer_t Stepper::block_phase_isr() {
           // Apply LA scaling and discount the effect of frequency scaling
           if (current_block->steps.e) {
             la_dividend = (advance_dividend.e << current_block->la_scaling) << oversampling_factor;
-          } else {
+          }
+          else {
             // travel move
             la_dividend = (current_block->step_event_count  << current_block->la_scaling) << oversampling_factor;
           }
@@ -2893,9 +2895,10 @@ hal_timer_t Stepper::block_phase_isr() {
           if (current_block->step_event_count != 0) {
             curr_step_rate = current_block->initial_rate;
             float old_xy_to_e_steps = xy_to_e_steps;
-            if (current_block->steps.e){
+            if (current_block->steps.e) {
               xy_to_e_steps = float(current_block->steps.e) / float(current_block->step_event_count);
-            } else {
+            }
+            else {
               // travel move.
               xy_to_e_steps = 1;
             }
@@ -2907,7 +2910,8 @@ hal_timer_t Stepper::block_phase_isr() {
             current_la_step_count = current_la_step_count * old_xy_to_e_steps / xy_to_e_steps;
             current_la_step_rate = current_la_step_rate * old_xy_to_e_steps / xy_to_e_steps;
             a_max = float(planner.max_acceleration_steps_per_s2[E_AXIS + E_INDEX_N(extruder)]) / xy_to_e_steps;
-          } else {
+          }
+          else {
             // not sure if this case exists, probably not
             a_max = 0;
           }
@@ -2926,23 +2930,23 @@ hal_timer_t Stepper::block_phase_isr() {
 }
 
 #if ENABLED(LIN_ADVANCE)
+
   #if ENABLED(LA_ZERO_SLOWDOWN)
-    void Stepper::set_la_interval(int32_t rate){
-      if (rate == 0) {
-        la_interval = LA_ADV_NEVER;
-      } else {
-        const bool forward_e = rate > 0;
-        la_interval = calc_timer_interval(uint32_t(ABS(rate)) >> current_block->la_scaling);
-        if (forward_e != motor_direction(E_AXIS)) {
-          last_direction_bits.toggle(E_AXIS);
-          count_direction.e = -count_direction.e;
-          DIR_WAIT_BEFORE();
-          E_APPLY_DIR(forward_e, false);
-          TERN_(FTM_OPTIMIZE_DIR_STATES, last_set_direction = last_direction_bits);
-          DIR_WAIT_AFTER();
-        }
-      }
+    void Stepper::set_la_interval(int32_t rate) {
+      if (rate == 0) { la_interval = LA_ADV_NEVER; return; }
+
+      const bool forward_e = rate > 0;
+      la_interval = calc_timer_interval(uint32_t(ABS(rate)) >> current_block->la_scaling);
+      if (forward_e == motor_direction(E_AXIS)) return;
+
+      last_direction_bits.toggle(E_AXIS);
+      count_direction.e = -count_direction.e;
+      DIR_WAIT_BEFORE();
+      E_APPLY_DIR(forward_e, false);
+      TERN_(FTM_OPTIMIZE_DIR_STATES, last_set_direction = last_direction_bits);
+      DIR_WAIT_AFTER();
     }
+
     hal_timer_t Stepper::zero_slowdown_isr() {
       /*
       1. [x] move to separate isr
@@ -2955,27 +2959,29 @@ hal_timer_t Stepper::block_phase_isr() {
       #define UPDATE_FREQ 4096 // hz
       constexpr uint32_t interval = STEPPER_TIMER_RATE / UPDATE_FREQ;
       constexpr float dt = float(interval) / float(STEPPER_TIMER_RATE);
-      constexpr float dt_inv = UPDATE_FREQ; 
-      if (current_block){
+      constexpr float dt_inv = UPDATE_FREQ;
+      if (current_block) {
         float target_la_step_count;
         if (la_active) {
           const float k = Planner::extruder_advance_K[E_INDEX_N(current_block->extruder)];
           target_la_step_count = curr_step_rate * k;
-        } else {
-          target_la_step_count = 0; // (de)retration may start with non-zero current_la_step_rate and/or count. This needs to be gradually compensated for
         }
-        const float distance_to_target = target_la_step_count - current_la_step_count;
-        const float one_shot_v = distance_to_target * dt_inv;
+        else
+          target_la_step_count = 0; // (de)retration may start with non-zero current_la_step_rate and/or count. This needs to be gradually compensated for
+
+        const float distance_to_target = target_la_step_count - current_la_step_count,
+                    one_shot_v = distance_to_target * dt_inv;
         float a = ABS(one_shot_v - current_la_step_rate) * dt_inv;
         NOMORE(a, a_max);
-        
+
         float stopping_distance = current_la_step_rate * current_la_step_rate / (2 * a_max);
-        
+
         bool fwd;
-        if (ABS(distance_to_target) <= stopping_distance){
+        if (ABS(distance_to_target) <= stopping_distance) {
           // If we're within stopping distance, decelerate
           fwd = current_la_step_rate < 0;
-        } else {
+        }
+        else {
           // Otherwise, accelerate towards the target
           fwd = distance_to_target > 0;
         }
@@ -2984,17 +2990,19 @@ hal_timer_t Stepper::block_phase_isr() {
         current_la_step_count += current_la_step_rate * dt;
         if (la_active) {
           set_la_interval((int32_t)curr_step_rate + current_la_step_rate);
-        } else if (current_block->steps.e){
-          // this is the (de)retraction case, for which we still need to gradually undo the current_la_step_count
-          set_la_interval((int32_t)curr_step_rate * (current_block->direction_bits.e ? 1 : -1) + current_la_step_rate);
-        } else {
-          // this is the travel case, wehere we need to slow down the extruder
+        }
+        else if (current_block->steps.e) {
+          // (De)retraction case, where we still need to gradually undo the current_la_step_count
+          set_la_interval(int32_t(current_block->direction_bits.e ? curr_step_rate : -curr_step_rate) + current_la_step_rate);
+        }
+        else {
+          // Travel case, where we need to slow down the extruder
           set_la_interval(current_la_step_rate);
         }
       }
       return interval;
     }
-  #endif
+  #endif // LA_ZERO_SLOWDOWN
 
   // Timer interrupt for E. LA_steps is set in the main routine
   void Stepper::advance_isr() {
