@@ -293,7 +293,7 @@ namespace ExtUI {
     return GET_TEMP_ADJUSTMENT(thermalManager.degHotend(extruder - E0));
   }
 
-  celsius_float_t getTargetTemp_celsius(const heater_t heater) {
+  celsius_t getTargetTemp_celsius(const heater_t heater) {
     switch (heater) {
       #if HAS_HEATED_BED
         case BED: return GET_TEMP_ADJUSTMENT(thermalManager.degTargetBed());
@@ -305,19 +305,19 @@ namespace ExtUI {
     }
   }
 
-  celsius_float_t getTargetTemp_celsius(const extruder_t extruder) {
+  celsius_t getTargetTemp_celsius(const extruder_t extruder) {
     return GET_TEMP_ADJUSTMENT(thermalManager.degTargetHotend(extruder - E0));
   }
 
   //
   // Fan target/actual speed
   //
-  float getTargetFan_percent(const fan_t fan) {
+  uint8_t getTargetFan_percent(const fan_t fan) {
     UNUSED(fan);
     return TERN0(HAS_FAN, thermalManager.fanSpeedPercent(fan - FAN0));
   }
 
-  float getActualFan_percent(const fan_t fan) {
+  uint8_t getActualFan_percent(const fan_t fan) {
     UNUSED(fan);
     return TERN0(HAS_FAN, thermalManager.scaledFanSpeedPercent(fan - FAN0));
   }
@@ -1070,7 +1070,7 @@ namespace ExtUI {
   void injectCommands_P(PGM_P const gcode) { queue.inject_P(gcode); }
   void injectCommands(char * const gcode)  { queue.inject(gcode); }
 
-  bool commandsInQueue() { return (planner.movesplanned() || queue.has_commands_queued()); }
+  bool commandsInQueue() { return (planner.has_blocks_queued() || queue.has_commands_queued()); }
 
   bool isAxisPositionKnown(const axis_t axis) { return axis_is_trusted((AxisEnum)axis); }
   bool isAxisPositionKnown(const extruder_t) { return axis_is_trusted(E_AXIS); }
@@ -1178,10 +1178,10 @@ namespace ExtUI {
   }
 
   bool isPrintingFromMediaPaused() {
-    return TERN0(HAS_MEDIA, IS_SD_PAUSED());
+    return IS_SD_PAUSED();
   }
 
-  bool isPrintingFromMedia() { return TERN0(HAS_MEDIA, IS_SD_PRINTING() || IS_SD_PAUSED()); }
+  bool isPrintingFromMedia() { return IS_SD_PRINTING() || IS_SD_PAUSED(); }
 
   bool isPrinting() {
     return commandsInQueue() || isPrintingFromMedia() || printJobOngoing() || printingIsPaused();
