@@ -2478,7 +2478,7 @@ hal_timer_t Stepper::block_phase_isr() {
           calc_nonlinear_e(acc_step_rate << oversampling_factor);
         #endif
 
-        #if ENABLED(LIN_ADVANCE) && DISABLED(LA_ZERO_SLOWDOWN)
+        #if HAS_LA_WITH_SLOWDOWN
           if (la_active) {
             const uint32_t la_step_rate = la_advance_steps < current_block->max_adv_steps ? current_block->la_advance_rate : 0;
             la_interval = calc_timer_interval((acc_step_rate + la_step_rate) >> current_block->la_scaling);
@@ -2544,7 +2544,7 @@ hal_timer_t Stepper::block_phase_isr() {
           calc_nonlinear_e(step_rate << oversampling_factor);
         #endif
 
-        #if ENABLED(LIN_ADVANCE) && DISABLED(LA_ZERO_SLOWDOWN)
+        #if HAS_LA_WITH_SLOWDOWN
           if (la_active) {
             const uint32_t la_step_rate = la_advance_steps > current_block->final_adv_steps ? current_block->la_advance_rate : 0;
             if (la_step_rate != step_rate) {
@@ -2567,7 +2567,7 @@ hal_timer_t Stepper::block_phase_isr() {
             else
               la_interval = LA_ADV_NEVER;
           }
-        #endif // LIN_ADVANCE
+        #endif // HAS_LA_WITH_SLOWDOWN
 
         // Adjust Laser Power - Decelerating
         #if ENABLED(LASER_POWER_TRAP)
@@ -2599,7 +2599,7 @@ hal_timer_t Stepper::block_phase_isr() {
             calc_nonlinear_e(current_block->nominal_rate << oversampling_factor);
           #endif
 
-          #if ENABLED(LIN_ADVANCE) && DISABLED(LA_ZERO_SLOWDOWN)
+          #if HAS_LA_WITH_SLOWDOWN
             if (la_active)
               la_interval = calc_timer_interval(current_block->nominal_rate >> current_block->la_scaling);
           #endif

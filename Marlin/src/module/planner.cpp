@@ -863,7 +863,7 @@ void Planner::calculate_trapezoid_for_block(block_t * const block, const_float_t
   #endif
   block->final_rate = final_rate;
 
-  #if ENABLED(LIN_ADVANCE) && DISABLED(LA_ZERO_SLOWDOWN)
+  #if HAS_LA_WITH_SLOWDOWN
     if (block->la_advance_rate) {
       const float comp = extruder_advance_K[E_INDEX_N(block->extruder)] * block->steps.e / block->step_event_count;
       block->max_adv_steps = cruise_rate * comp;
@@ -2407,7 +2407,7 @@ bool Planner::_populate_block(
         if (e_D_ratio > 3.0f)
           use_advance_lead = false;
         else {
-          #if DISABLED(LA_ZERO_SLOWDOWN)
+          #if HAS_LA_WITH_SLOWDOWN
             // Scale E acceleration so that it will be possible to jump to the advance speed.
             const uint32_t max_accel_steps_per_s2 = MAX_E_JERK(extruder) / (extruder_advance_K[E_INDEX_N(extruder)] * e_D_ratio) * steps_per_mm;
             if (accel > max_accel_steps_per_s2) {
@@ -2417,7 +2417,7 @@ bool Planner::_populate_block(
           #endif
         }
       }
-    #endif
+    #endif // LIN_ADVANCE
 
     // Limit acceleration per axis
     if (block->step_event_count <= acceleration_long_cutoff) {
@@ -2703,22 +2703,26 @@ bool Planner::_populate_block(
     #endif
 
     // In the LA_ZERO_SLOWDOWN case, the extra jerk will be applied by the residual curent_la_step_rate.
-    #if ENABLED(LIN_ADVANCE) && DISABLED(LA_ZERO_SLOWDOWN)
-      // Advance affects E_AXIS speed and therefore jerk. Add a speed correction whenever
-      // LA is turned OFF. No correction is applied when LA is turned ON (because it didn't
-      // perform well; it takes more time/effort to push/melt filament than the reverse).
+    #if HAS_LA_WITH_SLOWDOWN
+      /**
+       * Advance affects E_AXIS speed and therefore jerk. Add a speed correction whenever
+       * LA is turned OFF. No correction is applied when LA is turned ON (because it didn't
+       * perform well; it takes more time/effort to push/melt filament than the reverse).
+       */
       static uint32_t previous_advance_rate;
       static float previous_e_mm_per_step;
       if (dist.e < 0 && previous_advance_rate) {
-        // Retract move after a segment with LA that ended with an E speed decrease.
-        // Correct for this to allow a faster junction speed. Since the decrease always helps to
-        // get E to nominal retract speed, the equation simplifies to an increase in max jerk.
+        /**
+         * Retract move after a segment with LA that ended with an E speed decrease.
+         * Correct for this to allow a faster junction speed. Since the decrease always helps to
+         * get E to nominal retract speed, the equation simplifies to an increase in max jerk.
+         */
         max_j.e += previous_advance_rate * previous_e_mm_per_step;
       }
       // Prepare for next segment.
       previous_advance_rate = block->la_advance_rate;
       previous_e_mm_per_step = mm_per_step[E_AXIS_N(extruder)];
-    #endif
+    #endif // HAS_LA_WITH_SLOWDOWN
 
     xyze_float_t speed_diff = current_speed;
     float vmax_junction;
