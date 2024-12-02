@@ -2933,14 +2933,14 @@ hal_timer_t Stepper::block_phase_isr() {
   }
 
   hal_timer_t Stepper::zero_slowdown_isr() {
-    /*
-    1. [x] move to separate isr
-    2. [x] keep computations in movement step scale
-    3. [ ] precompute a_max in movement step scale and inter block correction factors in the planner
-    4. [ ] either use precomputed dt values or make update interval depend on la acceleration rate
-    5. [ ] optimise intermediate computations (e.g avoid dividing by dt to then multiply the variable by dt)
-    6. [ ] use int arithmetic (e.g bitshift instead of division/mult, fixed point, etc)
-    */
+    /**
+     * 1. [x] move to separate isr
+     * 2. [x] keep computations in movement step scale
+     * 3. [ ] precompute a_max in movement step scale and inter block correction factors in the planner
+     * 4. [ ] either use precomputed dt values or make update interval depend on la acceleration rate
+     * 5. [ ] optimise intermediate computations (e.g avoid dividing by dt to then multiply the variable by dt)
+     * 6. [ ] use int arithmetic (e.g bitshift instead of division/mult, fixed point, etc)
+     */
     #define UPDATE_FREQ 4096 // hz
     constexpr uint32_t interval = STEPPER_TIMER_RATE / UPDATE_FREQ;
     constexpr float dt = float(interval) / float(STEPPER_TIMER_RATE);
