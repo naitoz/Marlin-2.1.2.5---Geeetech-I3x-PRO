@@ -440,12 +440,12 @@ class Stepper {
                          la_advance_steps; // Count of steps added to increase nozzle pressure
       static bool        la_active;        // Whether linear advance is used on the present segment.
       #if ENABLED(LA_ZERO_SLOWDOWN)
-        static float     current_la_step_rate;         // Current (gradually changing) linear advance rate
-        static float     current_la_step_count;        // Currently advanced steps
-        static uint32_t curr_step_rate; // needed for new la algo
-        static float a_max;
-        static float xy_to_e_steps;
-        static void set_la_interval(int32_t rate);
+        static uint32_t  curr_step_rate;        // Needed for new LA algorithm
+        static float     current_la_step_rate,  // Current (gradually changing) linear advance rate
+                         current_la_step_count, // Currently advanced steps
+                         a_max,
+                         xy_to_e_steps;
+        static void set_la_interval(const int32_t rate);
       #endif
     #endif
 

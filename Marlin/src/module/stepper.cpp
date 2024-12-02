@@ -261,11 +261,11 @@ uint32_t Stepper::advance_divisor = 0,
               Stepper::la_advance_steps = 0;
   bool        Stepper::la_active = false;
   #if ENABLED(LA_ZERO_SLOWDOWN)
-    float       Stepper::current_la_step_rate = 0;
-    float       Stepper::current_la_step_count = 0;
-    uint32_t Stepper::curr_step_rate; // needed for the new LA algo
-    float Stepper::a_max;
-    float Stepper::xy_to_e_steps;
+    uint32_t  Stepper::curr_step_rate; // needed for the new LA algo
+    float     Stepper::current_la_step_rate = 0,
+              Stepper::current_la_step_count = 0,
+              Stepper::a_max,
+              Stepper::xy_to_e_steps;
   #endif
 #endif // LIN_ADVANCE
 
@@ -2788,6 +2788,7 @@ hal_timer_t Stepper::block_phase_isr() {
         #endif
 
         if (TERN1(HAS_LA_WITH_SLOWDOWN, la_active)) {
+          // Apply LA scaling and discount the effect of frequency scaling
           const bool use_advance_dividend = TERN1(LA_ZERO_SLOWDOWN, bool(current_block->steps.e))
           const int32_t steps = use_advance_dividend ? advance_dividend.e : current_block->step_event_count;
           la_dividend = (steps << current_block->la_scaling) << oversampling_factor;
@@ -2914,80 +2915,81 @@ hal_timer_t Stepper::block_phase_isr() {
   return interval;
 }
 
-#if ENABLED(LIN_ADVANCE)
+#if ENABLED(LA_ZERO_SLOWDOWN)
 
-  #if ENABLED(LA_ZERO_SLOWDOWN)
-    void Stepper::set_la_interval(int32_t rate) {
-      if (rate == 0) { la_interval = LA_ADV_NEVER; return; }
+  void Stepper::set_la_interval(const int32_t rate) {
+    if (rate == 0) { la_interval = LA_ADV_NEVER; return; }
 
-      const bool forward_e = rate > 0;
-      la_interval = calc_timer_interval(uint32_t(ABS(rate)) >> current_block->la_scaling);
-      if (forward_e == motor_direction(E_AXIS)) return;
+    const bool forward_e = rate > 0;
+    la_interval = calc_timer_interval(uint32_t(ABS(rate)) >> current_block->la_scaling);
+    if (forward_e == motor_direction(E_AXIS)) return;
 
-      last_direction_bits.toggle(E_AXIS);
-      count_direction.e = -count_direction.e;
-      DIR_WAIT_BEFORE();
-      E_APPLY_DIR(forward_e, false);
-      TERN_(FTM_OPTIMIZE_DIR_STATES, last_set_direction = last_direction_bits);
-      DIR_WAIT_AFTER();
-    }
+    last_direction_bits.toggle(E_AXIS);
+    count_direction.e = -count_direction.e;
+    DIR_WAIT_BEFORE();
+    E_APPLY_DIR(forward_e, false);
+    TERN_(FTM_OPTIMIZE_DIR_STATES, last_set_direction = last_direction_bits);
+    DIR_WAIT_AFTER();
+  }
 
-    hal_timer_t Stepper::zero_slowdown_isr() {
-      /*
-      1. [x] move to separate isr
-      2. [x] keep computations in movement step scale
-      3. [ ] precompute a_max in movement step scale and inter block correction factors in the planner
-      4. [ ] either use precomputed dt values or make update interval depend on la acceleration rate
-      5. [ ] optimise intermediate computations (e.g avoid dividing by dt to then multiply the variable by dt)
-      6. [ ] use int arithmetic (e.g bitshift instead of division/mult, fixed point, etc)
-      */
-      #define UPDATE_FREQ 4096 // hz
-      constexpr uint32_t interval = STEPPER_TIMER_RATE / UPDATE_FREQ;
-      constexpr float dt = float(interval) / float(STEPPER_TIMER_RATE);
-      constexpr float dt_inv = UPDATE_FREQ;
-      if (current_block) {
-        float target_la_step_count;
-        if (la_active) {
-          const float k = Planner::extruder_advance_K[E_INDEX_N(current_block->extruder)];
-          target_la_step_count = curr_step_rate * k;
-        }
-        else
-          target_la_step_count = 0; // (de)retration may start with non-zero current_la_step_rate and/or count. This needs to be gradually compensated for
-
-        const float distance_to_target = target_la_step_count - current_la_step_count,
-                    one_shot_v = distance_to_target * dt_inv;
-        float a = ABS(one_shot_v - current_la_step_rate) * dt_inv;
-        NOMORE(a, a_max);
-
-        float stopping_distance = current_la_step_rate * current_la_step_rate / (2 * a_max);
-
-        bool fwd;
-        if (ABS(distance_to_target) <= stopping_distance) {
-          // If we're within stopping distance, decelerate
-          fwd = current_la_step_rate < 0;
-        }
-        else {
-          // Otherwise, accelerate towards the target
-          fwd = distance_to_target > 0;
-        }
-
-        current_la_step_rate += (fwd ? a : -a) * dt;
-        current_la_step_count += current_la_step_rate * dt;
-        if (la_active) {
-          set_la_interval((int32_t)curr_step_rate + current_la_step_rate);
-        }
-        else if (current_block->steps.e) {
-          // (De)retraction case, where we still need to gradually undo the current_la_step_count
-          set_la_interval(int32_t(current_block->direction_bits.e ? curr_step_rate : -curr_step_rate) + current_la_step_rate);
-        }
-        else {
-          // Travel case, where we need to slow down the extruder
-          set_la_interval(current_la_step_rate);
-        }
+  hal_timer_t Stepper::zero_slowdown_isr() {
+    /*
+    1. [x] move to separate isr
+    2. [x] keep computations in movement step scale
+    3. [ ] precompute a_max in movement step scale and inter block correction factors in the planner
+    4. [ ] either use precomputed dt values or make update interval depend on la acceleration rate
+    5. [ ] optimise intermediate computations (e.g avoid dividing by dt to then multiply the variable by dt)
+    6. [ ] use int arithmetic (e.g bitshift instead of division/mult, fixed point, etc)
+    */
+    #define UPDATE_FREQ 4096 // hz
+    constexpr uint32_t interval = STEPPER_TIMER_RATE / UPDATE_FREQ;
+    constexpr float dt = float(interval) / float(STEPPER_TIMER_RATE);
+    constexpr float dt_inv = UPDATE_FREQ;
+    if (current_block) {
+      float target_la_step_count;
+      if (la_active) {
+        const float k = Planner::extruder_advance_K[E_INDEX_N(current_block->extruder)];
+        target_la_step_count = curr_step_rate * k;
       }
-      return interval;
+      else
+        target_la_step_count = 0; // (de)retration may start with non-zero current_la_step_rate and/or count. This needs to be gradually compensated for
+
+      const float distance_to_target = target_la_step_count - current_la_step_count,
+                  one_shot_v = distance_to_target * dt_inv;
+      float a = ABS(one_shot_v - current_la_step_rate) * dt_inv;
+      NOMORE(a, a_max);
+
+      float stopping_distance = current_la_step_rate * current_la_step_rate / (2 * a_max);
+
+      bool fwd;
+      if (ABS(distance_to_target) <= stopping_distance) {
+        // If we're within stopping distance, decelerate
+        fwd = current_la_step_rate < 0;
+      }
+      else {
+        // Otherwise, accelerate towards the target
+        fwd = distance_to_target > 0;
+      }
+
+      current_la_step_rate += (fwd ? a : -a) * dt;
+      current_la_step_count += current_la_step_rate * dt;
+      if (la_active) {
+        set_la_interval((int32_t)curr_step_rate + current_la_step_rate);
+      }
+      else if (current_block->steps.e) {
+        // (De)retraction case, where we still need to gradually undo the current_la_step_count
+        set_la_interval(int32_t(current_block->direction_bits.e ? curr_step_rate : -curr_step_rate) + current_la_step_rate);
+      }
+      else {
+        // Travel case, where we need to slow down the extruder
+        set_la_interval(current_la_step_rate);
+      }
     }
-  #endif // LA_ZERO_SLOWDOWN
+    return interval;
+  }
+#endif // LA_ZERO_SLOWDOWN
+
+#if ENABLED(LIN_ADVANCE)
 
   // Timer interrupt for E. LA_steps is set in the main routine
   void Stepper::advance_isr() {
