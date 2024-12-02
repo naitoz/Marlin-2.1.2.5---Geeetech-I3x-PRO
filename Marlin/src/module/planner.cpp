@@ -77,6 +77,8 @@
 
 #include "../MarlinCore.h"
 
+#include "printcounter.h" // Just to make sure it's included for the Differential Extruder
+
 #if HAS_LEVELING
   #include "../feature/bedlevel/bedlevel.h"
 #endif
