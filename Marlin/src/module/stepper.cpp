@@ -169,9 +169,9 @@ Stepper stepper; // Singleton
 #endif
 
 //// Beginning of a Differential Extruder block 4/6
-// Disable Differential Extruder unless there's only one extruder
+// Disable Differential Extruder unless there's only one extruder and the geometry is Cartesian
 #if ENABLED(DIFFERENTIAL_EXTRUDER)
-    #if EXTRUDERS != 1
+    #if !(EXTRUDERS == 1 && IS_CARTESIAN)
       #undef DIFFERENTIAL_EXTRUDER
     #endif
 #endif
