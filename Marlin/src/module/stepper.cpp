@@ -108,6 +108,8 @@ Stepper stepper; // Singleton
 #include "../MarlinCore.h"
 #include "../HAL/shared/Delay.h"
 
+#include "printcounter.h" // Just to make sure it's included for the Differential Extruder
+
 #if ENABLED(BD_SENSOR)
   #include "../feature/bedlevel/bdl/bdl.h"
 #endif
@@ -165,6 +167,15 @@ Stepper stepper; // Singleton
     constexpr uint32_t Stepper::digipot_count[];
   #endif
 #endif
+
+//// Beginning of a Differential Extruder block 4/6
+// Disable Differential Extruder unless there's only one extruder and the geometry is Cartesian
+#if ENABLED(DIFFERENTIAL_EXTRUDER)
+    #if !(EXTRUDERS == 1 && IS_CARTESIAN)
+      #undef DIFFERENTIAL_EXTRUDER
+    #endif
+#endif
+//// End of a Differential Extruder block 4/6
 
 stepper_flags_t Stepper::axis_enabled; // {0}
 
@@ -1542,6 +1553,7 @@ void Stepper::isr() {
   // We need this variable here to be able to use it in the following loop
   hal_timer_t min_ticks;
   do {
+
     // Enable ISRs to reduce USART processing latency
     hal.isr_on();
 
@@ -1841,19 +1853,64 @@ void Stepper::pulse_phase_isr() {
     }while(0)
 
     // Start an active pulse if needed
-    #define PULSE_START(AXIS) do{ \
-      if (step_needed.test(_AXIS(AXIS))) { \
-        count_position[_AXIS(AXIS)] += count_direction[_AXIS(AXIS)]; \
-        _APPLY_STEP(AXIS, _STEP_STATE(AXIS), 0); \
-      } \
-    }while(0)
+    #if ENABLED(DIFFERENTIAL_EXTRUDER) 
+      #define PULSE_START(AXIS) do{ \
+        if (step_needed.test(_AXIS(AXIS))) { \
+          count_position[_AXIS(AXIS)] += count_direction[_AXIS(AXIS)]; \
+          _APPLY_STEP(AXIS, _STEP_STATE(AXIS), 0); \
+            /* Beginning of a Differential Extruder block 5/6 */ \
+              if (!print_job_timer.isRunning()) { \
+                if (_AXIS(AXIS) == X_AXIS) { \
+                  /* Set the direction of the E stepper to match the X stepper */ \
+                  if (count_direction[X_AXIS] > 0) { \
+                    FWD_E_DIR(stepper_extruder); \
+                  } else { \
+                    REV_E_DIR(stepper_extruder); \
+                  } \
+                  /* Add the  pulse to the E stepper */ \
+                  E_APPLY_STEP(HIGH, 0); \
+                } \
+              } \
+          /* End of a Differential Extruder block 5/6 */ \
+        } \
+      }while(0)
+    #else
+      #define PULSE_START(AXIS) do{ \
+        if (step_needed.test(_AXIS(AXIS))) { \
+          count_position[_AXIS(AXIS)] += count_direction[_AXIS(AXIS)]; \
+          _APPLY_STEP(AXIS, _STEP_STATE(AXIS), 0); \
+        } \
+      }while(0)
+    #endif
 
     // Stop an active pulse if needed
-    #define PULSE_STOP(AXIS) do { \
-      if (step_needed.test(_AXIS(AXIS))) { \
-        _APPLY_STEP(AXIS, !_STEP_STATE(AXIS), 0); \
-      } \
-    }while(0)
+    #if ENABLED(DIFFERENTIAL_EXTRUDER) 
+      #define PULSE_STOP(AXIS) do { \
+        if (step_needed.test(_AXIS(AXIS))) { \
+          _APPLY_STEP(AXIS, !_STEP_STATE(AXIS), 0); \
+            /* Beginning of a Differential Extruder block 6/6 */ \
+              if (!print_job_timer.isRunning()) { \
+                if (_AXIS(AXIS) == X_AXIS) { \
+                  /* Set the direction of the E stepper to match the X stepper */ \
+                  if (count_direction[X_AXIS] > 0) { \
+                    FWD_E_DIR(stepper_extruder); \
+                  } else { \
+                    REV_E_DIR(stepper_extruder); \
+                  } \
+                  /* Stop the Differential pulse to the E stepper */ \
+                  E_APPLY_STEP(LOW, 0); \
+                } \
+              } \
+          /* End of a Differential Extruder block 6/6 */ \
+        } \
+      }while(0)
+    #else
+      #define PULSE_STOP(AXIS) do { \
+        if (step_needed.test(_AXIS(AXIS))) { \
+          _APPLY_STEP(AXIS, !_STEP_STATE(AXIS), 0); \
+        } \
+      }while(0)
+    #endif
 
     #if ENABLED(DIRECT_STEPPING)
       // Direct stepping is currently not ready for HAS_I_AXIS

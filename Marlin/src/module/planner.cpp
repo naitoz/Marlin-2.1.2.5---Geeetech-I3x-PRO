@@ -77,6 +77,8 @@
 
 #include "../MarlinCore.h"
 
+#include "printcounter.h" // Just to make sure it's included for the Differential Extruder
+
 #if HAS_LEVELING
   #include "../feature/bedlevel/bedlevel.h"
 #endif
@@ -92,6 +94,15 @@
 #if ENABLED(MIXING_EXTRUDER)
   #include "../feature/mixing.h"
 #endif
+
+//// Beginning of a Differential Extruder block 2/6
+// Disable Differential Extruder unless there's only one extruder and the geometry is Cartesian
+#if ENABLED(DIFFERENTIAL_EXTRUDER)
+    #if !(EXTRUDERS == 1 && IS_CARTESIAN)
+      #undef DIFFERENTIAL_EXTRUDER
+    #endif
+#endif
+//// End of a Differential Extruder block 2/6
 
 #if ENABLED(AUTO_POWER_CONTROL)
   #include "../feature/power.h"
@@ -3052,6 +3063,22 @@ bool Planner::buffer_line(const xyze_pos_t &cart, const_feedRate_t fr_mm_s
     return false;
 
   #else // !IS_KINEMATIC
+
+    //// Beginning of a Differential Extruder block  3/6  ////
+    // When a differential extruder is present, planner.cpp adds the X movement to the E movement and send the sum to the E stepper.
+    // This addition is performed only when a print job is running. When a print job is not running, the differential extruder is handled by stepper.cpp
+    #if ENABLED(DIFFERENTIAL_EXTRUDER)
+      if (print_job_timer.isRunning()) {
+        // Calculate the steps for X and E
+        long x_steps = lround(machine.x / mm_per_step[X_AXIS]);
+        long e_steps = lround(machine.e / mm_per_step[E_AXIS]);
+        // Calculate the differential steps for the extruder
+        e_steps += x_steps;
+        // Update the machine position with the differential steps
+        machine.e = e_steps * mm_per_step[E_AXIS];
+      }
+    #endif
+    //// End of a Differential Extruder block 3/6  ////
 
     return buffer_segment(machine, fr_mm_s, extruder, hints);
 
