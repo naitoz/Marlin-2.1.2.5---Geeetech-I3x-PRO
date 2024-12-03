@@ -95,6 +95,15 @@
   #include "../feature/mixing.h"
 #endif
 
+//// Beginning of a Differential Extruder block 2/6
+// Disable Differential Extruder unless there's only one extruder
+#if ENABLED(DIFFERENTIAL_EXTRUDER)
+    #if EXTRUDERS != 1
+      #undef DIFFERENTIAL_EXTRUDER
+    #endif
+#endif
+//// End of a Differential Extruder block 2/6
+
 #if ENABLED(AUTO_POWER_CONTROL)
   #include "../feature/power.h"
 #endif
@@ -3055,7 +3064,7 @@ bool Planner::buffer_line(const xyze_pos_t &cart, const_feedRate_t fr_mm_s
 
   #else // !IS_KINEMATIC
 
-    //// Beginning of a Differential Extruder block  2/6  ////
+    //// Beginning of a Differential Extruder block  3/6  ////
     // When a differential extruder is present, planner.cpp adds the X movement to the E movement and send the sum to the E stepper.
     // This addition is performed only when a print job is running. When a print job is not running, the differential extruder is handled by stepper.cpp
     #if ENABLED(DIFFERENTIAL_EXTRUDER)
@@ -3069,7 +3078,7 @@ bool Planner::buffer_line(const xyze_pos_t &cart, const_feedRate_t fr_mm_s
         machine.e = e_steps * mm_per_step[E_AXIS];
       }
     #endif
-    //// End of a Differential Extruder block 2/6  ////
+    //// End of a Differential Extruder block 3/6  ////
 
     return buffer_segment(machine, fr_mm_s, extruder, hints);
 
