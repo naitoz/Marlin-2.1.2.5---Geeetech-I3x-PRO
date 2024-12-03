@@ -58,6 +58,10 @@
   #include "probe.h"
 #endif
 
+#if HAS_FILAMENT_SENSOR && !MULTI_FILAMENT_SENSOR
+  #include "../feature/runout.h"
+#endif
+
 #define DEBUG_OUT ALL(USE_SENSORLESS, DEBUG_LEVELING_FEATURE)
 #include "../core/debug_out.h"
 
@@ -74,6 +78,12 @@ Endstops::endstop_mask_t Endstops::live_state = 0;
   bool Endstops::bdp_state; // = false
   #if HOMING_Z_WITH_PROBE
     #define READ_ENDSTOP(P) ((P == TERN(Z_MIN_PROBE_USES_Z_MIN_ENDSTOP_PIN, Z_MIN_PIN, Z_MIN_PROBE_PIN)) ? bdp_state : READ(P))
+  #else
+    #define READ_ENDSTOP(P) READ(P)
+  #endif
+#elif ENABLED(CAN_MASTER) // Read virtual CAN IO Probe status if needed
+  #if HAS_BED_PROBE
+    #define READ_ENDSTOP(P) ((P == Z_MIN_PIN) ? PROBE_READ() : READ(P))
   #else
     #define READ_ENDSTOP(P) READ(P)
   #endif
@@ -525,8 +535,11 @@ void __O2 Endstops::report_states() {
       print_es_state(extDigitalRead(pin) != state);
     }
     #undef _CASE_RUNOUT
+
   #elif HAS_FILAMENT_SENSOR
-    print_es_state(READ(FIL_RUNOUT1_PIN) != FIL_RUNOUT1_STATE, F(STR_FILAMENT));
+
+    print_es_state(RUNOUT_STATE(1) != FIL_RUNOUT1_STATE, F(STR_FILAMENT));
+
   #endif
 
   TERN_(BLTOUCH, bltouch._reset_SW_mode());
@@ -664,6 +677,12 @@ void Endstops::update() {
     // When closing the gap check the enabled probe
     if (probe_switch_activated())
       UPDATE_LIVE_STATE(Z, TERN(USE_Z_MIN_PROBE, MIN_PROBE, MIN));
+
+    #if ENABLED(CAN_TOOLHEAD)
+      HAL_StatusTypeDef CAN_Send_Message(bool TempUpdate); // Function Prototype
+      CAN_Send_Message(false); // Send Virtual IO update without temperature report
+    #endif // CAN_TOOLHEAD
+
   #endif
 
   #if USE_Z_MAX
