@@ -1,3 +1,11 @@
+## Marlin 2.1.2.5 for Geeetech I3x PRO
+This repository is a clone of the official Marlin project up to 2.1.2.5, with the Configuration.h file set for my printer, a stock Geeetech Prusa I3x PRO without any modifications.
+It was compiled and uploaded using Visual Studio 2022 with Auto Build Marlin and PlatformIO.
+It has been tested and works fine, but I am now migrating to Klipper.
+
+
+---
+
 <p align="center"><img src="buildroot/share/pixmaps/logo/marlin-outrun-nf-500.png" height="250" alt="MarlinFirmware's logo" /></p>
 
 <h1 align="center">Marlin 3D Printer Firmware</h1>
